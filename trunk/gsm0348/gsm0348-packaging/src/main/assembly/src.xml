@@ -23,4 +23,9 @@
 			</includes>
 		</dependencySet>
 	</dependencySets>
+	<files>
+		<file>
+			<source>resources/license.txt</source>
+		</file>
+	</files>
 </assembly>
