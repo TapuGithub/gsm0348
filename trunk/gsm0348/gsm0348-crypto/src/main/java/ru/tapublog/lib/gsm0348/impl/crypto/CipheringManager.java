@@ -1,18 +1,18 @@
-package ru.tapublog.lib.gsm0348.impl;
+package ru.tapublog.lib.gsm0348.impl.crypto;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.Arrays;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
 import org.apache.log4j.Logger;
-import ru.tapublog.lib.gsm0348.impl.Util;
 
 /**
  * This utility class is used for ciphering operations during GSM 03.48 packet
@@ -30,16 +30,9 @@ public class CipheringManager
 
 	private static final Cipher getCipher(final String alg) throws NoSuchAlgorithmException, NoSuchPaddingException
 	{
-		try
-		{
-			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("Creating cipher for name:" + alg);
-			return Cipher.getInstance(alg, "BC");
-		} catch (NoSuchProviderException ex)
-		{
-			LOGGER.error("BouncyCastle crypto provider not found. This is strange.", ex);
-		}
-		return null;
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Creating cipher for name:" + alg);
+		return Cipher.getInstance(alg);
 	}
 
 	/**
@@ -110,7 +103,7 @@ public class CipheringManager
 		return doWork(transformation, key, data, null, Cipher.DECRYPT_MODE);
 	}
 
-	private static void initCipher(Cipher cipher, int mode, byte[] key, byte[] iv) throws InvalidAlgorithmParameterException,
+	private static void initCipher(Cipher cipher,int mode, byte[] key, byte[] iv) throws InvalidAlgorithmParameterException,
 			InvalidAlgorithmParameterException, InvalidKeyException
 	{
 		if (LOGGER.isDebugEnabled())

@@ -1,7 +1,7 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
-import ru.tapublog.lib.gsm0348.impl.Util;
+
 import ru.tapublog.lib.gsm0348.api.header.Counters;
 
 /**
@@ -16,14 +16,17 @@ public final class CountersImpl implements Counters
 	{
 		if (data == null)
 			throw new IllegalArgumentException("data cannot be null");
+
 		m_data = data.clone();
 	}
 
+	@Override
 	public byte[] toBytes()
 	{
 		return m_data.clone();
 	}
 
+	@Override
 	public int getLength()
 	{
 		return m_data.length;
@@ -46,6 +49,7 @@ public final class CountersImpl implements Counters
 		for (int i = 0; i < m_data.length; i++)
 			if (m_data[i] != ci.m_data[i])
 				return false;
+
 		return true;
 	}
 

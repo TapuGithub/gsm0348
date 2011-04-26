@@ -1,6 +1,7 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
+
 import ru.tapublog.lib.gsm0348.api.PacketData;
 import ru.tapublog.lib.gsm0348.api.ResponsePacket;
 import ru.tapublog.lib.gsm0348.api.ResponsePacketHeader;
@@ -11,6 +12,7 @@ import ru.tapublog.lib.gsm0348.api.ResponsePacketHeader;
 @Immutable
 public final class ResponsePacketImpl extends SecuredPacketImpl implements ResponsePacket
 {
+
 	public ResponsePacketImpl(ResponsePacketHeader header, PacketData data)
 	{
 		super(header, data);

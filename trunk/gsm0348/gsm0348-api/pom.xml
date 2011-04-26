@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>gsm0348</artifactId>
 		<groupId>ru.tapublog.lib.gsm0348</groupId>
-		<version>1.0</version>
+		<version>1.1</version>
 	</parent>
 	<groupId>ru.tapublog.lib.gsm0348</groupId>
 	<artifactId>gsm0348-api</artifactId>
@@ -14,18 +14,10 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<finalName>${project.parent.name}-api</finalName>
+					<finalName>${project.parent.name}-api-${project.version}</finalName>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -33,11 +25,11 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.7</version>
 				<configuration>
-					<finalName>${project.parent.name}-api</finalName>
+					<finalName>${project.parent.name}-api-${project.version}</finalName>
 				</configuration>
 				<executions>
 					<execution>
-						<id>javadoc</id>
+						<id>api-javadoc</id>
 						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
@@ -50,11 +42,11 @@
 				<artifactId>maven-source-plugin</artifactId>
 				<version>2.1.2</version>
 				<configuration>
-					<finalName>${project.parent.name}-api</finalName>
+					<finalName>${project.parent.name}-api-${project.version}</finalName>
 				</configuration>
 				<executions>
 					<execution>
-						<id>sources</id>
+						<id>api-sources</id>
 						<phase>package</phase>
 						<goals>
 							<goal>jar-no-fork</goal>

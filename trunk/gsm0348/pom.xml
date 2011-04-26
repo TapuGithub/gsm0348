@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ru.tapublog.lib.gsm0348</groupId>
 	<artifactId>gsm0348</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<packaging>pom</packaging>
 	<name>GSM 03.48</name>
 	<url>http://gsm0348.googlecode.com</url>
@@ -12,12 +12,15 @@
 		<module>gsm0348-api</module>
 		<module>gsm0348-impl</module>
 		<module>gsm0348-packaging</module>
+		<module>gsm0348-crypto</module>
 	</modules>
 
 	<properties>
 		<version.log4j>1.2.9</version.log4j>
 		<version.commons-cli>1.2</version.commons-cli>
 		<version.jsr305>1.3.9</version.jsr305>
+		<version.junit>4.8.2</version.junit>
+		<version.bouncycastle>140</version.bouncycastle>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -38,6 +41,16 @@
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>jsr305</artifactId>
 				<version>${version.jsr305}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${version.junit}</version>
+			</dependency>
+			<dependency>
+				<groupId>bouncycastle</groupId>
+				<artifactId>bcprov-jdk16</artifactId>
+				<version>${version.bouncycastle}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

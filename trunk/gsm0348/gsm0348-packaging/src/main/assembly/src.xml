@@ -13,6 +13,7 @@
 			<excludes>
 				<exclude>ru.tapublog.lib.gsm0348:gsm0348-api</exclude>
 				<exclude>ru.tapublog.lib.gsm0348:gsm0348-impl</exclude>
+				<exclude>ru.tapublog.lib.gsm0348:gsm0348-crypto</exclude>
 			</excludes>
 		</dependencySet>
 		<dependencySet>
@@ -20,6 +21,7 @@
 			<includes>
 				<include>ru.tapublog.lib.gsm0348:gsm0348-api</include>
 				<include>ru.tapublog.lib.gsm0348:gsm0348-impl</include>
+				<include>ru.tapublog.lib.gsm0348:gsm0348-crypto</include>
 			</includes>
 		</dependencySet>
 	</dependencySets>

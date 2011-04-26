@@ -1,7 +1,7 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
-import ru.tapublog.lib.gsm0348.impl.Util;
+
 import ru.tapublog.lib.gsm0348.api.PacketData;
 
 /**
@@ -19,11 +19,13 @@ public final class PacketDataImpl implements PacketData
 		m_data = data.clone();
 	}
 
+	@Override
 	public byte[] toBytes()
 	{
 		return m_data.clone();
 	}
 
+	@Override
 	public int getLength()
 	{
 		return m_data.length;
@@ -31,7 +33,7 @@ public final class PacketDataImpl implements PacketData
 
 	public String toString()
 	{
-		return "PacketDataImpl[length=" + m_data.length + ",data=" + Util.toHexArray(m_data) + "]";
+		return "PacketData[length=" + m_data.length + ",data=" + Util.toHexArray(m_data) + "]";
 	}
 
 	public boolean equals(Object obj)
@@ -46,6 +48,7 @@ public final class PacketDataImpl implements PacketData
 		for (int i = 0; i < m_data.length; i++)
 			if (m_data[i] != pdi.m_data[i])
 				return false;
+
 		return true;
 	}
 

@@ -1,33 +1,36 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
+
 import ru.tapublog.lib.gsm0348.api.CommandPacket;
 import ru.tapublog.lib.gsm0348.api.CommandPacketHeader;
 import ru.tapublog.lib.gsm0348.api.PacketData;
-
 /**
  * @author Victor Platov
  */
 @Immutable
 public final class CommandPacketImpl implements CommandPacket
 {
+
 	private final PacketData m_data;
 	private final CommandPacketHeader m_header;
 
 	public CommandPacketImpl(CommandPacketHeader header, PacketData data)
 	{
-		if (header == null || data == null)
+		if(header == null || data == null )
 			throw new IllegalArgumentException("data and header cannot be null");
-
+		
 		m_data = data;
 		m_header = header;
 	}
 
+	@Override
 	public PacketData getData()
 	{
 		return m_data;
 	}
 
+	@Override
 	public byte[] toBytes()
 	{
 		int length = getLength();
@@ -39,11 +42,13 @@ public final class CommandPacketImpl implements CommandPacket
 		return result;
 	}
 
+	@Override
 	public int getLength()
 	{
 		return 2 + m_data.getLength() + m_header.getLength();
 	}
 
+	@Override
 	public CommandPacketHeader getHeader()
 	{
 		return m_header;
@@ -53,7 +58,6 @@ public final class CommandPacketImpl implements CommandPacket
 	{
 		return "CommandPacket[length=" + getLength() + ", " + m_header + ", " + m_data + "]";
 	}
-
 	public boolean equals(Object obj)
 	{
 		if (this == obj)

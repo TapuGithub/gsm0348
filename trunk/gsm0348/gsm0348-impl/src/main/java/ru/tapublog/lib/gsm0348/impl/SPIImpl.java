@@ -1,6 +1,7 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
+
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.CommandSPI;
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.ResponseSPI;
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.SPI;
@@ -35,7 +36,7 @@ public final class SPIImpl implements SPI
 
 	public String toString()
 	{
-		return "SPI[responseSPI=" + getResponseSPI() + ", commandSPI=" + getCommandSPI() + "]";
+		return "SPI[commandSPI=" + getCommandSPI() + ", responseSPI=" + getResponseSPI() + "]";
 	}
 
 	public boolean equals(Object obj)

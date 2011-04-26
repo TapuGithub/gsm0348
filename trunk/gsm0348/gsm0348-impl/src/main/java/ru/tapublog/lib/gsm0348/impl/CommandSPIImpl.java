@@ -1,13 +1,13 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
-import ru.tapublog.lib.gsm0348.impl.Util;
+
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.CommandSPI;
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.certificate.GSM0348CertificateMode;
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.synchronization.GSM0348SynchroCounterMode;
-
 /**
  * @author Victor Platov
+ * @version $Rev: 178 $
  */
 @Immutable
 public final class CommandSPIImpl implements CommandSPI
@@ -19,16 +19,19 @@ public final class CommandSPIImpl implements CommandSPI
 		m_data = data;
 	}
 
+	@Override
 	public GSM0348CertificateMode getCertificateMode()
 	{
 		return GSM0348CertificateMode.get((byte) (m_data & 0x3));
 	}
 
+	@Override
 	public GSM0348SynchroCounterMode getSynchroCounterMode()
 	{
 		return GSM0348SynchroCounterMode.get((byte) ((m_data & 0x18) >> 3));
 	}
 
+	@Override
 	public boolean isCiphered()
 	{
 		return ((m_data & 0x4) != 0);
@@ -36,10 +39,9 @@ public final class CommandSPIImpl implements CommandSPI
 
 	public String toString()
 	{
-		return "SPI[certificateMode=" + getCertificateMode() + ", countersMode=" + getSynchroCounterMode() + ", isCiphered="
-				+ isCiphered() + ", raw=" + Util.toHex(m_data) + "]";
+		return "CommandSPI[certificateMode=" + getCertificateMode() + ", countersMode=" + getSynchroCounterMode() + ", isCiphered="
+				+ isCiphered() + ", raw="+Util.toHex(m_data) +"]";
 	}
-
 	public boolean equals(Object obj)
 	{
 		if (this == obj)

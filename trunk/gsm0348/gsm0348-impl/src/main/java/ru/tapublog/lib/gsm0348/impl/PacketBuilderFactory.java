@@ -1,6 +1,7 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import org.apache.log4j.Logger;
+
 import ru.tapublog.lib.gsm0348.api.PacketBuilder;
 import ru.tapublog.lib.gsm0348.api.PacketBuilderConfiguration;
 import ru.tapublog.lib.gsm0348.api.PacketBuilderConfigurationException;
@@ -17,12 +18,14 @@ public class PacketBuilderFactory
 
 	private PacketBuilderFactory()
 	{
+
 	}
 
 	public static PacketBuilder getInstance(PacketBuilderConfiguration builderConfig) throws PacketBuilderConfigurationException
 	{
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Creating new PacketBuilder for " + builderConfig);
+
 		return new PacketBuilderImpl(builderConfig);
 	}
 }

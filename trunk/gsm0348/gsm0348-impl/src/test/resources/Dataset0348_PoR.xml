@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dataset>
+	<testcase>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>08 01</spi>
+		<KID>00</KID>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Tar>B0 00 10</Tar>
+		<Response>00 0E 0A B0 00 10 00 00 00 00 01 00 00 01 6E 00</Response>
+		
+		<ResultCode>00</ResultCode>
+		<ResultData>01 6E 00</ResultData>
+	</testcase>
+
+	<!--
+	<testcase>
+		<Counter>00 00 00 00 06</Counter>
+		<spi>08 09</spi>
+		<KID>01</KID>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>	
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Tar>B0 00 10</Tar>
+		<Response></Response>
+		
+		<ResultCode>00</ResultCode>
+		<ResultData></ResultData>
+	</testcase>
+
+	<testcase>
+		<Counter>FF AB 00 FF 01</Counter>
+		<spi>08 09</spi>
+		<KID>00</KID>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>	
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Tar>B0 00 10</Tar>
+		<Response></Response>
+		
+		<ResultCode>00</ResultCode>
+		<ResultData></ResultData>
+	</testcase>
+
+	<testcase>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>08 05</spi>
+		<KID>00</KID>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>	
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Tar>B0 00 10</Tar>
+		<Response></Response>
+		
+		<ResultCode>00</ResultCode>
+		<ResultData></ResultData>
+	</testcase>
+
+	<testcase>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>08 09</spi>
+		<KID>00</KID>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>	
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Tar>B0 00 10</Tar>
+		<Response></Response>
+		
+		<ResultCode>02</ResultCode>
+		<ResultData></ResultData>
+	</testcase>
+
+	<testcase>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>08 09</spi>
+		<KID>00</KID>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>	
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Tar>B0 00 10</Tar>
+		<Response></Response>
+		
+		<ResultCode>00</ResultCode>
+		<ResultData>non-empty</ResultData>
+	</testcase>
+
+	<testcase>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>08 09</spi>
+		<KID>00</KID>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>	
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Tar>B0 00 10</Tar>
+		<Response></Response>
+		
+		<ResultCode>00</ResultCode>
+		<ResultData>long-data</ResultData>
+	</testcase>
+-->
+</Dataset>

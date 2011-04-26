@@ -1,7 +1,7 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
-import ru.tapublog.lib.gsm0348.impl.Util;
+
 import ru.tapublog.lib.gsm0348.api.ResponsePacketHeader;
 import ru.tapublog.lib.gsm0348.api.header.Counters;
 import ru.tapublog.lib.gsm0348.api.header.TAR;
@@ -32,11 +32,13 @@ public final class ResponsePacketHeaderImpl implements ResponsePacketHeader
 		return new TARImpl(tar);
 	}
 
+	@Override
 	public byte getPaddingCounter()
 	{
 		return m_data[9];
 	}
 
+	@Override
 	public byte[] getSecurity()
 	{
 		byte[] security = new byte[m_securityLength];
@@ -44,6 +46,7 @@ public final class ResponsePacketHeaderImpl implements ResponsePacketHeader
 		return security;
 	}
 
+	@Override
 	public Counters getCounters()
 	{
 		byte[] counters = new byte[5];
@@ -51,16 +54,19 @@ public final class ResponsePacketHeaderImpl implements ResponsePacketHeader
 		return new CountersImpl(counters);
 	}
 
+	@Override
 	public byte[] toBytes()
 	{
 		return m_data.clone();
 	}
 
+	@Override
 	public int getLength()
 	{
 		return m_data.length;
 	}
 
+	@Override
 	public GSM0348ResponsePacketStatusCode getResponseStatus()
 	{
 		return GSM0348ResponsePacketStatusCode.get(m_data[10]);
@@ -85,6 +91,7 @@ public final class ResponsePacketHeaderImpl implements ResponsePacketHeader
 		for (int i = 0; i < m_data.length; i++)
 			if (m_data[i] != rphi.m_data[i])
 				return false;
+
 		return m_securityLength == rphi.m_securityLength;
 	}
 

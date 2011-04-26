@@ -1,6 +1,7 @@
 package ru.tapublog.lib.gsm0348.api;
+
 /**
- * This interface describes GSM 03.48 Response packet. 
+ * This interface describes GSM 03.48 Response packet.
  * 
  * @author Victor Platov
  */

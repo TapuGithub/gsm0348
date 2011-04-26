@@ -1,4 +1,5 @@
 package ru.tapublog.lib.gsm0348.api;
+
 /**
  * This interface describes {@linkplain PacketBuilder} configuration. It is used
  * to configure {@linkplain PacketBuilder} instances.
@@ -13,6 +14,7 @@ public interface PacketBuilderConfiguration
 	 * @return KIc byte.
 	 */
 	byte getKIc();
+
 	/**
 	 * Sets KIc (Key and algorithm Identifier for ciphering) byte. The KIc is
 	 * coded as below. <br>
@@ -49,12 +51,14 @@ public interface PacketBuilderConfiguration
 	 *            value.
 	 */
 	void setKIc(byte kic);
+
 	/**
 	 * Returns KID byte.
 	 * 
 	 * @return KID byte.
 	 */
 	byte getKID();
+
 	/**
 	 * Sets KID (Key and algorithm Identifier for RC/CC/DS) byte. The KID is
 	 * coded as below. <br>
@@ -91,12 +95,14 @@ public interface PacketBuilderConfiguration
 	 *            value.
 	 */
 	void setKID(byte kid);
+
 	/**
 	 * Returns TAR bytes.
 	 * 
 	 * @return byte[3]
 	 */
 	byte[] getTAR();
+
 	/**
 	 * Sets TAR (Toolkit Application Reference).
 	 * 
@@ -106,12 +112,14 @@ public interface PacketBuilderConfiguration
 	 *             if <strong>tar</strong> length is not 3.
 	 */
 	void setTAR(byte[] tar) throws IllegalArgumentException;
+
 	/**
 	 * Returns SPI bytes.
 	 * 
 	 * @return byte[2]
 	 */
 	byte[] getSPI();
+
 	/**
 	 * Sets SPI (Security Parameters Indication).
 	 * <p>
@@ -197,12 +205,14 @@ public interface PacketBuilderConfiguration
 	 *             if <strong>spi</strong> length is not 2.
 	 */
 	void setSPI(byte[] spi) throws IllegalArgumentException;
+
 	/**
 	 * Returns transformation name used for signing.
 	 * 
 	 * @return transformation name
 	 */
 	String getSignatureAlgorithm();
+
 	/**
 	 * Sets transformation name used for signing. Can be in short, e.g. DESMac,
 	 * or long(with mode), e.g. DESedeMac/CFB8, form.
@@ -211,12 +221,14 @@ public interface PacketBuilderConfiguration
 	 *            - transformation name.
 	 */
 	void setSignatureAlgorithm(String name);
+
 	/**
 	 * Returns transformation name used for ciphering.
 	 * 
 	 * @return transformation name
 	 */
 	String getCipheringAlgorithm();
+
 	/**
 	 * Sets transformation name used for ciphering. Can be in short, e.g. DES,
 	 * or long(with mode and padding), e.g. DESede/CBC/ZeroBytePadding, form.
@@ -225,4 +237,12 @@ public interface PacketBuilderConfiguration
 	 *            - transformation name.
 	 */
 	void setCipheringAlgorithm(String name);
+
+	/**
+	 * 
+	 * @return
+	 */
+	SecurityBytesType getSecurityBytesType();
+
+	void setSecurityBytesType(SecurityBytesType securityBytesType);
 }

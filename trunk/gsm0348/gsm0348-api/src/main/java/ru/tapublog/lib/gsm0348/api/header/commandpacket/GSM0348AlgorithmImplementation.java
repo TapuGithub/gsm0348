@@ -1,6 +1,7 @@
 package ru.tapublog.lib.gsm0348.api.header.commandpacket;
 
 import org.apache.log4j.Logger;
+
 /**
  * @author Victor Platov
  */
