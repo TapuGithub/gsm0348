@@ -1,12 +1,13 @@
 package ru.tapublog.lib.gsm0348.api.header.commandpacket.response;
 
 import org.apache.log4j.Logger;
+
 /**
  * @author Victor Platov
  */
 public enum GSM0348PoRProtocol
 {
-	SMS_DELIVER_REPORT((byte)0),SMS_SUBMIT((byte)1);
+	SMS_DELIVER_REPORT((byte) 0), SMS_SUBMIT((byte) 1);
 
 	private byte m_code;
 

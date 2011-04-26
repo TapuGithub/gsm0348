@@ -1,6 +1,7 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
+
 import ru.tapublog.lib.gsm0348.api.PacketData;
 import ru.tapublog.lib.gsm0348.api.SecuredPacket;
 import ru.tapublog.lib.gsm0348.api.SecurityHeader;
@@ -11,6 +12,7 @@ import ru.tapublog.lib.gsm0348.api.SecurityHeader;
 @Immutable
 public abstract class SecuredPacketImpl implements SecuredPacket
 {
+
 	private final PacketData m_data;
 	private final SecurityHeader m_header;
 
@@ -18,10 +20,12 @@ public abstract class SecuredPacketImpl implements SecuredPacket
 	{
 		if (header == null || data == null)
 			throw new IllegalArgumentException("data and header cannot be null");
+
 		m_data = data;
 		m_header = header;
 	}
 
+	@Override
 	public PacketData getData()
 	{
 		return m_data;
@@ -45,6 +49,7 @@ public abstract class SecuredPacketImpl implements SecuredPacket
 		return result;
 	}
 
+	@Override
 	public SecurityHeader getHeader()
 	{
 		return m_header;

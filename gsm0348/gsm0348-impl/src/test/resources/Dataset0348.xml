@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dataset>
+	<testcase name="test001">
+		<KIc>01</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 01 01 B0 00 10 1B 94 C9 BA 4B E5 D6 65 69 59 EA 5C 1B 6E 2A AA 47 46 F4 85 41 37 47 18 9E 5E EC C3 C0 48 4A AD</Result>
+	</testcase>
+
+	<testcase name="test002">
+		<KIc>01</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>17 93 F5 B8 FA 36 59 11</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 01 01 B0 00 10 59 05 05 41 26 C9 10 D7 FF 30 8D 2D 37 7B 7F 98 1C 73 70 E4 63 9F 0E C8 2F 9F ED 71 B2 52 78 30</Result>
+	</testcase>
+
+	<testcase name="test003">
+		<KIc>0D</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>00 00 00 00 00 00 00 00</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 0D 01 B0 00 10 1B 94 C9 BA 4B E5 D6 65 19 13 11 BC 86 95 71 BC 52 D8 B8 B7 B6 54 DE A8 C4 31 39 D8 A6 AA 05 E3</Result>
+	</testcase>
+
+	<testcase name="test004">
+		<KIc>0D</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>17 93 F5 B8 FA 36 59 11</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 0D 01 B0 00 10 59 05 05 41 26 C9 10 D7 83 7B 8C 16 44 C0 6C AF CB F4 98 D3 38 9C C2 E8 AF F3 E3 FF 45 1D 33 24</Result>
+	</testcase>
+
+	<testcase name="test005">
+		<KIc>05</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 05 01 B0 00 10 1B 94 C9 BA 4B E5 D6 65 69 59 EA 5C 1B 6E 2A AA 47 46 F4 85 41 37 47 18 9E 5E EC C3 C0 48 4A AD</Result>
+	</testcase>
+
+	<testcase name="test006">
+		<KIc>05</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>FA 33 84 47 F0 66 D8 4D 66 74 8B 17 35 09 C5 3F</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 05 01 B0 00 10 14 A9 6F 4D FD 50 E5 5A DF 87 B0 1E D6 C7 25 85 FC 15 6D 8B 41 AD C3 5B A7 A4 3A 77 6F 49 C5 D4</Result>
+	</testcase>
+
+	<testcase name="test007">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 09 01 B0 00 10 1B 94 C9 BA 4B E5 D6 65 69 59 EA 5C 1B 6E 2A AA 47 46 F4 85 41 37 47 18 9E 5E EC C3 C0 48 4A AD</Result>
+	</testcase>
+
+	<testcase name="test008">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 09 01 B0 00 10 82 1E F0 31 1F B8 E5 B6 A2 F7 EF A3 65 37 B3 1E B3 C9 FA B4 B5 23 00 70 81 BA 81 3C 77 D4 C5 BF</Result>
+	</testcase>
+
+	<testcase name="test009">
+		<KIc>04</KIc>
+		<CipheringAlgorithm>DESede/ECB/NoPadding</CipheringAlgorithm>
+		<CipheringKey>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 04 01 B0 00 10 1B 94 C9 BA 4B E5 D6 65 19 13 11 BC 86 95 71 BC 52 D8 B8 B7 B6 54 DE A8 C4 31 39 D8 A6 AA 05 E3</Result>
+	</testcase>
+
+	<testcase name="test010">
+		<KIc>04</KIc>
+		<CipheringAlgorithm>DESede/ECB/NoPadding</CipheringAlgorithm>
+		<CipheringKey>FA 33 84 47 F0 66 D8 4D 66 74 8B 17 35 09 C5 3F</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 04 01 B0 00 10 14 A9 6F 4D FD 50 E5 5A D8 D0 96 28 23 EA CC B0 64 CD BF A9 22 FD E2 F5 63 8C A6 78 7D 16 8D D8</Result>
+	</testcase>
+
+	<testcase name="test011">
+		<KIc>08</KIc>
+		<CipheringAlgorithm>DESede/ECB/NoPadding</CipheringAlgorithm>
+		<CipheringKey>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 08 01 B0 00 10 1B 94 C9 BA 4B E5 D6 65 19 13 11 BC 86 95 71 BC 52 D8 B8 B7 B6 54 DE A8 C4 31 39 D8 A6 AA 05 E3</Result>
+	</testcase>
+
+	<testcase name="test012">
+		<KIc>08</KIc>
+		<CipheringAlgorithm>DESede/ECB/NoPadding</CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 08 01 B0 00 10 82 1E F0 31 1F B8 E5 B6 A8 6F 88 4F 31 56 7F 88 C5 8F 01 51 81 07 B4 2B FF 93 25 12 D7 A4 5B 1C</Result>
+	</testcase>
+
+	<testcase name="test013">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 12 CD</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 09 01 B0 00 10 5D C0 A2 37 45 53 46 72 7F 48 A6 95 8F 03 14 0E 2A E7 51 20 0A 4D 95 87 81 DD 5E C9 7B 2D 1A C2</Result>
+	</testcase>
+
+	<testcase name="test014">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>FF AB 00 FF 00</Counter>
+		<spi>0C 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 0C 01 09 01 B0 00 10 B7 88 B3 F7 E5 E2 22 EE D4 D0 47 47 B8 9E 6E B3 C4 07 2B 81 AD 75 AA B9 F4 06 A7 4C E8 16 99 22</Result>
+	</testcase>
+
+<!--
+	<testcase name="test015">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0D 01</spi>
+		<KID>00</KID>
+		<SignatureAlgorithm>XOR4</SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 30 11 0D 01 09 00 B0 00 10 58 D3 83 C5 F5 3F 8D 9C 07 87 E2 D4 FC 8B C8 A8 80 05 BD 17 BE 63 30 8A BB 64 05 DA C4 FA E0 77 9F FF AA 7E 1A 44 7C 95</Result>
+	</testcase>
+
+	<testcase name="test016">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0D 01</spi>
+		<KID>00</KID>
+		<SignatureAlgorithm>CRC32</SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 30 11 0D 01 09 00 B0 00 10 49 EB 43 42 4D 46 A4 F8 A9 9E EA CB 48 65 31 04 44 52 44 8F 30 5A 40 C0 E4 C8 7A A1 22 AE D0 A9 BF E2 80 8F 1B 7A B7 39</Result>
+	</testcase>
+-->
+	
+	<testcase name="test017">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0E 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 30 15 0E 01 09 01 B0 00 10 8F D7 BB FE 89 F1 44 DF 2F 09 0B C7 F4 57 8C 58 89 60 2E 3A 64 E6 EF CD A3 A4 7F D8 A1 24 CF D3 F0 BA E1 32 E3 63 D6 D9</Result>
+	</testcase>
+
+	<testcase name="test018">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0E 01</spi>
+		<KID>01</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>B1 27 D4 FF AC 65 A5 3A</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 30 15 0E 01 09 01 B0 00 10 82 BC 0C 16 A1 FC 37 54 41 DB 11 63 13 02 11 93 23 90 EB D2 09 C7 C1 83 58 9E F8 C5 81 CE 82 0F B3 31 C3 03 2B A2 B2 FC</Result>
+	</testcase>
+
+	<testcase name="test019">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0E 01</spi>
+		<KID>05</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 30 15 0E 01 09 05 B0 00 10 7B F3 2C 9E A2 82 CE 6D 12 66 E0 99 A9 72 61 8F 9F 4E C1 AA 66 E6 FE EB 0E 05 63 C1 6D 9F 6F 30 FB B6 5F 3C AA 93 59 0C</Result>
+	</testcase>
+
+	<testcase name="test020">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0E 01</spi>
+		<KID>05</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>FA 33 84 47 F0 66 D8 4D 66 74 8B 17 35 09 C5 3F</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 30 15 0E 01 09 05 B0 00 10 C4 29 58 A0 C4 91 76 4C 07 CD 13 E8 05 F6 65 B2 CF B6 13 89 F2 A0 18 AB 68 CA 3E CE 19 13 47 C1 1A CE 57 E2 38 55 2A 61</Result>
+	</testcase>
+
+	<testcase name="test021">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0E 01</spi>
+		<KID>09</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 30 15 0E 01 09 09 B0 00 10 73 BF F6 C6 8A F2 23 76 68 52 80 DD 3E DF 4C 09 9D 38 69 CF AF B6 7D BC 50 EB 24 18 42 FE AA 9C B7 01 B7 F3 AB 0C D2 AD</Result>
+	</testcase>
+
+	<testcase name="test022">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>0E 01</spi>
+		<KID>09</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>95 71 C0 BE 50 A3 5A 74 03 4D 05 5F 5A 0A 3F B1 00 05 D8 C9 3C 6A 39 18</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 30 15 0E 01 09 09 B0 00 10 F6 24 31 EA 2C 69 C4 42 98 E5 2B 71 EF 4D FD 05 FA 42 7F 05 E9 20 25 01 04 61 25 FE 1A FE 32 5E 56 D1 30 B6 60 EE E5 2A</Result>
+	</testcase>
+
+	<testcase name="test023">
+		<KIc>09</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>93 8E D7 1B 96 CC 42 4B 72 55 E7 00 AF 27 D4 AA 12 8B AA 5F 27 D2 55 59</CipheringKey>
+		<Counter>00 00 00 00 01</Counter>
+		<spi>08 01</spi>
+		<KID>09</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>95 71 C0 BE 50 A3 5A 74 03 4D 05 5F 5A 0A 3F B1 00 05 D8 C9 3C 6A 39 18</SignatureKey>
+		<Data>A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6f 3C A0 B2 01 04 05</Data>
+		<Tar>B0 00 10</Tar>
+
+		<Result>00 28 0D 08 01 09 09 B0 00 10 00 00 00 00 01 00 A0 A4 00 00 02 3F 00 A0 A4 00 00 02 7F 10 A0 A4 00 00 02 6F 3C A0 B2 01 04 05</Result>
+	</testcase>
+
+	<testcase name="test024">
+		<KIc>75</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>20 42 20 42 20 44 20 44 20 45 20 45 20 46 20 46</CipheringKey>
+		<Counter>00 00 00 03 6F</Counter>
+		<spi>16 01</spi>
+		<KID>75</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>21 23 45 67 89 AB CD EF 10 02 76 FE DC BA 01 23</SignatureKey>
+		<Data>A0 A4 00 00 02 7F 20</Data>
+		<Tar>00 00 00</Tar>
+
+		<Result>00 20 15 16 01 75 75 00 00 00 2B 2D 23 49 31 B5 81 FC 76 BE 70 F3 C5 DD 49 F2 96 7E 9B 22 44 A2 28 C1</Result>
+	</testcase>
+		<testcase name="test101">
+		<KIc>75</KIc>
+		<CipheringAlgorithm></CipheringAlgorithm>
+		<CipheringKey>20 42 20 42 20 44 20 44 20 45 20 45 20 46 20 46</CipheringKey>
+		<Counter>00 00 00 03 6F</Counter>
+		<spi>12 01</spi>
+		<KID>75</KID>
+		<SignatureAlgorithm></SignatureAlgorithm>
+		<SignatureKey>21 23 45 67 89 AB CD EF 10 02 76 FE DC BA 01 23</SignatureKey>
+		<Data>A0 A4 00 00 02 7F 20</Data>
+		<Tar>00 00 00</Tar>
+
+		<Result>00 1D 15 12 01 75 75 00 00 00 00 00 00 03 6F 00 87 A4 7C 63 0C 8C A8 9E A0 A4 00 00 02 7F 20</Result>
+	</testcase>
+</Dataset>
+	

@@ -1,5 +1,10 @@
 package ru.tapublog.lib.gsm0348.api;
 
+/**
+ * General library exception
+ * 
+ * @author Victor Platov
+ * */
 public class Gsm0348Exception extends Exception
 {
 	private static final long serialVersionUID = -593113341925505030L;

@@ -1,18 +1,18 @@
 package ru.tapublog.lib.gsm0348.impl;
 
 import javax.annotation.concurrent.Immutable;
-import ru.tapublog.lib.gsm0348.impl.Util;
+
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.ResponseSPI;
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.response.GSM0348PoRCertificateMode;
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.response.GSM0348PoRMode;
 import ru.tapublog.lib.gsm0348.api.header.commandpacket.response.GSM0348PoRProtocol;
-
 /**
  * @author Victor Platov
  */
 @Immutable
 public final class ResponseSPIImpl implements ResponseSPI
 {
+
 	private final byte m_data;
 
 	public ResponseSPIImpl(byte data)
@@ -20,21 +20,25 @@ public final class ResponseSPIImpl implements ResponseSPI
 		m_data = data;
 	}
 
+	@Override
 	public GSM0348PoRCertificateMode getPoRCertificateMode()
 	{
 		return GSM0348PoRCertificateMode.get((byte) ((m_data & 0xC) >> 2));
 	}
 
+	@Override
 	public GSM0348PoRProtocol getPoRProtocol()
 	{
 		return GSM0348PoRProtocol.get((byte) ((m_data & 0x20) >> 5));
 	}
 
+	@Override
 	public GSM0348PoRMode getPoRMode()
 	{
 		return GSM0348PoRMode.get((byte) (m_data & 0x3));
 	}
 
+	@Override
 	public boolean isPoRCiphered()
 	{
 		return ((m_data & 0x10) != 0);
@@ -43,9 +47,9 @@ public final class ResponseSPIImpl implements ResponseSPI
 	public String toString()
 	{
 		return "ResponseSPI[PoRCertificateMode=" + getPoRCertificateMode() + ", PoRProtocol=" + getPoRProtocol() + ", PoRMode="
-				+ getPoRMode() + ", PoRCiphered=" + isPoRCiphered() + ", raw=" + Util.toHex(m_data) + "]";
+				+ getPoRMode() + ", PoRCiphered=" + isPoRCiphered() + ", raw="+Util.toHex(m_data) +"]";
 	}
-
+	
 	public boolean equals(Object obj)
 	{
 		if (this == obj)
@@ -53,6 +57,7 @@ public final class ResponseSPIImpl implements ResponseSPI
 		if (!(obj instanceof ResponseSPIImpl))
 			return false;
 		ResponseSPIImpl rspii = (ResponseSPIImpl) obj;
+
 		return m_data == rspii.m_data;
 	}
 

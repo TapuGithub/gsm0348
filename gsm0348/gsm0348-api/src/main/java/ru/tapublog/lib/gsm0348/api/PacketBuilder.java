@@ -1,5 +1,8 @@
 package ru.tapublog.lib.gsm0348.api;
+
 import ru.tapublog.lib.gsm0348.api.header.responsepacket.GSM0348ResponsePacketStatusCode;
+
+
 /**
  * This interface describes GSM 03.48 packet builder. Instances of this
  * interface must create and recover GSM 03.48 {@linkplain CommandPacket} and
@@ -24,12 +27,14 @@ public interface PacketBuilder
 	 *             if configuration is in inconsistent state.
 	 */
 	void setConfiguration(PacketBuilderConfiguration builderConfiguration) throws PacketBuilderConfigurationException;
+
 	/**
 	 * Returns configuration used or null if builder is not configured.
 	 * 
 	 * @return {@linkplain PacketBuilderConfiguration} used.
 	 */
 	PacketBuilderConfiguration getConfiguration();
+
 	/**
 	 * Returns builder configuration state. After
 	 * {@linkplain PacketBuilder#setConfiguration setConfiguration} method
@@ -40,6 +45,7 @@ public interface PacketBuilder
 	 * @return builder configuration state
 	 */
 	boolean isConfigured();
+
 	/**
 	 * Builds {@linkplain CommandPacket}.
 	 * 
@@ -57,12 +63,13 @@ public interface PacketBuilder
 	 * @throws PacketBuilderConfigurationException
 	 *             if builder if not configured or if ciphering and/or signing
 	 *             is on but key is not provided.
-	 * @throws SimUpdaterException
+	 * @throws Gsm0348Exception
 	 *             in other cases.
 	 * 
 	 */
 	CommandPacket buildCommandPacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey)
 			throws PacketBuilderConfigurationException, Gsm0348Exception;
+
 	/**
 	 * Recovers {@linkplain ResponsePacket} from byte array.
 	 * 
@@ -80,12 +87,13 @@ public interface PacketBuilder
 	 * @throws PacketBuilderConfigurationException
 	 *             if builder if not configured or if ciphering and/or signing
 	 *             is on but key is not provided.
-	 * @throws SimUpdaterException
+	 * @throws Gsm0348Exception
 	 *             in other cases.
 	 * 
 	 */
 	ResponsePacket recoverResponsePacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
 			throws PacketBuilderConfigurationException, Gsm0348Exception;
+
 	/**
 	 * Builds {@linkplain ResponsePacket}. Not implemented.
 	 * 
@@ -106,13 +114,14 @@ public interface PacketBuilder
 	 * @throws PacketBuilderConfigurationException
 	 *             if builder if not configured or if ciphering and/or signing
 	 *             is on but key is not provided.
-	 * @throws SimUpdaterException
+	 * @throws Gsm0348Exception
 	 *             in other cases.
 	 * 
 	 */
 	@Deprecated
 	ResponsePacket buildResponsePacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey,
 			GSM0348ResponsePacketStatusCode responseCode) throws PacketBuilderConfigurationException, Gsm0348Exception;
+
 	/**
 	 * Recovers {@linkplain CommandPacket} from byte array. Not implemented.
 	 * 
@@ -130,7 +139,7 @@ public interface PacketBuilder
 	 * @throws PacketBuilderConfigurationException
 	 *             if builder if not configured or if ciphering and/or signing
 	 *             is on but key is not provided.
-	 * @throws SimUpdaterException
+	 * @throws Gsm0348Exception
 	 *             in other cases.
 	 * 
 	 */

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<xs:schema id="Dataset" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Dataset">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="testcase" type="testCaseType" />
+      </xs:choice>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:simpleType name="byteArray">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([0-9A-Fa-f]{2} ?)*" />
+    </xs:restriction>
+  </xs:simpleType>
+ 
+  <xs:complexType name="testCaseType">
+    <xs:all>
+	  <xs:element name="KIc" type="byteArray" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="CipheringAlgorithm" type="xs:string" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="CipheringKey" type="byteArray" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="Counter" type="byteArray" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="spi" type="byteArray" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="KID" type="byteArray" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="SignatureAlgorithm" type="xs:string" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="SignatureKey" type="byteArray" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="Data" type="byteArray" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="Tar" type="byteArray" minOccurs="1" maxOccurs="1" />
+	  <xs:element name="Result" type="byteArray" minOccurs="1" maxOccurs="1" />
+	</xs:all>
+	<xs:attribute name="name" type="xs:string" use="required" /> 
+  </xs:complexType>
+</xs:schema>
