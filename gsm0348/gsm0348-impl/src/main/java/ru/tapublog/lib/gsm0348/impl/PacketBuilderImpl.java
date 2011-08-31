@@ -146,12 +146,10 @@ public class PacketBuilderImpl implements PacketBuilder
 		try
 		{
 			m_cipherBlockSize = CipheringManager.getBlockSize(m_cipheringAlgorithmName);
-		}
-		catch (NoSuchAlgorithmException ex)
+		} catch (NoSuchAlgorithmException ex)
 		{
 			throw new PacketBuilderConfigurationException(ex);
-		}
-		catch (NoSuchPaddingException ex)
+		} catch (NoSuchPaddingException ex)
 		{
 			throw new PacketBuilderConfigurationException(ex);
 		}
@@ -198,8 +196,7 @@ public class PacketBuilderImpl implements PacketBuilder
 		try
 		{
 			m_signatureSize = SignatureManager.signLength(m_signatureAlgorithmName);
-		}
-		catch (NoSuchAlgorithmException ex)
+		} catch (NoSuchAlgorithmException ex)
 		{
 			throw new PacketBuilderConfigurationException(ex);
 		}
@@ -332,8 +329,7 @@ public class PacketBuilderImpl implements PacketBuilder
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Packet created : " + packet);
 			return packet;
-		}
-		catch (GeneralSecurityException e)
+		} catch (GeneralSecurityException e)
 		{
 			throw new Gsm0348Exception(e);
 		}
@@ -343,21 +339,26 @@ public class PacketBuilderImpl implements PacketBuilder
 	public ResponsePacket recoverResponsePacket(byte[] rawdata, byte[] cipheringKey, byte[] signatureKey)
 			throws PacketBuilderConfigurationException, Gsm0348Exception
 	{
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Recovering response packet.\n\tData:" + Util.toHexArray(rawdata) + 
+					"\n\tCipheringKey:" + Util.toHexArray(cipheringKey) + "\n\tSigningKey:"
+					+ Util.toHexArray(signatureKey));
+		
 		if (!isConfigured())
 			throw new PacketBuilderConfigurationException("Not configured");
 
 		if (rawdata == null)
-			throw new NullPointerException("packet data cannot be null");
+			throw new IllegalArgumentException("packet data cannot be null");
 
-		if (m_responsePacketCiphering && (cipheringKey == null))
-			throw new PacketBuilderConfigurationException("Response ciphering is enabled - ciphering key must be specified");
-		if (m_responsePacketSigning && (signatureKey == null))
-			throw new PacketBuilderConfigurationException("Response signing is enabled - signature key must be specified");
+		if (m_responsePacketCiphering && (cipheringKey == null || cipheringKey.length == 0))
+			throw new PacketBuilderConfigurationException("Response ciphering is enabled - ciphering key must be specified. Provided: " + ((cipheringKey.length == 0)?"empty":Util.toHexArray(cipheringKey)));
+		if (m_responsePacketSigning && (signatureKey == null || signatureKey.length == 0))
+			throw new PacketBuilderConfigurationException("Response signing is enabled - signature key must be specified. Provided: " + ((signatureKey.length == 0)?"empty":Util.toHexArray(signatureKey)));
 
 		final int packetLength = Util.unsignedByteToInt(rawdata[0]) + Util.unsignedByteToInt(rawdata[1]);
 		if (rawdata.length - PACKET_LENGHT_SIZE != packetLength)
-			throw new Gsm0348Exception("Length of raw data doesnt match packet length. Expected " + packetLength + " but found "
-					+ (rawdata.length - PACKET_LENGHT_SIZE));
+			throw new Gsm0348Exception("Length of raw data doesnt match packet length. Expected " + packetLength
+					+ " but found " + (rawdata.length - PACKET_LENGHT_SIZE));
 
 		final int headerLength = Util.unsignedByteToInt(rawdata[HEADER_LENGHT_RESPONSE_POSITION]);
 		final byte[] tar = new byte[TAR_SIZE];
@@ -367,13 +368,13 @@ public class PacketBuilderImpl implements PacketBuilder
 
 		if (rawdata.length < MINIMUM_RESPONSE_PACKET_SIZE + signatureLength)
 		{
-			String message = "rawdata too small to be response packet. Expected to be not less then "
-					+ (MINIMUM_RESPONSE_PACKET_SIZE) + ", but found " + rawdata.length;
-			if (rawdata.length < MINIMUM_RESPONSE_PACKET_SIZE)
+			String message = "rawdata too small to be response packet. Expected to be >= "
+				+ (MINIMUM_RESPONSE_PACKET_SIZE+signatureLength)+", but found " + rawdata.length;
+			if(rawdata.length >= MINIMUM_RESPONSE_PACKET_SIZE)
 			{
-				message += ". It can be caused by incorrect profile(SPI value). Check SPI!";
-				if (LOGGER.isEnabledFor(Level.WARN))
-					LOGGER.warn("Packet recived(raw): " + Arrays.toString(rawdata));
+				message+=". It can be caused by incorrect profile(SPI value). Check SPI!";
+				if(LOGGER.isEnabledFor(Level.WARN))
+					LOGGER.warn("Packet recived(raw): " + Util.toHexArray(rawdata));
 			}
 			throw new Gsm0348Exception(message);
 		}
@@ -390,16 +391,17 @@ public class PacketBuilderImpl implements PacketBuilder
 			if (m_responsePacketCiphering)
 			{
 				byte[] dataEnc = CipheringManager.decipher(m_cipheringAlgorithmName, cipheringKey,
-						Arrays.copyOfRange(rawdata, 6, rawdata.length - 1));
+						Arrays.copyOfRange(rawdata, 6, rawdata.length));
 				System.arraycopy(dataEnc, 0, counters, 0, COUNTERS_SIZE);
 				paddingCounter = Util.unsignedByteToInt(dataEnc[COUNTERS_SIZE]);
 				responseCode = dataEnc[COUNTERS_SIZE + 1];
+				if(dataEnc.length < COUNTERS_SIZE + 2 + signatureLength)
+					throw new Gsm0348Exception("Packet recovery failure. Possibly because of unexpected security bytes length. Expected: " + m_signatureSize);
 				System.arraycopy(dataEnc, COUNTERS_SIZE + 2, signature, 0, signatureLength);
 				final int dataSize = dataEnc.length - TAR_SIZE - HEADER_LENGHT_SIZE;
 				data = new byte[dataSize];
 				System.arraycopy(dataEnc, COUNTERS_SIZE + 2 + signatureLength, data, 0, dataSize);
-			}
-			else
+			} else
 			{
 				System.arraycopy(rawdata, COUNTERS_RESPONSE_POSITION, counters, 0, COUNTERS_SIZE);
 				paddingCounter = Util.unsignedByteToInt(rawdata[PADDING_COUNTER_RESPONSE_POSITION]);
@@ -455,9 +457,10 @@ public class PacketBuilderImpl implements PacketBuilder
 
 			ResponsePacketHeader header = new ResponsePacketHeaderImpl(headerData, signatureLength);
 			ResponsePacket packet = new ResponsePacketImpl(header, new PacketDataImpl(data));
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("Packet recovered : " + packet);
 			return packet;
-		}
-		catch (GeneralSecurityException e)
+		} catch (GeneralSecurityException e)
 		{
 			throw new Gsm0348Exception(e);
 		}
@@ -483,6 +486,16 @@ public class PacketBuilderImpl implements PacketBuilder
 		final CommandSPI commandSPI = new CommandSPIImpl(builderConfiguration.getSPI()[0]);
 		final ResponseSPI responseSPI = new ResponseSPIImpl(builderConfiguration.getSPI()[1]);
 
+		if(commandSPI.getCertificateMode() == GSM0348CertificateMode.DS)
+			throw new PacketBuilderConfigurationException("Digital signature in command packets is not supported. Please change first byte of SPI. Possibly to cryptograthic checksum(CC). It will be: " + Util.toHex((byte)(builderConfiguration.getSPI()[0]&0xFC|2)));
+		if(commandSPI.getCertificateMode() == GSM0348CertificateMode.RC)
+			throw new PacketBuilderConfigurationException("Redundancy checking in command packets is not supported. Please change first byte of SPI. Possibly to cryptograthic checksum(CC).It will be: " + Util.toHex((byte)(builderConfiguration.getSPI()[0]&0xFC|2)));
+
+		if(responseSPI.getPoRCertificateMode() == GSM0348PoRCertificateMode.DS)
+			throw new PacketBuilderConfigurationException("Digital signature in response packets is not supported. Please change second byte of SPI. Possibly to cryptograthic checksum(CC). It will be: " + Util.toHex((byte)(builderConfiguration.getSPI()[1]&0xF3|8)));
+		if(responseSPI.getPoRCertificateMode() == GSM0348PoRCertificateMode.RC)
+			throw new PacketBuilderConfigurationException("Redundancy checking in response packets is not supported. Please change second byte of SPI. Possibly to cryptograthic checksum(CC). It will be: " + Util.toHex((byte)(builderConfiguration.getSPI()[1]&0xF3|8)));
+		
 		m_commandPacketCiphering = commandSPI.isCiphered();
 		m_responsePacketCiphering = responseSPI.isPoRCiphered();
 
