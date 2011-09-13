@@ -1,6 +1,9 @@
 package ru.tapublog.lib.gsm0348.api;
 
-import ru.tapublog.lib.gsm0348.api.header.responsepacket.GSM0348ResponsePacketStatusCode;
+import ru.tapublog.lib.gsm0348.api.model.CardProfile;
+import ru.tapublog.lib.gsm0348.api.model.CommandPacket;
+import ru.tapublog.lib.gsm0348.api.model.ResponsePacket;
+import ru.tapublog.lib.gsm0348.api.model.ResponsePacketStatus;
 
 
 /**
@@ -14,30 +17,30 @@ import ru.tapublog.lib.gsm0348.api.header.responsepacket.GSM0348ResponsePacketSt
 public interface PacketBuilder
 {
 	/**
-	 * Sets builder configuration providing all needed for packet builder and
+	 * Sets builder profile providing all needed for packet builder and
 	 * recovering information. Builder <strong>must</strong> be configured
-	 * before usage. Configuration state can be checked using
+	 * before usage. Profile state can be checked using
 	 * {@linkplain PacketBuilder#isConfigured isConfigured} method.
 	 * 
-	 * @param builderConfiguration
-	 *            - any {@linkplain PacketBuilderConfiguration} instance.
+	 * @param cardProfile
+	 *            - any {@linkplain CardProfile} instance.
 	 * @throws NullPointerException
-	 *             if <strong>builderConfiguration</strong> parameter is null.
+	 *             if <strong>cardProfile</strong> parameter is null.
 	 * @throws PacketBuilderConfigurationException
 	 *             if configuration is in inconsistent state.
 	 */
-	void setConfiguration(PacketBuilderConfiguration builderConfiguration) throws PacketBuilderConfigurationException;
+	void setProfile(CardProfile cardProfile) throws PacketBuilderConfigurationException;
 
 	/**
-	 * Returns configuration used or null if builder is not configured.
+	 * Returns profile used or null if builder is not configured.
 	 * 
-	 * @return {@linkplain PacketBuilderConfiguration} used.
+	 * @return {@linkplain CardProfile} used.
 	 */
-	PacketBuilderConfiguration getConfiguration();
+	CardProfile getProfile();
 
 	/**
 	 * Returns builder configuration state. After
-	 * {@linkplain PacketBuilder#setConfiguration setConfiguration} method
+	 * {@linkplain PacketBuilder#setConfiguration setProfile} method
 	 * called if no exception thrown builder should turn no configured state and
 	 * this method return <code>true</code>. Otherwise it will should return
 	 * <code>false</code>.
@@ -59,7 +62,7 @@ public interface PacketBuilder
 	 * @param signatureKey
 	 *            - signature key. Used only if signing is needed, otherwise can
 	 *            be null.
-	 * @return {@linkplain CommandPacket}
+	 * @return byte[] with {@linkplain CommandPacket}
 	 * @throws PacketBuilderConfigurationException
 	 *             if builder if not configured or if ciphering and/or signing
 	 *             is on but key is not provided.
@@ -67,7 +70,7 @@ public interface PacketBuilder
 	 *             in other cases.
 	 * 
 	 */
-	CommandPacket buildCommandPacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey)
+	byte[] buildCommandPacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey)
 			throws PacketBuilderConfigurationException, Gsm0348Exception;
 
 	/**
@@ -107,10 +110,10 @@ public interface PacketBuilder
 	 * @param signatureKey
 	 *            - signature key. Used only if signing is needed, otherwise can
 	 *            be null.
-	 * @param responseCode
-	 *            - {@linkplain GSM0348ResponsePacketStatusCode} of the building
+	 * @param responseStatus
+	 *            - {@linkplain ResponsePacketStatus} of the building
 	 *            message.
-	 * @return {@linkplain ResponsePacket}
+	 * @return byte[] with {@linkplain ResponsePacket}
 	 * @throws PacketBuilderConfigurationException
 	 *             if builder if not configured or if ciphering and/or signing
 	 *             is on but key is not provided.
@@ -118,9 +121,9 @@ public interface PacketBuilder
 	 *             in other cases.
 	 * 
 	 */
-	@Deprecated
-	ResponsePacket buildResponsePacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey,
-			GSM0348ResponsePacketStatusCode responseCode) throws PacketBuilderConfigurationException, Gsm0348Exception;
+	@Deprecated 
+	byte[] buildResponsePacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey,
+			ResponsePacketStatus responseStatus) throws PacketBuilderConfigurationException, Gsm0348Exception;
 
 	/**
 	 * Recovers {@linkplain CommandPacket} from byte array. Not implemented.
