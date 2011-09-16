@@ -51,6 +51,96 @@ public class ResponseSPI {
     @XmlElement(name = "Ciphered")
     protected boolean ciphered;
 
+    public void setValue(byte responseByte) {
+        switch((byte)(responseByte&0x03)) {
+            case 0:
+                poRMode = PoRMode.NO_REPLY;
+                break;
+            case 1:
+                poRMode = PoRMode.REPLY_ALWAYS;
+                break;
+            case 2:
+                poRMode = PoRMode.REPLY_WHEN_ERROR;
+                break;
+            case 3:
+                poRMode = PoRMode.RESERVED;
+                break;
+        }
+
+        switch((byte)((responseByte>>2)&0x03)) {
+            case 0:
+                poRCertificateMode = CertificationMode.NO_SECURITY;
+                break;
+            case 1:
+                poRCertificateMode = CertificationMode.RC;
+                break;
+            case 2:
+                poRCertificateMode = CertificationMode.CC;
+                break;
+            case 3:
+                poRCertificateMode = CertificationMode.DS;
+                break;
+        }
+    
+        ciphered = (responseByte&0x10)!=0;
+        
+        switch((byte)((responseByte>>5)&0x01)) {
+            case 0:
+                poRProtocol = PoRProtocol.SMS_DELIVER_REPORT;
+                break;
+            case 1:
+                poRProtocol = PoRProtocol.SMS_SUBMIT;
+                break;
+        }
+    }
+    
+    public byte getValue() {
+        byte responseByte = 0;
+        
+        switch(poRMode){
+            case NO_REPLY:
+                //responseByte |= 0x00;
+                break;
+            case REPLY_ALWAYS:
+                responseByte |= 0x01;
+                break;
+            case REPLY_WHEN_ERROR:
+                responseByte |= 0x02;
+                break;
+            case RESERVED:
+                responseByte |= 0x03;
+                break;
+        }
+        
+        switch(poRCertificateMode){
+            case NO_SECURITY:
+                //responseByte |= 0x00<<2;
+                break;
+            case RC:
+                responseByte |= 0x01<<2;
+                break;
+            case CC:
+                responseByte |= 0x02<<2;
+                break;
+            case DS:
+                responseByte |= 0x03<<2;
+                break;
+        }
+        
+        if(ciphered)
+            responseByte |= 0x10;
+
+        switch(poRProtocol){
+            case SMS_DELIVER_REPORT:
+                //responseByte |= 0x00<<5;
+                break;
+            case SMS_SUBMIT:
+                responseByte |= 0x01<<5;
+                break;
+        }
+        return responseByte;
+    }
+
     /**
      * Gets the value of the poRProtocol property.
      * 

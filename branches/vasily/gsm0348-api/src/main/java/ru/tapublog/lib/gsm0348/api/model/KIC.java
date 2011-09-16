@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "KIC", propOrder = {
 
 })
-public class KIC {
+public class KIC implements Cloneable {
 
     @XmlElement(name = "KeysetID")
     protected byte keysetID;
@@ -48,6 +48,86 @@ public class KIC {
     @XmlElement(name = "AlgorithmImplementation", required = true)
     protected AlgorithmImplementation algorithmImplementation;
 
+    /**
+     * Constructor for known KIc
+     * 
+     * @param KIc 
+     *      byte for KIc
+     */
+    public void setValue(byte KIc) {
+        keysetID = (byte) (KIc>>4);
+        switch((byte)(KIc&0x3)) {
+            case 0:
+                algorithmImplementation = AlgorithmImplementation.ALGORITHM_KNOWN_BY_BOTH_ENTITIES;
+                break;
+            case 1:
+                algorithmImplementation = AlgorithmImplementation.DES;
+                break;
+            case 2:
+                algorithmImplementation = AlgorithmImplementation.RESERVED;
+                break;
+            case 3:
+                algorithmImplementation = AlgorithmImplementation.PROPRIETARY_IMPLEMENTATIONS;
+                break;
+        }
+
+        switch((byte)((KIc>>2)&0x3)) {
+            case 0:
+                cipheringAlgorithmMode = CipheringAlgorithmMode.DES_CBC;
+                break;
+            case 1:
+                cipheringAlgorithmMode = CipheringAlgorithmMode.TRIPLE_DES_CBC_2_KEYS;
+                break;
+            case 2:
+                cipheringAlgorithmMode = CipheringAlgorithmMode.TRIPLE_DES_CBC_3_KEYS;
+                break;
+            case 3:
+                cipheringAlgorithmMode = CipheringAlgorithmMode.DES_ECB;
+                break;
+        }
+    }
+    
+    /*
+     * Return byte of KIc
+     * 
+     */
+    public byte getValue() {
+        byte KIc = 0;
+        
+        switch(algorithmImplementation) {
+            case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
+                KIc |= 0x00;
+                break;
+            case DES:
+                KIc |= 0x01;
+                break;
+            case RESERVED:
+                KIc |= 0x02;
+                break;
+            case PROPRIETARY_IMPLEMENTATIONS:
+                KIc |= 0x03;
+                break;
+        }
+
+        switch(cipheringAlgorithmMode) {
+            case DES_CBC:
+                KIc |= 0x00;
+                break;
+            case TRIPLE_DES_CBC_2_KEYS:
+                KIc |= 0x01<<2;
+                break;
+            case TRIPLE_DES_CBC_3_KEYS:
+                KIc |= 0x02<<2;
+                break;
+            case DES_ECB:
+                KIc |= 0x03<<2;
+                break;
+        }
+        KIc |= keysetID<<4;
+        
+        return KIc;
+    }
+    
     /**
      * Gets the value of the keysetID property.
      * 
@@ -155,5 +235,9 @@ public class KIC {
 		builder.append("]");
 		return builder.toString();
 	}
-
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

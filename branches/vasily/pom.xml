@@ -73,4 +73,17 @@
 		<developerConnection>scm:svn:http://gsm0348.googlecode.com/svn/trunk/ gsm0348</developerConnection>
 		<url>http://code.google.com/p/gsm0348/source/browse</url>
 	</scm>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

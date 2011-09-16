@@ -8,6 +8,7 @@
 
 package ru.tapublog.lib.gsm0348.api.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -47,7 +48,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlType(name = "CardProfile", propOrder = {
 
 })
-public class CardProfile {
+public class CardProfile implements Cloneable {
 
     @XmlElement(name = "KIC", required = true)
     protected KIC kic;
@@ -64,6 +65,12 @@ public class CardProfile {
     protected String signatureAlgorithm;
     @XmlElement(name = "CipheringAlgorithm", required = true)
     protected String cipheringAlgorithm;
+    @XmlElement(name = "CipheringKeys", required = false)
+    @XmlJavaTypeAdapter(HexBinaryAdapter.class)
+    protected ArrayList<byte[]> cipheringkeys;
+    @XmlElement(name = "SignatureKeys", required = false)
+    @XmlJavaTypeAdapter(HexBinaryAdapter.class)
+    protected ArrayList<byte[]> signaturekeys;
 
     /**
      * Gets the value of the kic property.
@@ -232,8 +239,49 @@ public class CardProfile {
     public void setCipheringAlgorithm(String value) {
         this.cipheringAlgorithm = value;
     }
+    
+    public void setCipheringKeys(ArrayList<byte[]> cipheringkeys) {
+        this.cipheringkeys = cipheringkeys;        
+    }
 
-	@Override
+    public void setSignatureKeys(ArrayList<byte[]> signaturekeys) {
+        this.signaturekeys = signaturekeys;
+    }
+    
+    public byte[] getCipheringKey(int Number) {
+        if(cipheringkeys == null)
+            return null;
+        return cipheringkeys.get(Number);
+    }
+
+    public byte[] getSignatureKey(int Number) {
+        if(signaturekeys == null)
+            return null;
+        return signaturekeys.get(Number);
+    }
+    
+    /*
+    @Override
+    public CardProfile copy() {
+        CardProfile profCopy = new CardProfile();
+        
+        profCopy.setKIC(kic.copy());
+        profCopy.setKID(kid.copy());
+        profCopy.setSPI(spi.copy());
+        profCopy.setTAR(tar.clone());
+        profCopy.setSecurityBytesType(securityBytesType);
+        profCopy.setSignatureAlgorithm(new String(signatureAlgorithm));
+        profCopy.setCipheringAlgorithm(new String(cipheringAlgorithm));
+        
+        profCopy.setSignatureKeys((ArrayList<byte[]>)signaturekeys.clone());
+        profCopy.setCipheringKeys((ArrayList<byte[]>)cipheringkeys.clone());
+        
+        return profCopy;
+    }
+     * 
+     */
+
+    @Override
 	public int hashCode()
 	{
 		final int prime = 31;
@@ -322,4 +370,8 @@ public class CardProfile {
 		return builder.toString();
 	}
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

@@ -100,7 +100,7 @@ public class CipheringManager
 	{
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Deciphering data");
-		return doWork(transformation, key, data, null, Cipher.DECRYPT_MODE);
+        return doWork(transformation, key, data, new byte[]{0,0,0,0,0}, Cipher.DECRYPT_MODE);
 	}
 
 	private static void initCipher(Cipher cipher,int mode, byte[] key, byte[] iv) throws InvalidAlgorithmParameterException,

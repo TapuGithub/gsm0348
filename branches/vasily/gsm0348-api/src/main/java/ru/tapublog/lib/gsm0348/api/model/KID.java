@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "KID", propOrder = {
 
 })
-public class KID {
+public class KID implements Cloneable {
 
     @XmlElement(name = "KeysetID")
     protected byte keysetID;
@@ -47,6 +47,86 @@ public class KID {
     protected CertificationAlgorithmMode certificationAlgorithmMode;
     @XmlElement(name = "AlgorithmImplementation", required = true)
     protected AlgorithmImplementation algorithmImplementation;
+
+    /**
+     * Constructor for known KIc
+     * 
+     * @param KIc 
+     *      byte for KIc
+     */
+    public void setValue(byte KID) {
+        keysetID = (byte) (KID>>4);
+        switch((byte)(KID&0x3)) {
+            case 0:
+                algorithmImplementation = AlgorithmImplementation.ALGORITHM_KNOWN_BY_BOTH_ENTITIES;
+                break;
+            case 1:
+                algorithmImplementation = AlgorithmImplementation.DES;
+                break;
+            case 2:
+                algorithmImplementation = AlgorithmImplementation.RESERVED;
+                break;
+            case 3:
+                algorithmImplementation = AlgorithmImplementation.PROPRIETARY_IMPLEMENTATIONS;
+                break;
+        }
+
+        switch((byte)((KID>>2)&0x3)) {
+            case 0:
+                certificationAlgorithmMode = CertificationAlgorithmMode.DES_CBC;
+                break;
+            case 1:
+                certificationAlgorithmMode = CertificationAlgorithmMode.TRIPLE_DES_CBC_2_KEYS;
+                break;
+            case 2:
+                certificationAlgorithmMode = CertificationAlgorithmMode.TRIPLE_DES_CBC_3_KEYS;
+                break;
+            case 3:
+                certificationAlgorithmMode = CertificationAlgorithmMode.RESERVED;
+                break;
+        }
+    }
+    
+    /*
+     * Return byte of KIc
+     * 
+     */
+    public byte getValue() {
+        byte KID = 0;
+        
+        switch(algorithmImplementation) {
+            case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
+                KID |= 0x00;
+                break;
+            case DES:
+                KID |= 0x01;
+                break;
+            case RESERVED:
+                KID |= 0x02;
+                break;
+            case PROPRIETARY_IMPLEMENTATIONS:
+                KID |= 0x03;
+                break;
+        }
+
+        switch(certificationAlgorithmMode) {
+            case DES_CBC:
+                KID |= 0x00;
+                break;
+            case TRIPLE_DES_CBC_2_KEYS:
+                KID |= 0x01<<2;
+                break;
+            case TRIPLE_DES_CBC_3_KEYS:
+                KID |= 0x02<<2;
+                break;
+            case RESERVED:
+                KID |= 0x03<<2;
+                break;
+        }
+        KID |= keysetID<<4;
+        
+        return KID;
+    }
 
     /**
      * Gets the value of the keysetID property.
@@ -156,4 +236,8 @@ public class KID {
 		return builder.toString();
 	}
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

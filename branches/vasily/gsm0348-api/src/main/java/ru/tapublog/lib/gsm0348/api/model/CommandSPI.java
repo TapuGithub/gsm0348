@@ -48,6 +48,80 @@ public class CommandSPI {
     @XmlElement(name = "Ciphered")
     protected boolean ciphered;
 
+    public void setValue(byte commandByte) {
+        
+        switch((byte)(commandByte&0x03)) {
+            case 0:
+                certificationMode = CertificationMode.NO_SECURITY;
+                break;
+            case 1:
+                certificationMode = CertificationMode.RC;
+                break;
+            case 2:
+                certificationMode = CertificationMode.CC;
+                break;
+            case 3:
+                certificationMode = CertificationMode.DS;
+                break;
+        }
+        
+        ciphered = (commandByte&0x04)!=0;
+        
+        switch((byte)((commandByte>>3)&0x03)) {
+            case 0:
+                synchroCounterMode = SynchroCounterMode.NO_COUNTER;
+                break;
+            case 1:
+                synchroCounterMode = SynchroCounterMode.COUNTER_NO_REPLAY_NO_CHECK;
+                break;
+            case 2:
+                synchroCounterMode = SynchroCounterMode.COUNTER_REPLAY_OR_CHECK_INCREMENT;
+                break;
+            case 3:
+                synchroCounterMode = SynchroCounterMode.COUNTER_REPLAY_OR_CHECK;
+                break;
+        }
+    }
+    
+    public byte getValue() {
+        byte commandByte = 0;
+        
+        switch(certificationMode) {
+            case NO_SECURITY:
+                //commandByte |= 0x00;
+                break;
+            case RC:
+                commandByte |= 0x01;
+                break;
+            case CC:
+                commandByte |= 0x02;
+                break;
+            case DS:
+                commandByte |= 0x03;
+                break;
+        }
+        
+        if(ciphered)
+            commandByte |= 0x04;
+        
+        switch(synchroCounterMode) {
+            case NO_COUNTER:
+                //commandByte |= 0x00<<3;
+                break;
+            case COUNTER_NO_REPLAY_NO_CHECK:
+                commandByte |= 0x01<<3;
+                break;
+            case COUNTER_REPLAY_OR_CHECK_INCREMENT:
+                commandByte |= 0x02<<3;
+                break;
+            case COUNTER_REPLAY_OR_CHECK:
+                commandByte |= 0x03<<3;
+                break;
+        }
+        
+        return commandByte;
+    }
+    
     /**
      * Gets the value of the certificationMode property.
      * 

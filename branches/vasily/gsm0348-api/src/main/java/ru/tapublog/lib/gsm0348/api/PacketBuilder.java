@@ -146,7 +146,6 @@ public interface PacketBuilder
 	 *             in other cases.
 	 * 
 	 */
-	@Deprecated
-	CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
+	byte[] recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
 			throws PacketBuilderConfigurationException, Gsm0348Exception;
 }

@@ -38,12 +38,26 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "SPI", propOrder = {
 
 })
-public class SPI {
+public class SPI implements Cloneable {
 
     @XmlElement(name = "CommandSPI", required = true)
     protected CommandSPI commandSPI;
     @XmlElement(name = "ResponseSPI", required = true)
     protected ResponseSPI responseSPI;
+    
+    public void setValue(byte[] SPIValue) {
+        commandSPI = new CommandSPI();
+        commandSPI.setValue(SPIValue[0]);
+        responseSPI = new ResponseSPI();
+        responseSPI.setValue(SPIValue[1]);
+    }
+    
+    public byte[] getValue() {
+        byte[] SPI = new byte[2];
+        SPI[0] = commandSPI.getValue();
+        SPI[1] = responseSPI.getValue();
+        return SPI;
+    }
 
     /**
      * Gets the value of the commandSPI property.
@@ -142,4 +156,8 @@ public class SPI {
 		return builder.toString();
 	}
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
