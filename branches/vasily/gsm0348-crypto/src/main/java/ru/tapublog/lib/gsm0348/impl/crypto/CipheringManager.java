@@ -109,7 +109,7 @@ public class CipheringManager
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Initializing cipher:" + cipher.getAlgorithm() + " key length: " + key.length * 8 + "bits");
 		SecretKeySpec keySpec = new SecretKeySpec(key, cipher.getAlgorithm());
-		if (cipher.getAlgorithm().contains("CBC") && iv != null)
+		if (cipher.getAlgorithm().contains("CBC"))
 		{
 			iv = new byte[8];
 			IvParameterSpec spec = new IvParameterSpec(iv);
@@ -168,7 +168,7 @@ public class CipheringManager
 			throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidKeyException
 	{
-		if (transformation == null || transformation.length() == 0 || key == null || data == null || iv == null)
+		if (transformation == null || transformation.length() == 0 || key == null || data == null)
 			throw new IllegalArgumentException();
 		Cipher cipher = null;
 		try

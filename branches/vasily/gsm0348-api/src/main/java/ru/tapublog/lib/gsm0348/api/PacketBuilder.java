@@ -146,6 +146,6 @@ public interface PacketBuilder
 	 *             in other cases.
 	 * 
 	 */
-	byte[] recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
+	CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
 			throws PacketBuilderConfigurationException, Gsm0348Exception;
 }

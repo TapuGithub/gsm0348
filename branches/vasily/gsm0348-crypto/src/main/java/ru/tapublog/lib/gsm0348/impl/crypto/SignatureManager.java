@@ -64,8 +64,7 @@ public class SignatureManager
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Verifying. Data length:" + data.length);
 
-        return Arrays.equals(signature, sing(algName, key, data));
-		//return Arrays.equals(signature, doWork(algName, key, data));
+		return Arrays.equals(signature, sing(algName, key, data));
 	}
 
 	private static byte[] doWork(String algName, byte[] key, byte[] data) throws InvalidKeyException, NoSuchAlgorithmException

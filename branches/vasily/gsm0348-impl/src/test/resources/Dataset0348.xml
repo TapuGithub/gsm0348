@@ -949,6 +949,47 @@
 			<!-- 000E 0A B00010 0000000001 00 00 016E00 -->
 		</Result>
 	</testcase>
+    
+    <testcase name="test102">
+        <CardProfile>
+            <gsm0348:Name>TestProfile</gsm0348:Name>
+            <gsm0348:KIC>
+                <gsm0348:KeysetID>1</gsm0348:KeysetID>
+                <gsm0348:CipheringAlgorithmMode>DES_CBC</gsm0348:CipheringAlgorithmMode>
+                <gsm0348:AlgorithmImplementation>DES</gsm0348:AlgorithmImplementation>
+            </gsm0348:KIC>
+            <gsm0348:KID>
+                <gsm0348:KeysetID>1</gsm0348:KeysetID>
+                <gsm0348:CertificationAlgorithmMode>DES_CBC</gsm0348:CertificationAlgorithmMode>
+                <gsm0348:AlgorithmImplementation>DES</gsm0348:AlgorithmImplementation>
+            </gsm0348:KID>
+            <gsm0348:SPI>
+                <gsm0348:CommandSPI>
+                    <gsm0348:CertificationMode>CC</gsm0348:CertificationMode>
+                    <gsm0348:SynchroCounterMode>COUNTER_REPLAY_OR_CHECK</gsm0348:SynchroCounterMode>
+                    <gsm0348:Ciphered>true</gsm0348:Ciphered>
+                </gsm0348:CommandSPI>
+                <gsm0348:ResponseSPI>
+                    <gsm0348:PoRProtocol>SMS_DELIVER_REPORT</gsm0348:PoRProtocol>
+                    <gsm0348:PoRMode>REPLY_ALWAYS</gsm0348:PoRMode>
+                    <gsm0348:PoRCertificateMode>NO_SECURITY</gsm0348:PoRCertificateMode>
+                    <gsm0348:Ciphered>false</gsm0348:Ciphered>
+                </gsm0348:ResponseSPI>
+            </gsm0348:SPI>
+            <gsm0348:TAR>000000</gsm0348:TAR>
+            <gsm0348:SecurityBytesType>WITH_LENGHTS_AND_UDHL</gsm0348:SecurityBytesType>
+            <gsm0348:SignatureAlgorithm></gsm0348:SignatureAlgorithm>
+            <gsm0348:CipheringAlgorithm></gsm0348:CipheringAlgorithm>
+        </CardProfile>
+        <CipheringKey>4C43372F8AF115D6</CipheringKey>
+        <SignatureKey>6829E061EC9285FB</SignatureKey>
+        <Counter>0000000001</Counter>
+        <Data>80E602001B10A0000004650000000000000050524F01000006EF04C60201FD00</Data>
+        <Result>
+            <RequestResult>00381516011111000000f9498ad3b9e797f04f92b075508023cd6ab4fc11f6f7ba416e115c00181486a4b17357b3a7d95d3a6741d30afe01e8e7</RequestResult>
+        </Result>
+    </testcase>
+    
 <!-- 	<testcase type="response" name="Response-502">
 		<CardProfile>
 			<gsm0348:KIC>
