@@ -1,21 +1,27 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.tapublog.lib.gsm0348.impl.coders;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import org.apache.log4j.Logger;
 import ru.tapublog.lib.gsm0348.api.model.CardProfile;
+import ru.tapublog.lib.gsm0348.api.model.CertificationMode;
 import ru.tapublog.lib.gsm0348.api.model.KIC;
 import ru.tapublog.lib.gsm0348.api.model.KID;
 import ru.tapublog.lib.gsm0348.api.model.SPI;
 import ru.tapublog.lib.gsm0348.impl.CodingException;
+import ru.tapublog.lib.gsm0348.impl.Util;
+import ru.tapublog.lib.gsm0348.impl.crypto.SignatureManager;
 
 /**
- *
- * @author avilov
+ * This class provides methods for converting row bytes array to
+ * {@linkplain CardProfile} and backside.
+ * 
+ * @author Vasily Avilov
  */
 public class CardProfileCoder {
+    
+    private static final Logger LOGGER = Logger.getLogger(CardProfileCoder.class);
+    
 	private static final int PACKET_LENGHT_SIZE = 2;
 
 	private static final int HEADER_LENGHT_POSITION = 0;
@@ -57,25 +63,149 @@ public class CardProfileCoder {
     
     private static final int HEADER_SIZE_UNCRIPTED = HEADER_LENGHT_SIZE + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE;
 
-    public static CardProfile getProfileFromRow(byte[] datarow) throws CodingException {
+	/**
+     * Build {@linkplain CardProfile} from row byte array
+	 * 
+	 * @param datarow
+	 *            - the message heater {@linkplain byte[]} row.
+	 * @throws NullPointerException
+	 *             if <strong>datarow</strong> parameter is null.
+	 * @throws CodingException
+	 *             if configuration is in inconsistent state.
+	 */
+    public static CardProfile encode(byte[] datarow) throws CodingException {
+        
+        if(datarow == null)
+            throw new NullPointerException();
+        
+        if(datarow.length < 7)
+            throw new CodingException("Incorrect header size");
+        
         CardProfile newCardProfile = new CardProfile();
         
-        newCardProfile.setCipheringAlgorithm("");
-        newCardProfile.setSignatureAlgorithm("");
         //cardProfile.setSecurityBytesType(SecurityBytesType.WITH_LENGHTS);
-        newCardProfile.setTAR(Arrays.copyOfRange(datarow, 2 + TAR_POSITION,
-                2 + TAR_POSITION + TAR_SIZE));
-        
-        KIC kic = KICCoder.encode(datarow[2 + KIC_POSITION]);
-        KID kid = KIDCoder.encode(datarow[2 + KID_POSITION]);
+
         SPI spi = new SPI();
-        spi.setCommandSPI(CommandSPICoder.encode(datarow[2 + SPI_POSITION]));
-        spi.setResponseSPI(ResponseSPICoder.encode(datarow[2 + SPI_POSITION + 1]));
+        spi.setCommandSPI(CommandSPICoder.encode(datarow[SPI_POSITION - 1]));
+        spi.setResponseSPI(ResponseSPICoder.encode(datarow[SPI_POSITION]));
+
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("SPI value: " + spi.toString());
+
+        KIC kic = KICCoder.encode(datarow[KIC_POSITION - 1]);
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("KIc value: " + kic.toString());
+        KID kid = KIDCoder.encode(datarow[KID_POSITION - 1]);
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("KID value: " + kid.toString());
+
+        newCardProfile.setTAR(Arrays.copyOfRange(datarow, TAR_POSITION - 1,
+                TAR_POSITION - 1 + TAR_SIZE));
+
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("TAR value: " + Util.toHexArray(newCardProfile.getTAR()));
         
         newCardProfile.setSPI(spi);
         newCardProfile.setKIC(kic);
         newCardProfile.setKID(kid);
+
+		switch (kic.getAlgorithmImplementation())
+		{
+			case RESERVED:
+                break;
+
+			case PROPRIETARY_IMPLEMENTATIONS:
+			case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
+				break;
+			case DES:
+				switch (kic.getCipheringAlgorithmMode())
+				{
+					case DES_CBC:
+						newCardProfile.setCipheringAlgorithm("DES/CBC/ZeroBytePadding");
+						break;
+
+					case DES_ECB:
+						newCardProfile.setCipheringAlgorithm("DES/ECB/ZeroBytePadding");
+						break;
+
+					case TRIPLE_DES_CBC_2_KEYS:
+					case TRIPLE_DES_CBC_3_KEYS:
+						newCardProfile.setCipheringAlgorithm("DESede/CBC/ZeroBytePadding");
+						break;
+
+					default:
+				}
+				break;
+			default:
+		}
+        
+		switch (kid.getAlgorithmImplementation())
+		{
+			case RESERVED:
+				break;
+
+			case PROPRIETARY_IMPLEMENTATIONS:
+			case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
+				break;
+			case DES:
+				switch (kid.getCertificationAlgorithmMode())
+				{
+					case DES_CBC:
+						newCardProfile.setSignatureAlgorithm(SignatureManager.DES_MAC8_ISO9797_M1);
+						break;
+
+					case RESERVED:
+						break;
+
+					case TRIPLE_DES_CBC_2_KEYS:
+					case TRIPLE_DES_CBC_3_KEYS:
+						newCardProfile.setSignatureAlgorithm("DESEDEMAC64");
+						break;
+
+					default:
+				}
+				break;
+			default:
+		}
         
         return newCardProfile;
+    }
+    
+	/**
+     * Build {@linkplain byte[]} from {@linkplain CardProfile}
+	 * 
+	 * @param profile
+	 *            - a card profile {@linkplain CardProfile}.
+	 * @throws NullPointerException
+	 *             if <strong>profile</strong> parameter is null.
+	 * @throws CodingException
+	 *             if configuration is in inconsistent state.
+	 */
+    public static byte[] decode(CardProfile profile) throws CodingException {
+        
+        if(profile == null)
+            throw new NullPointerException();
+
+        byte[] headerData = new byte[7];
+
+        System.arraycopy(profile.getSPI().getValue(), 0, headerData,
+                SPI_POSITION - 1, SPI_SIZE);
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("SPI value: "
+                    + Util.toHexArray(Arrays.copyOfRange(headerData,
+                    SPI_POSITION - 1, SPI_POSITION - 1 + SPI_SIZE)));
+        headerData[KIC_POSITION - 1] = KICCoder.decode(profile.getKIC());
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("KIc value: " + Util.toHex(headerData[KIC_POSITION - 1]));
+        headerData[KID_POSITION - 1] = KIDCoder.decode(profile.getKID());
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("KID value: " + Util.toHex(headerData[KID_POSITION - 1]));
+        System.arraycopy(profile.getTAR(), 0, headerData, TAR_POSITION - 1, TAR_SIZE);
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("TAR value: "
+                    + Util.toHexArray(Arrays.copyOfRange(headerData,
+                    TAR_POSITION - 1, TAR_POSITION - 1 + TAR_SIZE)));
+        
+        return headerData;
     }
 }
