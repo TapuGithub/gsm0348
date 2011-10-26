@@ -160,6 +160,7 @@ public class ICCIDKeyGenerator
 			result += tmp;
 		}
 		result = 10 - (result % 10);
+		if(result == 10) result = 0; // Strange workaround since this algo never adds "0" 
 		return (byte) result;
 	}
 }

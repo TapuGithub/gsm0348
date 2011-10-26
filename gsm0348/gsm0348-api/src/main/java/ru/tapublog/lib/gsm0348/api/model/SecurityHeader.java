@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *       &lt;sequence>
  *         &lt;element name="TAR" type="{ru.tapublog.lib.gsm0348}TAR"/>
  *         &lt;element name="PaddingCounter" type="{http://www.w3.org/2001/XMLSchema}byte"/>
- *         &lt;element name="Security" type="{ru.tapublog.lib.gsm0348}Security"/>
+ *         &lt;element name="Security" type="{ru.tapublog.lib.gsm0348}Security" minOccurs="0"/>
  *         &lt;element name="Counter" type="{ru.tapublog.lib.gsm0348}Counter"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -61,7 +61,7 @@ public class SecurityHeader
     protected byte[] tar;
     @XmlElement(name = "PaddingCounter")
     protected byte paddingCounter;
-    @XmlElement(name = "Security", required = true, type = String.class)
+    @XmlElement(name = "Security", type = String.class)
     @XmlJavaTypeAdapter(HexBinaryAdapter.class)
     protected byte[] security;
     @XmlElement(name = "Counter", required = true, type = String.class)

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -27,7 +28,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * &lt;complexType name="CardProfile">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
+ *         &lt;element name="Name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="KIC" type="{ru.tapublog.lib.gsm0348}KIC"/>
  *         &lt;element name="KID" type="{ru.tapublog.lib.gsm0348}KID"/>
  *         &lt;element name="SPI" type="{ru.tapublog.lib.gsm0348}SPI"/>
@@ -35,7 +37,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="SecurityBytesType" type="{ru.tapublog.lib.gsm0348}SecurityBytesType"/>
  *         &lt;element name="SignatureAlgorithm" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="CipheringAlgorithm" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/all>
+ *         &lt;group ref="{ru.tapublog.lib.gsm0348}MasterKeys" minOccurs="0"/>
+ *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -45,10 +48,21 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CardProfile", propOrder = {
-
+    "name",
+    "kic",
+    "kid",
+    "spi",
+    "tar",
+    "securityBytesType",
+    "signatureAlgorithm",
+    "cipheringAlgorithm",
+    "cipheringMasterKey",
+    "signatureMasterKey"
 })
 public class CardProfile {
 
+    @XmlElement(name = "Name", required = true)
+    protected String name;
     @XmlElement(name = "KIC", required = true)
     protected KIC kic;
     @XmlElement(name = "KID", required = true)
@@ -64,7 +78,38 @@ public class CardProfile {
     protected String signatureAlgorithm;
     @XmlElement(name = "CipheringAlgorithm", required = true)
     protected String cipheringAlgorithm;
+    @XmlElement(name = "CipheringMasterKey", type = String.class)
+    @XmlJavaTypeAdapter(HexBinaryAdapter.class)
+    @XmlSchemaType(name = "hexBinary")
+    protected byte[] cipheringMasterKey;
+    @XmlElement(name = "SignatureMasterKey", type = String.class)
+    @XmlJavaTypeAdapter(HexBinaryAdapter.class)
+    @XmlSchemaType(name = "hexBinary")
+    protected byte[] signatureMasterKey;
 
+    /**
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+        this.name = value;
+    }
     /**
      * Gets the value of the kic property.
      * 
@@ -233,18 +278,60 @@ public class CardProfile {
         this.cipheringAlgorithm = value;
     }
 
+    /**
+     * Gets the value of the cipheringMasterKey property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public byte[] getCipheringMasterKey() {
+        return cipheringMasterKey;
+    }
+
+    /**
+     * Sets the value of the cipheringMasterKey property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCipheringMasterKey(byte[] value) {
+        this.cipheringMasterKey = ((byte[]) value);
+    }
+
+    /**
+     * Gets the value of the signatureMasterKey property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public byte[] getSignatureMasterKey() {
+        return signatureMasterKey;
+    }
+
+    /**
+     * Sets the value of the signatureMasterKey property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSignatureMasterKey(byte[] value) {
+        this.signatureMasterKey = ((byte[]) value);
+    }
+    
 	@Override
 	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cipheringAlgorithm == null) ? 0 : cipheringAlgorithm.hashCode());
-		result = prime * result + ((kic == null) ? 0 : kic.hashCode());
-		result = prime * result + ((kid == null) ? 0 : kid.hashCode());
-		result = prime * result + ((securityBytesType == null) ? 0 : securityBytesType.hashCode());
-		result = prime * result + ((signatureAlgorithm == null) ? 0 : signatureAlgorithm.hashCode());
-		result = prime * result + ((spi == null) ? 0 : spi.hashCode());
-		result = prime * result + Arrays.hashCode(tar);
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -258,44 +345,12 @@ public class CardProfile {
 		if (!(obj instanceof CardProfile))
 			return false;
 		CardProfile other = (CardProfile) obj;
-		if (cipheringAlgorithm == null)
+		if (name == null)
 		{
-			if (other.cipheringAlgorithm != null)
+			if (other.name != null)
 				return false;
 		}
-		else if (!cipheringAlgorithm.equals(other.cipheringAlgorithm))
-			return false;
-		if (kic == null)
-		{
-			if (other.kic != null)
-				return false;
-		}
-		else if (!kic.equals(other.kic))
-			return false;
-		if (kid == null)
-		{
-			if (other.kid != null)
-				return false;
-		}
-		else if (!kid.equals(other.kid))
-			return false;
-		if (securityBytesType != other.securityBytesType)
-			return false;
-		if (signatureAlgorithm == null)
-		{
-			if (other.signatureAlgorithm != null)
-				return false;
-		}
-		else if (!signatureAlgorithm.equals(other.signatureAlgorithm))
-			return false;
-		if (spi == null)
-		{
-			if (other.spi != null)
-				return false;
-		}
-		else if (!spi.equals(other.spi))
-			return false;
-		if (!Arrays.equals(tar, other.tar))
+		else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
@@ -304,7 +359,9 @@ public class CardProfile {
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("CardProfile [kic=");
+		builder.append("CardProfile [name=");
+		builder.append(name);
+		builder.append(", kic=");
 		builder.append(kic);
 		builder.append(", kid=");
 		builder.append(kid);
@@ -318,6 +375,10 @@ public class CardProfile {
 		builder.append(signatureAlgorithm);
 		builder.append(", cipheringAlgorithm=");
 		builder.append(cipheringAlgorithm);
+		builder.append(", cipheringMasterKey=");
+		builder.append(Arrays.toString(cipheringMasterKey));
+		builder.append(", signatureMasterKey=");
+		builder.append(Arrays.toString(signatureMasterKey));
 		builder.append("]");
 		return builder.toString();
 	}

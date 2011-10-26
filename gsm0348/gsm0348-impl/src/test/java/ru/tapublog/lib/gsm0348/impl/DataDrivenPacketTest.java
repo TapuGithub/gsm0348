@@ -11,6 +11,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import junit.framework.TestCase;
 
@@ -42,11 +44,16 @@ public class DataDrivenPacketTest extends TestCase
 
 	}
 
-	private static Dataset loadDataset() throws JAXBException,IOException,SAXException,ParserConfigurationException
+	private static Dataset loadDataset() throws JAXBException, IOException, SAXException, ParserConfigurationException
 	{
 		final JAXBContext ctx = JAXBContext.newInstance("ru.tapublog.lib.gsm0348.api.model:ru.tapublog.lib.gsm0348.impl.generated");
 		final Unmarshaller u = ctx.createUnmarshaller();
-	
+
+		SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		Schema schema = sf.newSchema(new File("src/test/resources/Dataset0348.xsd"));
+		
+		u.setSchema(schema);
+		
 		return (Dataset) u.unmarshal(CONFIG);
 	}
 
@@ -68,8 +75,8 @@ public class DataDrivenPacketTest extends TestCase
 		for (TestCaseType testcase : cfg.getTestcase())
 		{
 			System.out.println("Running test id=" + testcase.getName());
-			PacketBuilder builder = new PacketBuilderImpl(testcase.getCardProfile().getValue());//PacketBuilderFactory.getInstance(testcase.getCardProfile());
-			if(testcase.getType().equals("request"))
+			PacketBuilder builder = new PacketBuilderImpl(testcase.getCardProfile().getValue());// PacketBuilderFactory.getInstance(testcase.getCardProfile());
+			if (testcase.getType().equals("request"))
 			{
 				byte[] packet = null;
 				try
@@ -86,7 +93,7 @@ public class DataDrivenPacketTest extends TestCase
 				if (packet != null && !Arrays.equals(packet, testcase.getResult().getRequestResult()))
 				{
 					System.out.println("Name: " + testcase.getName());
-					System.out.println("Found: \t" + Util.toHexArray(packet));
+					System.out.println("Found: \t\t" + Util.toHexArray(packet));
 					System.out.println("Expected: \t" + Util.toHexArray(testcase.getResult().getRequestResult()));
 					passed = false;
 				}
@@ -103,8 +110,8 @@ public class DataDrivenPacketTest extends TestCase
 					exception.printStackTrace();
 					passed = false;
 				}
-				
-				if (packet == null ||  !compareResponsePackets(testcase.getResult().getResponseResult().getValue(),packet))
+
+				if (packet == null || !compareResponsePackets(testcase.getResult().getResponseResult().getValue(), packet))
 				{
 					System.out.println("Name: " + testcase.getName());
 					System.out.println("Found: " + packet);
@@ -112,7 +119,7 @@ public class DataDrivenPacketTest extends TestCase
 					passed = false;
 				}
 			}
-		
+
 		}
 		TestCase.assertTrue(passed);
 	}
@@ -121,6 +128,7 @@ public class DataDrivenPacketTest extends TestCase
 	{
 		return rp1.equals(rp2);
 	}
+
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception
 	{

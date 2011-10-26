@@ -111,18 +111,6 @@ public class PacketBuilderImpl implements PacketBuilder
 		{
 			throw new Gsm0348Exception(ex);
 		}
-
-		// JAXBContext jc = JAXBContext.newInstance(CardProfile.class);
-		// Marshaller m = jc.createMarshaller();
-		// Unmarshaller u = jc.createUnmarshaller();
-		//
-		// StringWriter wr = new StringWriter();
-		// m.marshal(profile, wr);
-		//
-		// StringReader reader = new StringReader(wr.toString());
-		// CardProfile result = (CardProfile) (u.unmarshal(reader));
-
-		// return result;
 	}
 
 	private void verifyProfile(CardProfile cardProfile) throws PacketBuilderConfigurationException
@@ -432,7 +420,7 @@ public class PacketBuilderImpl implements PacketBuilder
 				System.arraycopy(dataBytes, 0, signData, headerLenght - signatureLength + 2, dataBytes.length);
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("Signing data : " + Util.toHexArray(signData));
-				signature = SignatureManager.sing(signatureAlgorithmName, signatureKey, signData);
+				signature = SignatureManager.sign(signatureAlgorithmName, signatureKey, signData);
 			}
 			System.arraycopy(signature, 0, headerData, SIGNATURE_POSITION, signatureLength);
 
