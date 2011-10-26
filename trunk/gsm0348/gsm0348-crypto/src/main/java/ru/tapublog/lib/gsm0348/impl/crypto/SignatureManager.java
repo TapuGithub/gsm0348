@@ -49,7 +49,7 @@ public class SignatureManager
 		mac.doFinal(result, 0);
 		return result;
 	}
-	public static byte[] sing(String algName, byte[] key, byte[] data) throws NoSuchAlgorithmException, InvalidKeyException
+	public static byte[] sign(String algName, byte[] key, byte[] data) throws NoSuchAlgorithmException, InvalidKeyException
 	{
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Signing. Data length:" + data.length);
@@ -64,7 +64,7 @@ public class SignatureManager
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Verifying. Data length:" + data.length);
 
-		return Arrays.equals(signature, doWork(algName, key, data));
+		return Arrays.equals(signature, sign(algName, key, data));
 	}
 
 	private static byte[] doWork(String algName, byte[] key, byte[] data) throws InvalidKeyException, NoSuchAlgorithmException
@@ -96,5 +96,11 @@ public class SignatureManager
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("MAC length:" + macLength);
 		return macLength;
+	}
+
+	public static byte[] sing(String signatureAlgorithmName, byte[] signatureKey, byte[] signData)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
