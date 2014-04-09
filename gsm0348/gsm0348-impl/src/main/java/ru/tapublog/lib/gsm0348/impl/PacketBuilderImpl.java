@@ -539,9 +539,22 @@ public class PacketBuilderImpl implements PacketBuilder
 							"Packet recovery failure. Possibly because of unexpected security bytes length. Expected: "
 									+ signatureSize);
 				System.arraycopy(dataEnc, COUNTERS_SIZE + 2, signature, 0, signatureLength);
-				final int dataSize = dataEnc.length - TAR_SIZE - HEADER_LENGHT_SIZE;
-				packetData = new byte[dataSize];
-				System.arraycopy(dataEnc, COUNTERS_SIZE + 2 + signatureLength, packetData, 0, dataSize);
+				// Modified by Tomas Andersen / Morecom AS 2014.04.08 - TEST CASE: Tomas Andersen Bug #1->
+				
+				// Old code->
+//				final int dataSize = dataEnc.length - TAR_SIZE - HEADER_LENGHT_SIZE;
+//				packetData = new byte[dataSize];
+//				System.arraycopy(dataEnc, COUNTERS_SIZE + 2 + signatureLength, packetData, 0, dataSize);
+				// <- End of old code
+				// New code->
+				final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
+		        final int dataSizeToCopy = dataEnc.length - COUNTERS_SIZE - PADDING_COUNTER_SIZE - RESPONSE_CODE_RESPONSE_SIZE - signatureLength;
+		        
+		        packetData = new byte[dataSize];
+
+		        System.arraycopy(dataEnc, COUNTERS_SIZE + 2 + signatureLength, packetData, 0, dataSizeToCopy);
+//				<- End of new code
+//				End of modification by Tomas Andersen / Morecom AS 2014.04.08 - TEST CASE: Tomas Andersen Bug #1->
 			}
 			else
 			{
