@@ -414,7 +414,7 @@ public class PacketBuilderImpl implements PacketBuilder
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("Signing data length: " + signData.length);
 				final int length = dataBytes.length + paddingCounter + headerLenght;
-				signData[0] = (byte) ((length & 0xFF) >> 8);
+				signData[0] = (byte) ((length >> 8) & 0xFF);
 				signData[1] = (byte) ((length & 0xFF));
 				System.arraycopy(headerData, 0, signData, 2, headerLenght - signatureLength);
 				System.arraycopy(dataBytes, 0, signData, headerLenght - signatureLength + 2, dataBytes.length);
@@ -456,7 +456,7 @@ public class PacketBuilderImpl implements PacketBuilder
 				LOGGER.debug("Header raw data : " + Util.toHexArray(headerData));
 			byte[] result = new byte[headerData.length + dataBytes.length + PACKET_LENGHT_SIZE];
 
-			result[0] = (byte) (((headerData.length + dataBytes.length) & 0xFF) >> 8);
+			result[0] = (byte) (((headerData.length + dataBytes.length) >> 8) & 0xFF);
 			result[1] = (byte) (((headerData.length + dataBytes.length) & 0xFF));
 			System.arraycopy(headerData, 0, result, PACKET_LENGHT_SIZE, headerData.length);
 			System.arraycopy(dataBytes, 0, result, headerData.length + PACKET_LENGHT_SIZE, dataBytes.length);
