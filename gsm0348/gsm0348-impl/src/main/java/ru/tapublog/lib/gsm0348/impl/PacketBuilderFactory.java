@@ -1,6 +1,7 @@
 package ru.tapublog.lib.gsm0348.impl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.tapublog.lib.gsm0348.api.PacketBuilder;
 import ru.tapublog.lib.gsm0348.api.PacketBuilderConfigurationException;
@@ -14,7 +15,7 @@ import ru.tapublog.lib.gsm0348.api.model.CardProfile;
  */
 public class PacketBuilderFactory
 {
-	private static final Logger LOGGER = Logger.getLogger(PacketBuilderFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PacketBuilderFactory.class);
 
 	private PacketBuilderFactory()
 	{

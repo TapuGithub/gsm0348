@@ -59,8 +59,9 @@ public class ResponseSPICoder
 		}
 		
 		byte result = (byte) (porMode + (certMode << 2) + (porProtocol << 5));
-		if (isCiphered)
+		if (isCiphered) {
 			result = (byte) (result | (1 << 4));
+		}
 
 		return result;
 	}

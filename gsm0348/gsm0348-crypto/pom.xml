@@ -4,18 +4,20 @@
 	<parent>
 		<artifactId>gsm0348</artifactId>
 		<groupId>ru.tapublog.lib.gsm0348</groupId>
-		<version>1.2.3</version>
+		<version>1.2.4</version>
 	</parent>
 	<artifactId>gsm0348-crypto</artifactId>
+
 	<name>GSM 03.48 :: Crypto</name>
 	<description>Crypto Library</description>
 	<packaging>jar</packaging>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.2</version>
+				<version>3.0.2</version>
 				<configuration>
 					<finalName>${project.parent.name}-crypto-${project.version}</finalName>
 				</configuration>
@@ -61,11 +63,10 @@
 		<dependency>
 			<groupId>ru.tapublog.lib.gsm0348</groupId>
 			<artifactId>gsm0348-api</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -73,8 +74,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>bouncycastle</groupId>
-			<artifactId>bcprov-jdk16</artifactId>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
 		</dependency>
 	</dependencies>
 </project>

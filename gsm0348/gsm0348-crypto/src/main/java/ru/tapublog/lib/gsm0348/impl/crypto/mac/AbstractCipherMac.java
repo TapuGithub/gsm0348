@@ -31,7 +31,6 @@ public abstract class AbstractCipherMac implements Mac
 		m_size = size;
 	}
 
-	@Override
 	public void init(CipherParameters cipheringParams) throws IllegalArgumentException
 	{
 		if (cipheringParams instanceof ParametersWithIV)
@@ -71,31 +70,26 @@ public abstract class AbstractCipherMac implements Mac
 		}
 	}
 
-	@Override
 	public String getAlgorithmName()
 	{
 		return m_algFullName;
 	}
 
-	@Override
 	public int getMacSize()
 	{
 		return m_size;
 	}
 
-	@Override
 	public void update(byte input) throws IllegalStateException
 	{
 		m_cipher.update(new byte[] { input });
 	}
 
-	@Override
 	public void update(byte[] input, int inputOffset, int inputLen) throws  IllegalStateException
 	{
 		m_cipher.update(input, inputOffset, inputLen);
 	}
 
-	@Override
 	public int doFinal(byte[] output, int outputOffset) throws  IllegalStateException
 	{
 		try
@@ -113,7 +107,6 @@ public abstract class AbstractCipherMac implements Mac
 		return 0;
 	}
 
-	@Override
 	public void reset()
 	{
 		try
