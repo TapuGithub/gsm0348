@@ -15,16 +15,18 @@ public class Util
  
 	public static String toHexArray(byte[] array)
 	{
-		if (array == null)
+		if (array == null) {
 			return "null";
+		}
 		StringBuilder sb = new StringBuilder();
 		for (byte b : array)
 		{
 			appendHexPair(b, sb);
 			sb.append(' ');
 		}
-		if (sb.length() > 0)
+		if (sb.length() > 0) {
 			sb.deleteCharAt(sb.length() - 1);
+		}
 		return sb.toString();
 	}
 }

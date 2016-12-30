@@ -82,17 +82,17 @@ public class ICCIDKeyGenerator {
     if (iccid.length > 8) {
       iccid = Arrays.copyOfRange(iccid, iccid.length - 8, iccid.length);
       if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("ICCID length > 8 - using last 8 bytes: " + iccid);
+        LOGGER.debug("ICCID length > 8 - using last 8 bytes: {}", iccid);
       }
     }
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Generating key. Master key: " + Util.toHexArray(masterKey) + ", ICCID= " + Util.toHexArray(iccid));
+      LOGGER.debug("Generating key. Master key: {}, ICCID= {}", Util.toHexArray(masterKey), Util.toHexArray(iccid));
     }
 
     byte[] result = CipheringManager.encipher(TRANSFORMATION, masterKey, iccid, new byte[8]);
 
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Generated key: " + Util.toHexArray(result));
+      LOGGER.debug("Generated key: {}", Util.toHexArray(result));
     }
 
     return result;
@@ -115,10 +115,10 @@ public class ICCIDKeyGenerator {
     final boolean result = sum % 10 == 0;
 
     if (result && LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Checksum check for " + input + " is: PASSED");
+      LOGGER.debug("Checksum check for {} is: PASSED", input);
     }
     if (!result) {
-      LOGGER.error("Checksum check for " + input + " is: FAILED");
+      LOGGER.error("Checksum check for {} is: FAILED", input);
     }
     return result;
   }
