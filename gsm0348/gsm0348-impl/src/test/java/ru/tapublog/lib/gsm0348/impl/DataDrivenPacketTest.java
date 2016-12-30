@@ -1,5 +1,8 @@
 package ru.tapublog.lib.gsm0348.impl;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.Security;
@@ -18,29 +21,32 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import junit.framework.TestCase;
 import ru.tapublog.lib.gsm0348.api.PacketBuilder;
 import ru.tapublog.lib.gsm0348.api.model.ResponsePacket;
 import ru.tapublog.lib.gsm0348.impl.generated.Dataset;
 import ru.tapublog.lib.gsm0348.impl.generated.TestCaseType;
 
-public class DataDrivenPacketTest extends TestCase {
-  private static final File CONFIG;
+public class DataDrivenPacketTest {
 
-  static {
-    final String cfg = System.getProperty("dataset_packet.path");
-    CONFIG = new File((cfg == null) ? "src/test/resources/Dataset0348.xml" : cfg);
-    Security.addProvider(new BouncyCastleProvider());
-  }
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataDrivenPacketTest.class);
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-
+    Security.addProvider(new BouncyCastleProvider());
   }
 
-  private static Dataset loadDataset() throws JAXBException, IOException, SAXException, ParserConfigurationException {
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception {
+  }
+
+  private Dataset loadDataset() throws JAXBException, IOException, SAXException, ParserConfigurationException {
+    final String cfg = System.getProperty("dataset_packet.path");
+    final File configurationFile = new File((cfg == null) ? "src/test/resources/Dataset0348.xml" : cfg);
+
     final JAXBContext ctx = JAXBContext.newInstance("ru.tapublog.lib.gsm0348.api.model:ru.tapublog.lib.gsm0348.impl.generated");
     final Unmarshaller u = ctx.createUnmarshaller();
 
@@ -49,11 +55,7 @@ public class DataDrivenPacketTest extends TestCase {
 
     u.setSchema(schema);
 
-    return (Dataset) u.unmarshal(CONFIG);
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
+    return (Dataset) u.unmarshal(configurationFile);
   }
 
   @Test
@@ -71,7 +73,7 @@ public class DataDrivenPacketTest extends TestCase {
 
     boolean passed = true;
     for (TestCaseType testcase : cfg.getTestcase()) {
-      System.out.println("Running test id=" + testcase.getName());
+      LOGGER.info("Running test id={}", testcase.getName());
       PacketBuilder builder = new PacketBuilderImpl(testcase.getCardProfile().getValue());// PacketBuilderFactory.getInstance(testcase.getCardProfile());
       if (testcase.getType().equals("request")) {
         byte[] packet = null;
@@ -84,9 +86,9 @@ public class DataDrivenPacketTest extends TestCase {
         }
 
         if (packet != null && !Arrays.equals(packet, testcase.getResult().getRequestResult())) {
-          System.out.println("Name: " + testcase.getName());
-          System.out.println("Found: \t\t" + Util.toHexArray(packet));
-          System.out.println("Expected: \t" + Util.toHexArray(testcase.getResult().getRequestResult()));
+          LOGGER.error("Name: {}",testcase.getName());
+          LOGGER.error("Found: \t\t{}",Util.toHexArray(packet));
+          LOGGER.error("Expected: \t{}", Util.toHexArray(testcase.getResult().getRequestResult()));
           passed = false;
         }
       } else {
@@ -99,15 +101,15 @@ public class DataDrivenPacketTest extends TestCase {
         }
 
         if (packet == null || !compareResponsePackets(testcase.getResult().getResponseResult().getValue(), packet)) {
-          System.out.println("Name: " + testcase.getName());
-          System.out.println("Found: " + packet);
-          System.out.println("Expected: " + testcase.getResult().getResponseResult().getValue());
+          LOGGER.error("Name: {}",testcase.getName());
+          LOGGER.error("Found: \t\t{}",packet);
+          LOGGER.error("Expected: \t{}", testcase.getResult().getResponseResult().getValue());
           passed = false;
         }
       }
 
     }
-    TestCase.assertTrue(passed);
+    assertTrue(passed);
   }
 
   private boolean compareResponsePackets(ResponsePacket rp1, ResponsePacket rp2) {
