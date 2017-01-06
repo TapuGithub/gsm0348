@@ -126,7 +126,7 @@ public interface PacketBuilder
 			ResponsePacketStatus responseStatus) throws PacketBuilderConfigurationException, Gsm0348Exception;
 
 	/**
-	 * Recovers {@linkplain CommandPacket} from byte array. Not implemented.
+	 * Recovers {@linkplain CommandPacket} from byte array.
 	 * 
 	 * @param data
 	 *            - data to be decoded.
@@ -146,7 +146,6 @@ public interface PacketBuilder
 	 *             in other cases.
 	 * 
 	 */
-	@Deprecated
 	CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
 			throws PacketBuilderConfigurationException, Gsm0348Exception;
 }

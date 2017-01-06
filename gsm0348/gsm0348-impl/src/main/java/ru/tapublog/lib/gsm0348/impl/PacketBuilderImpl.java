@@ -16,6 +16,7 @@ import ru.tapublog.lib.gsm0348.api.PacketBuilderConfigurationException;
 import ru.tapublog.lib.gsm0348.api.model.CardProfile;
 import ru.tapublog.lib.gsm0348.api.model.CertificationMode;
 import ru.tapublog.lib.gsm0348.api.model.CommandPacket;
+import ru.tapublog.lib.gsm0348.api.model.CommandPacketHeader;
 import ru.tapublog.lib.gsm0348.api.model.CommandSPI;
 import ru.tapublog.lib.gsm0348.api.model.KIC;
 import ru.tapublog.lib.gsm0348.api.model.KID;
@@ -23,6 +24,7 @@ import ru.tapublog.lib.gsm0348.api.model.ResponsePacket;
 import ru.tapublog.lib.gsm0348.api.model.ResponsePacketHeader;
 import ru.tapublog.lib.gsm0348.api.model.ResponsePacketStatus;
 import ru.tapublog.lib.gsm0348.api.model.ResponseSPI;
+import ru.tapublog.lib.gsm0348.api.model.SPI;
 import ru.tapublog.lib.gsm0348.api.model.SecurityBytesType;
 import ru.tapublog.lib.gsm0348.api.model.SynchroCounterMode;
 import ru.tapublog.lib.gsm0348.impl.coders.CommandSPICoder;
@@ -89,7 +91,7 @@ public class PacketBuilderImpl implements PacketBuilder {
 
   private void verifyProfile(CardProfile cardProfile) throws PacketBuilderConfigurationException {
     if (cardProfile == null) {
-      throw new PacketBuilderConfigurationException("profile cannot be null");
+      throw new PacketBuilderConfigurationException("CardProfile cannot be null");
     }
 
     if (cardProfile.getKIC() == null) {
@@ -101,7 +103,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     if (cardProfile.getKIC().getCipheringAlgorithmMode() == null) {
       throw new PacketBuilderConfigurationException("KIC CipheringAlgorithmMode cannot be null");
     }
-    if (cardProfile.getKIC().getKeysetID() < 0x0 || cardProfile.getKIC().getKeysetID() > (byte)0xf) {
+    if (cardProfile.getKIC().getKeysetID() < 0x0 || cardProfile.getKIC().getKeysetID() > (byte) 0xf) {
       throw new PacketBuilderConfigurationException("KIC keySetID cannot be <0 and >15");
     }
 
@@ -114,7 +116,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     if (cardProfile.getKID().getCertificationAlgorithmMode() == null) {
       throw new PacketBuilderConfigurationException("KID CertificationAlgorithmMode cannot be null");
     }
-    if (cardProfile.getKID().getKeysetID() < 0x0 || cardProfile.getKID().getKeysetID() > (byte)0xf) {
+    if (cardProfile.getKID().getKeysetID() < 0x0 || cardProfile.getKID().getKeysetID() > (byte) 0xf) {
       throw new PacketBuilderConfigurationException("KID keySetID cannot be <0 and >15");
     }
 
@@ -150,7 +152,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     }
 
     if (cardProfile.getTAR() == null || cardProfile.getTAR().length != 3) {
-      throw new PacketBuilderConfigurationException("TAR value null or not a 3 bytes arays");
+      throw new PacketBuilderConfigurationException("TAR value null or not a 3 bytes array");
     }
   }
 
@@ -201,7 +203,7 @@ public class PacketBuilderImpl implements PacketBuilder {
 
     switch (kic.getAlgorithmImplementation()) {
       case RESERVED:
-        throw new PacketBuilderConfigurationException("Using reserved value for algorithm implementation in KIc");
+        throw new PacketBuilderConfigurationException("Using reserved value for algorithm implementation in KIC");
 
       case PROPRIETARY_IMPLEMENTATIONS:
       case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
@@ -310,6 +312,13 @@ public class PacketBuilderImpl implements PacketBuilder {
     return result;
   }
 
+  private SPI getSPI(byte[] data) throws CodingException {
+    SPI spi = new SPI();
+    spi.setCommandSPI(CommandSPICoder.encode(data[0]));
+    spi.setResponseSPI(ResponseSPICoder.encode(data[1]));
+    return spi;
+  }
+
   @Override
   public byte[] buildCommandPacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey)
       throws PacketBuilderConfigurationException, Gsm0348Exception {
@@ -352,14 +361,9 @@ public class PacketBuilderImpl implements PacketBuilder {
       byte paddingCounter = 0;
 
       headerData[HEADER_LENGHT_POSITION] = (byte) (headerLenght - HEADER_LENGHT_SIZE);
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Header length value: {}", headerData[HEADER_LENGHT_POSITION]);
-      }
+      LOGGER.debug("Header length value: {}", headerData[HEADER_LENGHT_POSITION]);
       System.arraycopy(getSPI(), 0, headerData, SPI_POSITION, SPI_SIZE);
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("SPI value: "
-            + Util.toHexArray(Arrays.copyOfRange(headerData, SPI_POSITION, SPI_POSITION + SPI_SIZE)));
-      }
+      LOGGER.debug("SPI value: " + Util.toHexArray(Arrays.copyOfRange(headerData, SPI_POSITION, SPI_POSITION + SPI_SIZE)));
       headerData[KIC_POSITION] = KICCoder.decode(cardProfile.getKIC());
       LOGGER.debug("KIC value: {}", Util.toHex(headerData[KIC_POSITION]));
       headerData[KID_POSITION] = KIDCoder.decode(cardProfile.getKID());
@@ -375,7 +379,6 @@ public class PacketBuilderImpl implements PacketBuilder {
         if (remainder != 0) {
           paddingCounter = (byte) (cipherBlockSize - remainder);
         }
-
       }
       headerData[PADDING_COUNTER_POSITION] = paddingCounter;
       LOGGER.debug("Padding counter value: {}", String.format("%X", headerData[PADDING_COUNTER_POSITION]));
@@ -389,7 +392,7 @@ public class PacketBuilderImpl implements PacketBuilder {
         signData[1] = (byte) ((length & (byte) 0xff));
         System.arraycopy(headerData, 0, signData, 2, headerLenght - signatureLength);
         System.arraycopy(dataBytes, 0, signData, headerLenght - signatureLength + 2, dataBytes.length);
-        LOGGER.debug("Signing data: {}", Util.toHexArray(signData));
+        LOGGER.debug("Signing data: {} ({})", Util.toHexArray(signData), signatureAlgorithmName);
         signature = SignatureManager.sign(signatureAlgorithmName, signatureKey, signData);
       }
       System.arraycopy(signature, 0, headerData, SIGNATURE_POSITION, signatureLength);
@@ -497,7 +500,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     int paddingCounter = Util.unsignedByteToInt(data[PADDING_COUNTER_RESPONSE_POSITION]);
     if (!responsePacketCiphering && paddingCounter != 0) {
       throw new Gsm0348Exception(
-          "Response packet ciphering is off but padding counter isnot 0. So it can be corrupted packet or configuration doesn`t match provided data");
+          "Response packet ciphering is off but padding counter is not 0. So it can be corrupted packet or configuration doesn`t match provided data");
     }
     byte responseCode = 0;
     byte[] packetData;
@@ -602,10 +605,176 @@ public class PacketBuilderImpl implements PacketBuilder {
   }
 
   @Override
-  @Deprecated
   public CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
       throws PacketBuilderConfigurationException, Gsm0348Exception {
-    throw new Gsm0348Exception("Not implemented yet");
-  }
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Recovering command packet.\n\tData: {}\n\tCipheringKey: {}\n\tSigningKey: {}",
+          Util.toHexArray(data),
+          Util.toHexArray(cipheringKey),
+          Util.toHexArray(signatureKey));
+    }
 
+    if (!isConfigured()) {
+      throw new PacketBuilderConfigurationException("Not configured");
+    }
+
+    if (data == null) {
+      throw new IllegalArgumentException("Packet data cannot be null");
+    }
+
+    if (responsePacketCiphering && (cipheringKey == null || cipheringKey.length == 0)) {
+      throw new PacketBuilderConfigurationException(
+          "Response ciphering is enabled - ciphering key must be specified. Provided: "
+              + ((cipheringKey.length == 0) ? "empty" : Util.toHexArray(cipheringKey)));
+    }
+    if (responsePacketSigning && (signatureKey == null || signatureKey.length == 0)) {
+      throw new PacketBuilderConfigurationException(
+          "Response signing is enabled - signature key must be specified. Provided: "
+              + ((signatureKey.length == 0) ? "empty" : Util.toHexArray(signatureKey)));
+    }
+    final int packetLength = (Util.unsignedByteToInt(data[0]) >> 8) + Util.unsignedByteToInt(data[1]);
+    if (data.length - PACKET_LENGHT_SIZE != packetLength) {
+      throw new Gsm0348Exception(
+          "Length of raw data doesnt match packet length. Expected " + packetLength + " but found " + (data.length - PACKET_LENGHT_SIZE));
+    }
+
+    final int headerLength = Util.unsignedByteToInt(data[PACKET_LENGHT_SIZE + HEADER_LENGHT_POSITION]);
+    final byte[] header = new byte[headerLength];
+    System.arraycopy(data, PACKET_LENGHT_SIZE, header, 0, headerLength);
+    LOGGER.debug("Header[{}]: {}", header.length, Util.toHexArray(header));
+
+    final byte[] spiBytes = new byte[SPI_SIZE];
+    System.arraycopy(header, SPI_POSITION, spiBytes, 0, SPI_SIZE);
+    LOGGER.debug("SPI: {}", Util.toHexArray(spiBytes));
+    final SPI spi = getSPI(spiBytes);
+
+    final byte[] kicBytes = new byte[KIC_SIZE];
+    System.arraycopy(header, KIC_POSITION, kicBytes, 0, KIC_SIZE);
+    LOGGER.debug("KIC: {}", Util.toHexArray(kicBytes));
+    final KIC kic = KICCoder.encode(kicBytes[0]);
+
+    final byte[] kidBytes = new byte[KID_SIZE];
+    System.arraycopy(header, KID_POSITION, kidBytes, 0, KID_SIZE);
+    LOGGER.debug("KID: {}", Util.toHexArray(kidBytes));
+    final KID kid = KIDCoder.encode(kidBytes[0]);
+
+    final byte[] tar = new byte[TAR_SIZE];
+    System.arraycopy(header, TAR_POSITION, tar, 0, TAR_SIZE);
+    LOGGER.debug("TAR: {}", Util.toHexArray(tar));
+
+    final byte[] counters = new byte[COUNTERS_SIZE];
+    final int signatureLength = commandPacketSigning ? signatureSize : 0;
+
+    if (data.length < MINIMUM_RESPONSE_PACKET_SIZE + signatureLength) {
+      String message = "rawdata too small to be response packet. Expected to be >= "
+          + (MINIMUM_RESPONSE_PACKET_SIZE + signatureLength) + ", but found " + data.length;
+      if (data.length >= MINIMUM_RESPONSE_PACKET_SIZE) {
+        message += ". It can be caused by incorrect profile(SPI value). Check SPI!";
+        LOGGER.warn("Packet received(raw): {}", Util.toHexArray(data));
+      }
+      throw new Gsm0348Exception(message);
+    }
+
+    final byte[] signature = new byte[signatureLength];
+    LOGGER.debug("Signature length: {}", signatureLength);
+
+    int paddingCounter = Util.unsignedByteToInt(data[PADDING_COUNTER_RESPONSE_POSITION]);
+    if (!commandPacketCiphering && paddingCounter != 0) {
+      throw new Gsm0348Exception(
+          "Response packet ciphering is off but padding counter is not 0. So it can be corrupted packet or configuration doesn`t match provided data");
+    }
+    byte[] packetData;
+    try {
+      if (commandPacketCiphering) {
+        byte[] dataDec = CipheringManager.decipher(cipheringAlgorithmName, cipheringKey,
+            Arrays.copyOfRange(data, PACKET_LENGHT_SIZE + HEADER_LENGHT_SIZE + TAR_SIZE + SPI_SIZE + KIC_SIZE + KID_SIZE, data.length));
+        LOGGER.info("Decrypted: {}", Util.toHexArray(dataDec));
+
+        System.arraycopy(dataDec, 0, counters, 0, COUNTERS_SIZE);
+        LOGGER.debug("Counters[{}]: {}", counters.length, Util.toHexArray(counters));
+        paddingCounter = Util.unsignedByteToInt(dataDec[COUNTERS_SIZE]);
+        LOGGER.trace("paddingCounter: {}", paddingCounter);
+
+//        responseCode = dataDec[COUNTERS_SIZE + 1];
+//        if (dataDec.length < COUNTERS_SIZE + 2 + signatureLength) {
+//          throw new Gsm0348Exception(
+//              "Packet recovery failure. Possibly because of unexpected security bytes length. Expected: "
+//                  + signatureSize);
+//        }
+        System.arraycopy(dataDec, COUNTERS_SIZE + 1, signature, 0, signatureLength);
+        LOGGER.info("Signature[{}]: {}", signature.length, Util.toHexArray(signature));
+        // Modified by Tomas Andersen / Morecom AS 2014.04.08 - TEST CASE: Tomas Andersen Bug #1->
+
+        final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
+        final int dataSizeToCopy = dataDec.length - COUNTERS_SIZE - PADDING_COUNTER_SIZE - signatureLength;
+
+        packetData = new byte[dataSize];
+        System.arraycopy(dataDec, COUNTERS_SIZE + PADDING_COUNTER_SIZE + signatureLength, packetData, 0, dataSizeToCopy);
+        LOGGER.info("PacketData[{}]: {}", packetData.length, Util.toHexArray(packetData));
+      } else {
+        // TODO: Fix this
+        System.arraycopy(data, COUNTERS_RESPONSE_POSITION, counters, 0, COUNTERS_SIZE);
+        paddingCounter = Util.unsignedByteToInt(data[PADDING_COUNTER_POSITION]);
+        System.arraycopy(data, SIGNATURE_RESPONSE_POSITION, signature, 0, signatureLength);
+        final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
+        packetData = new byte[dataSize];
+        System.arraycopy(data, headerLength + HEADER_LENGHT_SIZE + PACKET_LENGHT_SIZE, packetData, 0, dataSize);
+      }
+
+      if (commandPacketSigning) {
+//        int addonAmount = 0;
+//        LOGGER.info("SecurityBytesType: {}", cardProfile.getSecurityBytesType());
+//        if (cardProfile.getSecurityBytesType() == SecurityBytesType.WITH_LENGHTS_AND_UDHL) {
+//          addonAmount = 6;
+//        } else if (cardProfile.getSecurityBytesType() == SecurityBytesType.WITH_LENGHTS) {
+//          addonAmount = 3;
+//        }
+        int addonAmount = PACKET_LENGHT_SIZE + HEADER_LENGHT_SIZE;
+        byte[] signData = new byte[addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE + COUNTERS_SIZE + PADDING_COUNTER_SIZE + packetData.length];
+//        switch (cardProfile.getSecurityBytesType()) {
+//          case WITH_LENGHTS_AND_UDHL:
+//            signData[0] = 0x02;
+//            signData[1] = 0x70;
+//            signData[2] = 0x00;
+//            System.arraycopy(data, 0, signData, 3, 3);
+//            break;
+//          case WITH_LENGHTS:
+//            System.arraycopy(data, 0, signData, 0, 3);
+//            break;
+//          case NORMAL:
+//            break;
+//        }
+        System.arraycopy(data, 0, signData, 0, addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE);
+        System.arraycopy(counters, 0, signData, addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE, COUNTERS_SIZE);
+        signData[addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE + COUNTERS_SIZE] = (byte) paddingCounter;
+        System.arraycopy(packetData, 0, signData, addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE + COUNTERS_SIZE + PADDING_COUNTER_SIZE,
+            packetData.length);
+
+        LOGGER.trace("Verify[{}]: {}", signData.length, Util.toHexArray(signData));
+        final boolean valid = SignatureManager.verify(signatureAlgorithmName, signatureKey, signData, signature);
+        if (!valid) {
+          throw new Gsm0348Exception("Signatures don't match");
+        } else {
+          LOGGER.debug("Signatures do match");
+        }
+      }
+
+      final CommandPacketHeader pacHeader = new CommandPacketHeader();
+      pacHeader.setCounter(counters);
+      pacHeader.setPaddingCounter((byte) paddingCounter);
+      pacHeader.setKIC(kic);
+      pacHeader.setKID(kid);
+      pacHeader.setSPI(spi);
+      pacHeader.setSecurity(signature);
+      pacHeader.setTAR(tar);
+
+      final CommandPacket pac = new CommandPacket();
+      pac.setData(packetData);
+      pac.setHeader(pacHeader);
+      LOGGER.debug("Command Packet recovered: {}", pac);
+      return pac;
+    } catch (GeneralSecurityException e) {
+      throw new Gsm0348Exception(e);
+    }
+  }
 }
