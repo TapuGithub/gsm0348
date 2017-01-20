@@ -60,6 +60,7 @@ public class PacketBuilderImpl implements PacketBuilder {
   private static final int RESPONSE_CODE_RESPONSE_SIZE = 1;
   private static final int SIGNATURE_POSITION = 14;
   private static final int SIGNATURE_RESPONSE_POSITION = 13;
+  private static final int MINIMUM_COMMAND_PACKET_SIZE = 16;
   private static final int MINIMUM_RESPONSE_PACKET_SIZE = 13;
   private static final int HEADER_SIZE_WITHOUT_SIGNATURE = SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE + COUNTERS_SIZE + PADDING_COUNTER_SIZE;
   private boolean commandPacketCiphering;
@@ -74,7 +75,6 @@ public class PacketBuilderImpl implements PacketBuilder {
   private int signatureSize;
 
   public PacketBuilderImpl() {
-
   }
 
   public PacketBuilderImpl(CardProfile cardProfile) throws PacketBuilderConfigurationException {
@@ -665,10 +665,10 @@ public class PacketBuilderImpl implements PacketBuilder {
     final byte[] counters = new byte[COUNTERS_SIZE];
     final int signatureLength = commandPacketSigning ? signatureSize : 0;
 
-    if (data.length < MINIMUM_RESPONSE_PACKET_SIZE + signatureLength) {
-      String message = "rawdata too small to be response packet. Expected to be >= "
-          + (MINIMUM_RESPONSE_PACKET_SIZE + signatureLength) + ", but found " + data.length;
-      if (data.length >= MINIMUM_RESPONSE_PACKET_SIZE) {
+    if (data.length < MINIMUM_COMMAND_PACKET_SIZE + signatureLength) {
+      String message = "rawdata too small to be command packet. Expected to be >= "
+          + (MINIMUM_COMMAND_PACKET_SIZE + signatureLength) + ", but found " + data.length;
+      if (data.length >= MINIMUM_COMMAND_PACKET_SIZE) {
         message += ". It can be caused by incorrect profile(SPI value). Check SPI!";
         LOGGER.warn("Packet received(raw): {}", Util.toHexArray(data));
       }
@@ -678,11 +678,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     final byte[] signature = new byte[signatureLength];
     LOGGER.debug("Signature length: {}", signatureLength);
 
-    int paddingCounter = Util.unsignedByteToInt(data[PADDING_COUNTER_RESPONSE_POSITION]);
-    if (!commandPacketCiphering && paddingCounter != 0) {
-      throw new Gsm0348Exception(
-          "Response packet ciphering is off but padding counter is not 0. So it can be corrupted packet or configuration doesn`t match provided data");
-    }
+    int paddingCounter;
     byte[] packetData;
     try {
       if (commandPacketCiphering) {
@@ -693,33 +689,33 @@ public class PacketBuilderImpl implements PacketBuilder {
         System.arraycopy(dataDec, 0, counters, 0, COUNTERS_SIZE);
         LOGGER.debug("Counters[{}]: {}", counters.length, Util.toHexArray(counters));
         paddingCounter = Util.unsignedByteToInt(dataDec[COUNTERS_SIZE]);
-        LOGGER.trace("paddingCounter: {}", paddingCounter);
+        LOGGER.debug("Padding counter: {}", paddingCounter);
 
-//        responseCode = dataDec[COUNTERS_SIZE + 1];
-//        if (dataDec.length < COUNTERS_SIZE + 2 + signatureLength) {
-//          throw new Gsm0348Exception(
-//              "Packet recovery failure. Possibly because of unexpected security bytes length. Expected: "
-//                  + signatureSize);
-//        }
         System.arraycopy(dataDec, COUNTERS_SIZE + 1, signature, 0, signatureLength);
-        LOGGER.info("Signature[{}]: {}", signature.length, Util.toHexArray(signature));
-        // Modified by Tomas Andersen / Morecom AS 2014.04.08 - TEST CASE: Tomas Andersen Bug #1->
+        LOGGER.debug("Signature[{}]: {}", signature.length, Util.toHexArray(signature));
 
         final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
         final int dataSizeToCopy = dataDec.length - COUNTERS_SIZE - PADDING_COUNTER_SIZE - signatureLength;
 
         packetData = new byte[dataSize];
         System.arraycopy(dataDec, COUNTERS_SIZE + PADDING_COUNTER_SIZE + signatureLength, packetData, 0, dataSizeToCopy);
-        LOGGER.info("PacketData[{}]: {}", packetData.length, Util.toHexArray(packetData));
       } else {
-        // TODO: Fix this
-        System.arraycopy(data, COUNTERS_RESPONSE_POSITION, counters, 0, COUNTERS_SIZE);
-        paddingCounter = Util.unsignedByteToInt(data[PADDING_COUNTER_POSITION]);
-        System.arraycopy(data, SIGNATURE_RESPONSE_POSITION, signature, 0, signatureLength);
+        System.arraycopy(data, PACKET_LENGHT_SIZE + COUNTERS_POSITION, counters, 0, COUNTERS_SIZE);
+        LOGGER.debug("Counters[{}]: {}", counters.length, Util.toHexArray(counters));
+        paddingCounter = Util.unsignedByteToInt(data[PACKET_LENGHT_SIZE + PADDING_COUNTER_POSITION]);
+        LOGGER.debug("Padding counter: {}", paddingCounter);
+        if (paddingCounter != 0) {
+          throw new Gsm0348Exception(
+              "Command packet ciphering is off but padding counter is not 0. So it can be corrupted packet or configuration doesn't match provided data");
+        }
+
+        System.arraycopy(data, PACKET_LENGHT_SIZE + SIGNATURE_POSITION, signature, 0, signatureLength);
+        LOGGER.debug("Signature[{}]: {}", signature.length, Util.toHexArray(signature));
         final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
         packetData = new byte[dataSize];
         System.arraycopy(data, headerLength + HEADER_LENGHT_SIZE + PACKET_LENGHT_SIZE, packetData, 0, dataSize);
       }
+      LOGGER.debug("PacketData[{}]: {}", packetData.length, Util.toHexArray(packetData));
 
       if (commandPacketSigning) {
 //        int addonAmount = 0;
@@ -730,7 +726,8 @@ public class PacketBuilderImpl implements PacketBuilder {
 //          addonAmount = 3;
 //        }
         int addonAmount = PACKET_LENGHT_SIZE + HEADER_LENGHT_SIZE;
-        byte[] signData = new byte[addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE + COUNTERS_SIZE + PADDING_COUNTER_SIZE + packetData.length];
+        byte[] signData = new byte[addonAmount + HEADER_SIZE_WITHOUT_SIGNATURE + packetData.length];
+
 //        switch (cardProfile.getSecurityBytesType()) {
 //          case WITH_LENGHTS_AND_UDHL:
 //            signData[0] = 0x02;
@@ -747,10 +744,10 @@ public class PacketBuilderImpl implements PacketBuilder {
         System.arraycopy(data, 0, signData, 0, addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE);
         System.arraycopy(counters, 0, signData, addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE, COUNTERS_SIZE);
         signData[addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE + COUNTERS_SIZE] = (byte) paddingCounter;
-        System.arraycopy(packetData, 0, signData, addonAmount + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE + COUNTERS_SIZE + PADDING_COUNTER_SIZE,
+        System.arraycopy(packetData, 0, signData, addonAmount + HEADER_SIZE_WITHOUT_SIGNATURE,
             packetData.length);
 
-        LOGGER.trace("Verify[{}]: {}", signData.length, Util.toHexArray(signData));
+        LOGGER.debug("Verify[{}]: {}", signData.length, Util.toHexArray(signData));
         final boolean valid = SignatureManager.verify(signatureAlgorithmName, signatureKey, signData, signature);
         if (!valid) {
           throw new Gsm0348Exception("Signatures don't match");

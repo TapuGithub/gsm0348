@@ -31,18 +31,18 @@ Short Message Service Cell Broadcast (SMS-CB) isnot supported as for now.
 ```
 <repository>
    <id>GSM 03.48 Library</id>
-   <url>http://gsm0348.googlecode.com/svn/trunk/repo</url>
+   <url>https://github.com/pmoerenhout/gsm0348</url>
 </repository>
 <dependencies>
    <dependency>
       <groupId>ru.tapublog.lib.gsm0348</groupId>
       <artifactId>gsm0348-api</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.4</version>
    </dependency>
    <dependency>
       <groupId>ru.tapublog.lib.gsm0348</groupId>
       <artifactId>gsm0348-impl</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.4</version>
    </dependency>
 </dependencies>
 ```

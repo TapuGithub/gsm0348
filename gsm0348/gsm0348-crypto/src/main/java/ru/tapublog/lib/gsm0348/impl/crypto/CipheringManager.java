@@ -134,7 +134,7 @@ public class CipheringManager {
       throw e;
     } catch (BadPaddingException e) {
       LOGGER.error(
-          "Data isnot padded correctly. Input data size is " + data.length + " cipher block size is "
+          "Data is not padded correctly. Input data size is " + data.length + " cipher block size is "
               + cipher.getBlockSize() + " cipher name is " + cipher.getAlgorithm() + " data=["
               + Util.toHexArray(data) + "]", e);
       throw e;

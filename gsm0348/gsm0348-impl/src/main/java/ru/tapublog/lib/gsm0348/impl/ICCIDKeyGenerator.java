@@ -33,7 +33,7 @@ public class ICCIDKeyGenerator {
    */
   public static byte[] getKey(byte[] masterKey, String iccid) throws GeneralSecurityException {
     if (iccid == null || iccid.isEmpty()) {
-      throw new IllegalArgumentException("ICCID cannot be null or empty. Now is iccid=" + iccid);
+      throw new IllegalArgumentException("ICCID cannot be null or empty. ICCID=" + iccid);
     }
     if (iccid.length() != ICCID_LENGTH && iccid.length() != ICCID_LENGTH_WITHOUT_LUHN) {
       throw new IllegalArgumentException("ICCID length must be ether " + ICCID_LENGTH + " or " + ICCID_LENGTH_WITHOUT_LUHN
