@@ -40,7 +40,7 @@ public interface PacketBuilder
 
 	/**
 	 * Returns builder configuration state. After
-	 * {@linkplain PacketBuilder#setConfiguration setProfile} method
+	 * {@linkplain PacketBuilder#setProfile cardProfile} method
 	 * called if no exception thrown builder should turn no configured state and
 	 * this method return <code>true</code>. Otherwise it will should return
 	 * <code>false</code>.
