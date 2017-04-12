@@ -15,7 +15,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -24,18 +24,12 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<finalName>${project.parent.name}-impl-${project.version}</finalName>
-				</configuration>
+				<version>${maven-jar-plugin.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<finalName>${project.parent.name}-impl-${project.version}</finalName>
-				</configuration>
+				<version>${maven-javadoc-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>impl-javadoc</id>
@@ -49,10 +43,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
-				<configuration>
-					<finalName>${project.parent.name}-impl-${project.version}</finalName>
-				</configuration>
+				<version>${maven-source-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>impl-sources</id>

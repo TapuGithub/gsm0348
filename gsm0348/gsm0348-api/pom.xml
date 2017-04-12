@@ -11,10 +11,10 @@
 	<description>API</description>
 	<build>
 		<plugins>
-<!--  			<plugin>
+      <!-- <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>1.6</version>
+				<version>${jaxb2-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -22,18 +22,18 @@
 						</goals>
 					</execution>
 				</executions>
-					<configuration>
-						<schemaFiles>gsm0348.xsd</schemaFiles>
-						<schemaDirectory>src/main/resources</schemaDirectory>
+			  <configuration>
+				  <schemaFiles>gsm0348.xsd</schemaFiles>
+					<schemaDirectory>src/main/resources</schemaDirectory>
 					<outputDirectory>src/main/java/</outputDirectory>
 					<clearOutputDir>false</clearOutputDir>
-					<packageName>ru.tapublog.lib.gsm0348.api.model.test</packageName>
+					<packageName>ru.tapublog.lib.gsm0348.api.model</packageName>
 				</configuration>
-			</plugin>  -->
+			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<source>${java.source.version}</source>
 					<target>${java.target.version}</target>
@@ -50,10 +50,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
-				<configuration>
-					<finalName>${project.parent.name}-api-${project.version}</finalName>
-				</configuration>
+				<version>${maven-javadoc-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>api-javadoc</id>
@@ -64,23 +61,20 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--<plugin>-->
-				<!--<groupId>org.apache.maven.plugins</groupId>-->
-				<!--<artifactId>maven-source-plugin</artifactId>-->
-				<!--<version>3.0.1</version>-->
-				<!--<configuration>-->
-					<!--<finalName>${project.parent.name}-api-${project.version}</finalName>-->
-				<!--</configuration>-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<id>api-sources</id>-->
-						<!--<phase>package</phase>-->
-						<!--<goals>-->
-							<!--<goal>jar-no-fork</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-				<!--</executions>-->
-			<!--</plugin>-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven-source-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>api-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

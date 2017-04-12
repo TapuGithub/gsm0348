@@ -23,7 +23,11 @@
 		<bouncycastle.version>1.56</bouncycastle.version>
 		<beanutils.version>1.9.3</beanutils.version>
 
+		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
+		<jaxb2-maven-plugin.version>1.6</jaxb2-maven-plugin.version>
 
 		<java.source.version>1.6</java.source.version>
 		<java.target.version>1.6</java.target.version>
