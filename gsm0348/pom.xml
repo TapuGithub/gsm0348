@@ -20,10 +20,10 @@
 		<commons-cli.version>1.4</commons-cli.version>
 		<jsr305.version>2.0.3</jsr305.version>
 		<junit.version>4.12</junit.version>
-		<bouncycastle.version>1.56</bouncycastle.version>
+		<bouncycastle.version>1.58</bouncycastle.version>
 		<beanutils.version>1.9.3</beanutils.version>
 
-		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
