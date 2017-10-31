@@ -71,8 +71,7 @@ public class ResponsePacketHeader
     }
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((responseStatus == null) ? 0 : responseStatus.hashCode());
@@ -80,8 +79,7 @@ public class ResponsePacketHeader
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -89,14 +87,23 @@ public class ResponsePacketHeader
 		if (!(obj instanceof ResponsePacketHeader))
 			return false;
 		ResponsePacketHeader other = (ResponsePacketHeader) obj;
-		if (responseStatus != other.responseStatus)
+		if (responseStatus != other.responseStatus) {
 			return false;
+		}
+		if (!Arrays.equals(counter, other.counter)) {
+			return false;
+		}
+		if (!Arrays.equals(tar, other.tar)) {
+			return false;
+		}
+		if (paddingCounter != other.paddingCounter) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("ResponsePacketHeader [responseStatus=");
 		builder.append(responseStatus);
