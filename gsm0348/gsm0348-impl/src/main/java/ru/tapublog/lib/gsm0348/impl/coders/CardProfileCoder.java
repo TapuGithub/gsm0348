@@ -111,10 +111,8 @@ public class CardProfileCoder {
     newCardProfile.setKIC(kic);
     newCardProfile.setKID(kid);
 
+    // The initial chaining value for CBC modes shall be zero.
     switch (kic.getAlgorithmImplementation()) {
-      case RESERVED:
-        break;
-
       case PROPRIETARY_IMPLEMENTATIONS:
       case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
         break;
@@ -136,13 +134,21 @@ public class CardProfileCoder {
           default:
         }
         break;
+
+      case AES:
+        // AES shall be used together with counter settings (b5 and b4 of the first octet of SPI) 10 or 11.
+        switch (kic.getCipheringAlgorithmMode()) {
+          case AES_CBC:
+            newCardProfile.setCipheringAlgorithm("AES/CBC/ZeroBytePadding");
+            break;
+          default:
+        }
+        break;
+
       default:
     }
 
     switch (kid.getAlgorithmImplementation()) {
-      case RESERVED:
-        break;
-
       case PROPRIETARY_IMPLEMENTATIONS:
       case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
         break;
@@ -162,6 +168,9 @@ public class CardProfileCoder {
 
           default:
         }
+        break;
+      case AES:
+        newCardProfile.setSignatureAlgorithm("AESCMAC");
         break;
       default:
     }

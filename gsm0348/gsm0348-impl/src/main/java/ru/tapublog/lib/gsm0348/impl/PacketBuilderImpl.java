@@ -159,9 +159,6 @@ public class PacketBuilderImpl implements PacketBuilder {
   private void setSigningAlgorithmName(CardProfile cardProfile) throws PacketBuilderConfigurationException {
     final KID kid = cardProfile.getKID();
     switch (kid.getAlgorithmImplementation()) {
-      case RESERVED:
-        throw new PacketBuilderConfigurationException("Using reserved value for algorithm implementation in KID");
-
       case PROPRIETARY_IMPLEMENTATIONS:
       case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
         signatureAlgorithmName = cardProfile.getSignatureAlgorithm();
@@ -188,6 +185,15 @@ public class PacketBuilderImpl implements PacketBuilder {
             throw new PacketBuilderConfigurationException("Not implemented yet");
         }
         break;
+      case AES:
+        switch (kid.getCertificationAlgorithmMode()) {
+          case AES_CMAC:
+            signatureAlgorithmName = "AESCMAC";
+            break;
+          default:
+            throw new PacketBuilderConfigurationException("Not implemented yet");
+        }
+        break;
       default:
         throw new PacketBuilderConfigurationException("Not implemented yet");
     }
@@ -202,9 +208,6 @@ public class PacketBuilderImpl implements PacketBuilder {
     final KIC kic = cardProfile.getKIC();
 
     switch (kic.getAlgorithmImplementation()) {
-      case RESERVED:
-        throw new PacketBuilderConfigurationException("Using reserved value for algorithm implementation in KIC");
-
       case PROPRIETARY_IMPLEMENTATIONS:
       case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
         cipheringAlgorithmName = cardProfile.getCipheringAlgorithm();
@@ -228,6 +231,15 @@ public class PacketBuilderImpl implements PacketBuilder {
             cipheringAlgorithmName = "DESede/CBC/ZeroBytePadding";
             break;
 
+          default:
+            throw new PacketBuilderConfigurationException("Not implemented yet");
+        }
+        break;
+      case AES:
+        switch (kic.getCipheringAlgorithmMode()) {
+          case AES_CBC:
+            cipheringAlgorithmName = "AES/CBC/ZeroBytePadding";
+            break;
           default:
             throw new PacketBuilderConfigurationException("Not implemented yet");
         }
@@ -403,7 +415,7 @@ public class PacketBuilderImpl implements PacketBuilder {
         LOGGER.debug("Ciphering");
         byte[] cipherData = new byte[COUNTERS_SIZE + PADDING_COUNTER_SIZE + signatureLength + dataBytes.length];
         if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug("Ciphering data length: " + cipherData.length);
+          LOGGER.debug("Ciphering data length: {}", cipherData.length);
         }
         System.arraycopy(countersBytes, 0, cipherData, 0, COUNTERS_SIZE);
         cipherData[5] = paddingCounter;
@@ -413,7 +425,7 @@ public class PacketBuilderImpl implements PacketBuilder {
 
         byte[] cipheredData = CipheringManager.encipher(cipheringAlgorithmName, cipheringKey, cipherData, countersBytes);
         if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug("Ciphered data length: " + cipheredData.length);
+          LOGGER.debug("Ciphered data length: {}", cipheredData.length);
         }
         System.arraycopy(cipheredData, 0, countersBytes, 0, COUNTERS_SIZE);
         System.arraycopy(cipheredData, 6, signature, 0, signatureLength);

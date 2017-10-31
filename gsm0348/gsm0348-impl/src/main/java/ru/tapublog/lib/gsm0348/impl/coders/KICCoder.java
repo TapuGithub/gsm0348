@@ -1,5 +1,10 @@
 package ru.tapublog.lib.gsm0348.impl.coders;
 
+import static ru.tapublog.lib.gsm0348.api.model.AlgorithmImplementation.AES;
+import static ru.tapublog.lib.gsm0348.api.model.AlgorithmImplementation.ALGORITHM_KNOWN_BY_BOTH_ENTITIES;
+import static ru.tapublog.lib.gsm0348.api.model.AlgorithmImplementation.DES;
+import static ru.tapublog.lib.gsm0348.api.model.AlgorithmImplementation.PROPRIETARY_IMPLEMENTATIONS;
+
 import ru.tapublog.lib.gsm0348.api.model.AlgorithmImplementation;
 import ru.tapublog.lib.gsm0348.api.model.CipheringAlgorithmMode;
 import ru.tapublog.lib.gsm0348.api.model.KIC;
@@ -25,7 +30,7 @@ public class KICCoder
 			case DES:
 				algImpl = 1;
 				break;
-			case RESERVED:
+			case AES:
 				algImpl = 2;
 				break;
 			case PROPRIETARY_IMPLEMENTATIONS:
@@ -36,6 +41,7 @@ public class KICCoder
 		switch (kic.getCipheringAlgorithmMode())
 		{
 			case DES_CBC:
+			case AES_CBC:
 				algMode = 0;
 				break;
 			case TRIPLE_DES_CBC_2_KEYS:
@@ -63,45 +69,67 @@ public class KICCoder
 		final byte keysetID = (byte) ((kic & 0xF0) >>> 4);
 
 		AlgorithmImplementation resultAlgImpl = null;
+		CipheringAlgorithmMode resultAlgMode = null;
 		switch (algImpl)
 		{
 			case 0:
-				resultAlgImpl = AlgorithmImplementation.ALGORITHM_KNOWN_BY_BOTH_ENTITIES;
+				resultAlgImpl = ALGORITHM_KNOWN_BY_BOTH_ENTITIES;
+				switch (algMode)
+				{
+					case 0:
+						resultAlgMode = CipheringAlgorithmMode.DES_CBC;
+						break;
+					case 1:
+						resultAlgMode = CipheringAlgorithmMode.TRIPLE_DES_CBC_2_KEYS;
+						break;
+					case 2:
+						resultAlgMode = CipheringAlgorithmMode.TRIPLE_DES_CBC_3_KEYS;
+						break;
+					case 3:
+						resultAlgMode = CipheringAlgorithmMode.DES_ECB;
+						break;
+					default:
+						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such DES algorithm mode(raw=" + Integer.toHexString(algMode));
+				}
 				break;
 			case 1:
-				resultAlgImpl = AlgorithmImplementation.DES;
+				resultAlgImpl = DES;
+				switch (algMode)
+				{
+					case 0:
+						resultAlgMode = CipheringAlgorithmMode.DES_CBC;
+						break;
+					case 1:
+						resultAlgMode = CipheringAlgorithmMode.TRIPLE_DES_CBC_2_KEYS;
+						break;
+					case 2:
+						resultAlgMode = CipheringAlgorithmMode.TRIPLE_DES_CBC_3_KEYS;
+						break;
+					case 3:
+						resultAlgMode = CipheringAlgorithmMode.DES_ECB;
+						break;
+					default:
+						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such DES algorithm mode(raw=" + Integer.toHexString(algMode));
+				}
 				break;
 			case 2:
-				resultAlgImpl = AlgorithmImplementation.RESERVED;
+				resultAlgImpl = AES;
+				switch (algMode)
+				{
+					case 0:
+						resultAlgMode = CipheringAlgorithmMode.AES_CBC;
+						break;
+					default:
+						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such AES algorithm mode(raw=" + Integer.toHexString(algMode));
+				}
 				break;
 			case 3:
-				resultAlgImpl = AlgorithmImplementation.PROPRIETARY_IMPLEMENTATIONS;
+				resultAlgImpl = PROPRIETARY_IMPLEMENTATIONS;
 				break;
 
 			default:
 				throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such algorithm implemetation(raw="
 						+ Integer.toHexString(algImpl));
-		}
-		
-		CipheringAlgorithmMode resultAlgMode = null;
-		switch (algMode)
-		{
-			case 0:
-				resultAlgMode = CipheringAlgorithmMode.DES_CBC;
-				break;
-			case 1:
-				resultAlgMode = CipheringAlgorithmMode.TRIPLE_DES_CBC_2_KEYS;
-				break;
-			case 2:
-				resultAlgMode = CipheringAlgorithmMode.TRIPLE_DES_CBC_3_KEYS;
-				break;
-			case 3:
-				resultAlgMode = CipheringAlgorithmMode.DES_ECB;
-				break;
-
-			default:
-				throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such algorithm mode(raw="
-						+ Integer.toHexString(algMode));
 		}
 		
 		if(keysetID  < 0 && keysetID > 0xF)

@@ -9,6 +9,9 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ru.tapublog.lib.gsm0348.impl.crypto.CipherParameters;
 import ru.tapublog.lib.gsm0348.impl.crypto.Mac;
 import ru.tapublog.lib.gsm0348.impl.crypto.params.KeyParameter;
@@ -16,6 +19,8 @@ import ru.tapublog.lib.gsm0348.impl.crypto.params.ParametersWithIV;
 
 public abstract class AbstractCipherMac implements Mac
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCipherMac.class);
+
 	private Cipher m_cipher;
 	private byte[] m_key;
 	private byte[] m_iv;
@@ -36,8 +41,9 @@ public abstract class AbstractCipherMac implements Mac
 		if (cipheringParams instanceof ParametersWithIV)
 		{
 			m_iv = ((ParametersWithIV) cipheringParams).getIV();
-			if (m_iv == null)
+			if (m_iv == null) {
 				throw new IllegalArgumentException("IV cannot be null");
+			}
 
 			cipheringParams = ((ParametersWithIV) cipheringParams).getParameters();
 		}
@@ -99,10 +105,10 @@ public abstract class AbstractCipherMac implements Mac
 			return m_size;
 		} catch (IllegalBlockSizeException e)
 		{
-			e.printStackTrace();
+			LOGGER.error("Could not cipher (illegal block size)", e);
 		} catch (BadPaddingException e)
 		{
-			e.printStackTrace();
+			LOGGER.error("Could not cipher (bad padding)", e);
 		}
 		return 0;
 	}
@@ -114,12 +120,10 @@ public abstract class AbstractCipherMac implements Mac
 			m_cipher.doFinal();
 		} catch (IllegalBlockSizeException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Could not cipher (illegal block size)", e);
 		} catch (BadPaddingException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Could not cipher (bad padding)", e);
 		}
 	}
 }

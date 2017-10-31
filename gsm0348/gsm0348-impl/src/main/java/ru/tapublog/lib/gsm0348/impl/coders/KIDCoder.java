@@ -25,7 +25,7 @@ public class KIDCoder
 			case DES:
 				algImpl = 1;
 				break;
-			case RESERVED:
+			case AES:
 				algImpl = 2;
 				break;
 			case PROPRIETARY_IMPLEMENTATIONS:
@@ -36,6 +36,7 @@ public class KIDCoder
 		switch (kid.getCertificationAlgorithmMode())
 		{
 			case DES_CBC:
+			case AES_CMAC:
 				algMode = 0;
 				break;
 			case TRIPLE_DES_CBC_2_KEYS:
@@ -63,6 +64,7 @@ public class KIDCoder
 		final byte keysetID = (byte) ((kid & 0xF0) >>> 4);
 
 		AlgorithmImplementation resultAlgImpl = null;
+		CertificationAlgorithmMode resultAlgMode = null;
 		switch (algImpl)
 		{
 			case 0:
@@ -70,9 +72,36 @@ public class KIDCoder
 				break;
 			case 1:
 				resultAlgImpl = AlgorithmImplementation.DES;
+				switch (algMode)
+				{
+					case 0:
+						resultAlgMode = CertificationAlgorithmMode.DES_CBC;
+						break;
+					case 1:
+						resultAlgMode = CertificationAlgorithmMode.TRIPLE_DES_CBC_2_KEYS;
+						break;
+					case 2:
+						resultAlgMode = CertificationAlgorithmMode.TRIPLE_DES_CBC_3_KEYS;
+						break;
+					case 3:
+						resultAlgMode = CertificationAlgorithmMode.RESERVED;
+						break;
+					default:
+						throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such DES algorithm mode(raw="
+								+ Integer.toHexString(algMode));
+				}
 				break;
 			case 2:
-				resultAlgImpl = AlgorithmImplementation.RESERVED;
+				resultAlgImpl = AlgorithmImplementation.AES;
+				switch (algMode)
+				{
+					case 0:
+						resultAlgMode = CertificationAlgorithmMode.AES_CMAC;
+						break;
+					default:
+						throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such AES algorithm mode(raw="
+								+ Integer.toHexString(algMode));
+				}
 				break;
 			case 3:
 				resultAlgImpl = AlgorithmImplementation.PROPRIETARY_IMPLEMENTATIONS;
@@ -82,28 +111,7 @@ public class KIDCoder
 				throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such algorithm implemetation(raw="
 						+ Integer.toHexString(algImpl));
 		}
-		
-		CertificationAlgorithmMode resultAlgMode = null;
-		switch (algMode)
-		{
-			case 0:
-				resultAlgMode = CertificationAlgorithmMode.DES_CBC;
-				break;
-			case 1:
-				resultAlgMode = CertificationAlgorithmMode.TRIPLE_DES_CBC_2_KEYS;
-				break;
-			case 2:
-				resultAlgMode = CertificationAlgorithmMode.TRIPLE_DES_CBC_3_KEYS;
-				break;
-			case 3:
-				resultAlgMode = CertificationAlgorithmMode.RESERVED;
-				break;
 
-			default:
-				throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such algorithm mode(raw="
-						+ Integer.toHexString(algMode));
-		}
-		
 		if(keysetID  < 0 && keysetID > 0xF)
 			throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). KID keySetID cannot be <0 and >15");
 		

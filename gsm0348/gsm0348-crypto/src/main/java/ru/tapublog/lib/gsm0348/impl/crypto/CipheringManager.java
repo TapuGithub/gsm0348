@@ -77,11 +77,17 @@ public class CipheringManager {
     return doWork(transformation, key, data, new byte[]{ 0, 0, 0, 0, 0 }, Cipher.DECRYPT_MODE);
   }
 
-  private static void initCipher(Cipher cipher, int mode, byte[] key, byte[] iv) throws InvalidAlgorithmParameterException, InvalidKeyException {
+  private static void initCipher(Cipher cipher, int mode, byte[] key, byte[] iv) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
     LOGGER.debug("Initializing cipher: {} key length: {} bits", cipher.getAlgorithm(), key.length * 8);
+    final int blockSize = getBlockSize(cipher.getAlgorithm());
+    LOGGER.debug("Block size for {}: {}", cipher.getAlgorithm(), blockSize);
     SecretKeySpec keySpec = new SecretKeySpec(key, cipher.getAlgorithm());
+    if (key.length > Cipher.getMaxAllowedKeyLength(cipher.getAlgorithm())) {
+      LOGGER.error("The maximum allowed key length is {} for {}", Cipher.getMaxAllowedKeyLength(cipher.getAlgorithm()), cipher.getAlgorithm());
+      throw new IllegalArgumentException("The key length is above the maximum, please install JCE unlimited strength jurisdiction policy files");
+    }
     if (cipher.getAlgorithm().contains("CBC")) {
-      iv = new byte[8];
+      iv = new byte[blockSize];
       IvParameterSpec spec = new IvParameterSpec(iv);
       LOGGER.debug("Using IV: {}", Arrays.toString(iv));
       cipher.init(mode, keySpec, spec);

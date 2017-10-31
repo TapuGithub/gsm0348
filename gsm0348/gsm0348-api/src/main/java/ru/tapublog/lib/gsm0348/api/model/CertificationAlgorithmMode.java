@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="TRIPLE_DES_CBC_2_KEYS"/>
  *     &lt;enumeration value="TRIPLE_DES_CBC_3_KEYS"/>
  *     &lt;enumeration value="RESERVED"/>
+ *     &lt;enumeration value="AES_CMAC"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -36,7 +37,8 @@ public enum CertificationAlgorithmMode {
     DES_CBC,
     TRIPLE_DES_CBC_2_KEYS,
     TRIPLE_DES_CBC_3_KEYS,
-    RESERVED;
+    RESERVED,
+    AES_CMAC;
 
     public String value() {
         return name();

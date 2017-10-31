@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="TRIPLE_DES_CBC_2_KEYS"/>
  *     &lt;enumeration value="TRIPLE_DES_CBC_3_KEYS"/>
  *     &lt;enumeration value="DES_ECB"/>
+ *     &lt;enumeration value="AES_CBC"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -36,7 +37,8 @@ public enum CipheringAlgorithmMode {
     DES_CBC,
     TRIPLE_DES_CBC_2_KEYS,
     TRIPLE_DES_CBC_3_KEYS,
-    DES_ECB;
+    DES_ECB,
+    AES_CBC;
 
     public String value() {
         return name();

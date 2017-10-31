@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="ALGORITHM_KNOWN_BY_BOTH_ENTITIES"/>
  *     &lt;enumeration value="DES"/>
- *     &lt;enumeration value="RESERVED"/>
+ *     &lt;enumeration value="AES"/>
  *     &lt;enumeration value="PROPRIETARY_IMPLEMENTATIONS"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
@@ -35,7 +35,7 @@ public enum AlgorithmImplementation {
 
     ALGORITHM_KNOWN_BY_BOTH_ENTITIES,
     DES,
-    RESERVED,
+    AES,
     PROPRIETARY_IMPLEMENTATIONS;
 
     public String value() {
