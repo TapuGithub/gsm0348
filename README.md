@@ -30,7 +30,7 @@ This project designed to help building Receiving/Sending Entity. It provides lib
 Short Message Service Cell Broadcast (SMS-CB) is not supported as for now.
 
 ### Maven Config
-``
+```
 <repository>
    <id>GSM 03.48 Library</id>
    <url>https://github.com/pmoerenhout/gsm0348</url>
