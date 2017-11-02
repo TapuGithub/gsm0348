@@ -1,8 +1,9 @@
-** If you have ANY questions - please mail me(tapumail@gmail.com)**
+** If you have ANY questions - please mail me(tapumail@gmail.com) **
 
-# API and realization of GSM 03.48 standard for Java
+# API and realization of GSM 03.48 (ETSI TS 102 225) standard for Java
 ## Scope
-The present project provides API and realization of the Secured Packets using Short Message Service Point to Point (SMS-PP). It is used to the exchange of secured packets between an entity in a GSM PLMN and an entity in the SIM. Secured Packets contain application messages to which certain mechanisms according to GSM 03.48 have been applied. Application messages are commands or data exchanged between an application resident in or behind the GSM PLMN and on the SIM.
+The present project provides API and realization of the Secured Packets using Short Message Service Point to Point (SMS-PP). It is used to the exchange of secured packets between an entity in a GSM PLMN and an entity in the SIM. Secured Packets contain application messages to which certain mechanisms according to GSM 03.48 have been applied.
+Application messages are commands or data exchanged between an application resident in or behind the GSM PLMN and on the SIM.
 
 ## News
 
