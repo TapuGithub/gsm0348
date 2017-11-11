@@ -69,6 +69,7 @@ public class CardProfileCoder {
    * @param datarow - the message heater {@linkplain byte[]} row.
    * @throws NullPointerException if <strong>datarow</strong> parameter is null.
    * @throws CodingException      if configuration is in inconsistent state.
+   * @return CardProfile
    */
   public static CardProfile encode(byte[] datarow) throws CodingException {
 
@@ -93,13 +94,9 @@ public class CardProfileCoder {
     }
 
     KIC kic = KICCoder.encode(datarow[KIC_POSITION - 1]);
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("KIC value: {}", kic);
-    }
-    KID kid = KIDCoder.encode(datarow[KID_POSITION - 1]);
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("KID value: {}", kid);
-    }
+    LOGGER.debug("KIC value: {}", kic);
+    KID kid = KIDCoder.encode(spi.getCommandSPI().getCertificationMode(), datarow[KID_POSITION - 1]);
+    LOGGER.debug("KID value: {}", kid);
 
     newCardProfile.setTAR(Arrays.copyOfRange(datarow, TAR_POSITION - 1, TAR_POSITION - 1 + TAR_SIZE));
 
@@ -149,6 +146,15 @@ public class CardProfileCoder {
     }
 
     switch (kid.getAlgorithmImplementation()) {
+      case CRC:
+        switch (kid.getCertificationAlgorithmMode()) {
+          case CRC_16:
+            newCardProfile.setSignatureAlgorithm("CRC16");
+            break;
+          case CRC_32:
+            newCardProfile.setSignatureAlgorithm("CRC32");
+            break;
+        }
       case PROPRIETARY_IMPLEMENTATIONS:
       case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
         break;
@@ -172,7 +178,6 @@ public class CardProfileCoder {
       case AES:
         newCardProfile.setSignatureAlgorithm("AESCMAC");
         break;
-      default:
     }
 
     return newCardProfile;
@@ -184,6 +189,7 @@ public class CardProfileCoder {
    * @param profile - a card profile {@linkplain CardProfile}.
    * @throws NullPointerException if <strong>profile</strong> parameter is null.
    * @throws CodingException      if configuration is in inconsistent state.
+   * @return byte[]
    */
   public static byte[] decode(CardProfile profile) throws CodingException {
 
@@ -195,7 +201,7 @@ public class CardProfileCoder {
 
     headerData[0] = CommandSPICoder.decode(profile.getSPI().getCommandSPI());
     headerData[1] = ResponseSPICoder.decode(profile.getSPI().getResponseSPI());
-      LOGGER.debug("SPI value: {}", String.format("%1$#x %2$#x", headerData[0], headerData[1]));
+    LOGGER.debug("SPI value: {}", String.format("%1$#x %2$#x", headerData[0], headerData[1]));
 
     headerData[KIC_POSITION - 1] = KICCoder.decode(profile.getKIC());
     LOGGER.debug("KIC value: {}", Util.toHex(headerData[KIC_POSITION - 1]));

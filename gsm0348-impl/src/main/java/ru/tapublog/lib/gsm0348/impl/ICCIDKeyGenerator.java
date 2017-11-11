@@ -63,11 +63,12 @@ public class ICCIDKeyGenerator {
    * using DES ECB with key=master key and data=last 8 bytes of ICCID.
    *
    * @param masterKey - master key. Must be 8 bytes length.
-   * @param iccid     - ICCID. Must be >= 8 length.
+   * @param iccid     - ICCID. Must be &gt;= 8 length.
    * @return 8-bytes length key
-   * @throws IllegalArgumentException if ICCID is null or iccid.length < 8
+   * @throws IllegalArgumentException if ICCID is null or iccid.length &lt; 8
    * @throws IllegalArgumentException if master key is null or masterKey.length != 8
    * @throws GeneralSecurityException in case of unexpected cryptographic problems
+   * @return byte[]
    */
   public static byte[] getKey(byte[] masterKey, byte[] iccid) throws GeneralSecurityException {
     if (masterKey == null || masterKey.length != 8) {
@@ -103,6 +104,7 @@ public class ICCIDKeyGenerator {
    * decimal digits(ex. "1236340012").
    *
    * @param input - sequence of decimal digits(ex. "1236340012")
+   * @return boolean
    */
   public static boolean verifyLuhnChecksum(String input) {
     final int[][] sumTable = { { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 } };
@@ -128,7 +130,6 @@ public class ICCIDKeyGenerator {
     for (int i = 0; i < input.length(); i++) {
       byteIccid[i] = (byte) (Character.digit(input.charAt(i), 10));
     }
-
     return input + getLuhn(byteIccid);
   }
 

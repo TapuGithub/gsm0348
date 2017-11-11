@@ -5,7 +5,6 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,28 +12,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-/**
- * <p>Java class for KID complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="KID">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="KeysetID" type="{ru.tapublog.lib.gsm0348}KeysetID"/>
- *         &lt;element name="CertificationAlgorithmMode" type="{ru.tapublog.lib.gsm0348}CertificationAlgorithmMode"/>
- *         &lt;element name="AlgorithmImplementation" type="{ru.tapublog.lib.gsm0348}AlgorithmImplementation"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "KID", propOrder = {
 

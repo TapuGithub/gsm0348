@@ -194,6 +194,18 @@ public class PacketBuilderImpl implements PacketBuilder {
             throw new PacketBuilderConfigurationException("Not implemented yet");
         }
         break;
+      case CRC:
+        switch (kid.getCertificationAlgorithmMode()) {
+          case CRC_16:
+            signatureAlgorithmName = "CRC16";
+            break;
+          case CRC_32:
+            signatureAlgorithmName = "CRC32";
+            break;
+          default:
+            throw new PacketBuilderConfigurationException("Not implemented yet");
+        }
+        break;
       default:
         throw new PacketBuilderConfigurationException("Not implemented yet");
     }
@@ -206,7 +218,6 @@ public class PacketBuilderImpl implements PacketBuilder {
 
   private void setCipheringAlgorithmName(CardProfile cardProfile) throws PacketBuilderConfigurationException {
     final KIC kic = cardProfile.getKIC();
-
     switch (kic.getAlgorithmImplementation()) {
       case PROPRIETARY_IMPLEMENTATIONS:
       case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
@@ -275,16 +286,9 @@ public class PacketBuilderImpl implements PacketBuilder {
     if (commandSPI.getCertificationMode() == CertificationMode.DS) {
       throw new PacketBuilderConfigurationException("Digital signature in command packets is not supported");
     }
-//    if (commandSPI.getCertificationMode() == CertificationMode.RC) {
-//      throw new PacketBuilderConfigurationException("Redundancy checking in command packets is not supported");
-//    }
     if (responseSPI.getPoRCertificateMode() == CertificationMode.DS) {
       throw new PacketBuilderConfigurationException("Digital signature in response packets is not supported");
     }
-    if (responseSPI.getPoRCertificateMode() == CertificationMode.RC) {
-      throw new PacketBuilderConfigurationException("Redundancy checking in response packets is not supported");
-    }
-
     commandPacketCiphering = cardProfile.getSPI().getCommandSPI().isCiphered();
     responsePacketCiphering = cardProfile.getSPI().getResponseSPI().isCiphered();
 
@@ -503,9 +507,7 @@ public class PacketBuilderImpl implements PacketBuilder {
           + (MINIMUM_RESPONSE_PACKET_SIZE + signatureLength) + ", but found " + data.length;
       if (data.length >= MINIMUM_RESPONSE_PACKET_SIZE) {
         message += ". It can be caused by incorrect profile(SPI value). Check SPI!";
-        if (LOGGER.isWarnEnabled()) {
           LOGGER.warn("Packet received(raw): {}", Util.toHexArray(data));
-        }
       }
       throw new Gsm0348Exception(message);
     }
@@ -670,7 +672,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     final byte[] kidBytes = new byte[KID_SIZE];
     System.arraycopy(header, KID_POSITION, kidBytes, 0, KID_SIZE);
     LOGGER.debug("KID: {}", Util.toHexArray(kidBytes));
-    final KID kid = KIDCoder.encode(kidBytes[0]);
+    final KID kid = KIDCoder.encode(spi.getCommandSPI().getCertificationMode(), kidBytes[0]);
 
     final byte[] tar = new byte[TAR_SIZE];
     System.arraycopy(header, TAR_POSITION, tar, 0, TAR_SIZE);

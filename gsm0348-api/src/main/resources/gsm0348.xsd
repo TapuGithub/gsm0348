@@ -133,6 +133,7 @@
 			<xsd:enumeration value='ALGORITHM_KNOWN_BY_BOTH_ENTITIES'/>
 			<xsd:enumeration value='DES'/>
 			<xsd:enumeration value='AES'/>
+			<xsd:enumeration value='CRC'/>
 			<xsd:enumeration value='PROPRIETARY_IMPLEMENTATIONS'/>
 		</xsd:restriction>
 	</xsd:simpleType>
@@ -155,6 +156,8 @@
 
 	<xsd:simpleType name="CertificationAlgorithmMode">
 		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value='CRC_16'/>
+			<xsd:enumeration value='CRC_32'/>
 			<xsd:enumeration value='DES_CBC'/>
 			<xsd:enumeration value='TRIPLE_DES_CBC_2_KEYS'/>
 			<xsd:enumeration value='TRIPLE_DES_CBC_3_KEYS'/>

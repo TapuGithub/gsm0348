@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>gsm0348</artifactId>
 		<groupId>ru.tapublog.lib.gsm0348</groupId>
-		<version>1.2.5</version>
+		<version>1.2.6</version>
 	</parent>
 	<artifactId>gsm0348-api</artifactId>
 	<name>GSM 03.48 :: API</name>

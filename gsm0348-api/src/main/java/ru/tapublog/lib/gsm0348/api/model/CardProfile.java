@@ -5,7 +5,6 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import java.util.Arrays;
@@ -18,34 +17,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
-/**
- * <p>Java class for CardProfile complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="CardProfile">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="KIC" type="{ru.tapublog.lib.gsm0348}KIC"/>
- *         &lt;element name="KID" type="{ru.tapublog.lib.gsm0348}KID"/>
- *         &lt;element name="SPI" type="{ru.tapublog.lib.gsm0348}SPI"/>
- *         &lt;element name="TAR" type="{ru.tapublog.lib.gsm0348}TAR"/>
- *         &lt;element name="SecurityBytesType" type="{ru.tapublog.lib.gsm0348}SecurityBytesType"/>
- *         &lt;element name="SignatureAlgorithm" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="CipheringAlgorithm" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;group ref="{ru.tapublog.lib.gsm0348}MasterKeys" minOccurs="0"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CardProfile", propOrder = {
     "name",

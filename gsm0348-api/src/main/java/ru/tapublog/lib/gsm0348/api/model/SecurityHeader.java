@@ -5,7 +5,6 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import java.util.Arrays;
@@ -18,29 +17,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
-/**
- * <p>Java class for SecurityHeader complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="SecurityHeader">
- *   &lt;complexContent>
- *     &lt;extension base="{ru.tapublog.lib.gsm0348}PacketHeader">
- *       &lt;sequence>
- *         &lt;element name="TAR" type="{ru.tapublog.lib.gsm0348}TAR"/>
- *         &lt;element name="PaddingCounter" type="{http://www.w3.org/2001/XMLSchema}byte"/>
- *         &lt;element name="Security" type="{ru.tapublog.lib.gsm0348}Security" minOccurs="0"/>
- *         &lt;element name="Counter" type="{ru.tapublog.lib.gsm0348}Counter"/>
- *       &lt;/sequence>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SecurityHeader", propOrder = {
     "tar",

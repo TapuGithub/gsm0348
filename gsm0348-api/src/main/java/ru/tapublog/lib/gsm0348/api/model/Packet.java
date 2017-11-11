@@ -5,7 +5,6 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import java.util.Arrays;
@@ -19,13 +18,11 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-
 /**
+ *
  * This interface describes GSM 03.48 packet.
  * @author Victor Platov
- * 
- * 
- * 
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Packet", propOrder = {

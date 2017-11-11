@@ -5,31 +5,11 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
-
-/**
- * <p>Java class for CipheringAlgorithmMode.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
- * <pre>
- * &lt;simpleType name="CipheringAlgorithmMode">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="DES_CBC"/>
- *     &lt;enumeration value="TRIPLE_DES_CBC_2_KEYS"/>
- *     &lt;enumeration value="TRIPLE_DES_CBC_3_KEYS"/>
- *     &lt;enumeration value="DES_ECB"/>
- *     &lt;enumeration value="AES_CBC"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
- * </pre>
- * 
- */
 @XmlType(name = "CipheringAlgorithmMode")
 @XmlEnum
 public enum CipheringAlgorithmMode {

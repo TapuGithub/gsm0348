@@ -5,30 +5,11 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
-
-/**
- * <p>Java class for AlgorithmImplementation.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
- * <pre>
- * &lt;simpleType name="AlgorithmImplementation">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="ALGORITHM_KNOWN_BY_BOTH_ENTITIES"/>
- *     &lt;enumeration value="DES"/>
- *     &lt;enumeration value="AES"/>
- *     &lt;enumeration value="PROPRIETARY_IMPLEMENTATIONS"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
- * </pre>
- * 
- */
 @XmlType(name = "AlgorithmImplementation")
 @XmlEnum
 public enum AlgorithmImplementation {
@@ -36,6 +17,7 @@ public enum AlgorithmImplementation {
     ALGORITHM_KNOWN_BY_BOTH_ENTITIES,
     DES,
     AES,
+    CRC,
     PROPRIETARY_IMPLEMENTATIONS;
 
     public String value() {

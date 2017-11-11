@@ -5,30 +5,11 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
-
-/**
- * <p>Java class for SynchroCounterMode.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
- * <pre>
- * &lt;simpleType name="SynchroCounterMode">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="NO_COUNTER"/>
- *     &lt;enumeration value="COUNTER_NO_REPLAY_NO_CHECK"/>
- *     &lt;enumeration value="COUNTER_REPLAY_OR_CHECK"/>
- *     &lt;enumeration value="COUNTER_REPLAY_OR_CHECK_INCREMENT"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
- * </pre>
- * 
- */
 @XmlType(name = "SynchroCounterMode")
 @XmlEnum
 public enum SynchroCounterMode {

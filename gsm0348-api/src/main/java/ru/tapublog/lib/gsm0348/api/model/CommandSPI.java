@@ -5,7 +5,6 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,28 +12,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-/**
- * <p>Java class for CommandSPI complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="CommandSPI">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="CertificationMode" type="{ru.tapublog.lib.gsm0348}CertificationMode"/>
- *         &lt;element name="SynchroCounterMode" type="{ru.tapublog.lib.gsm0348}SynchroCounterMode"/>
- *         &lt;element name="Ciphered" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CommandSPI", propOrder = {
 

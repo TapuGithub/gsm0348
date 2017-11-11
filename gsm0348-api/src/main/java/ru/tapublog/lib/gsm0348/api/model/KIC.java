@@ -13,28 +13,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-/**
- * <p>Java class for KIC complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="KIC">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element name="KeysetID" type="{ru.tapublog.lib.gsm0348}KeysetID"/>
- *         &lt;element name="CipheringAlgorithmMode" type="{ru.tapublog.lib.gsm0348}CipheringAlgorithmMode"/>
- *         &lt;element name="AlgorithmImplementation" type="{ru.tapublog.lib.gsm0348}AlgorithmImplementation"/>
- *       &lt;/all>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "KIC", propOrder = {
 

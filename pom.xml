@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ru.tapublog.lib.gsm0348</groupId>
 	<artifactId>gsm0348</artifactId>
-	<version>1.2.5</version>
+	<version>1.2.6</version>
 	<packaging>pom</packaging>
 	<name>GSM 03.48</name>
 	<url>https://github.com/TapuGithub/gsm0348</url>
@@ -22,6 +22,7 @@
 		<junit.version>4.12</junit.version>
 		<bouncycastle.version>1.58</bouncycastle.version>
 		<beanutils.version>1.9.3</beanutils.version>
+		<crc.version>1.0.1</crc.version>
 
 		<maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
@@ -29,6 +30,7 @@
 		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
 		<jaxb2-maven-plugin.version>1.6</jaxb2-maven-plugin.version>
 
+		<java.version>1.6</java.version>
 		<java.source.version>1.6</java.source.version>
 		<java.target.version>1.6</java.target.version>
 
@@ -99,6 +101,11 @@
 				<version>${bouncycastle.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.github.snksoft</groupId>
+				<artifactId>crc</artifactId>
+				<version>${crc.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-simple</artifactId>
 				<version>${slf4j.version}</version>
@@ -106,5 +113,19 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${java.source.version}</source>
+					<target>${java.target.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

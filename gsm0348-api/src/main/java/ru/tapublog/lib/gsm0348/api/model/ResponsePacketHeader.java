@@ -5,7 +5,6 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import java.util.Arrays;
@@ -15,26 +14,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-/**
- * <p>Java class for ResponsePacketHeader complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType name="ResponsePacketHeader">
- *   &lt;complexContent>
- *     &lt;extension base="{ru.tapublog.lib.gsm0348}SecurityHeader">
- *       &lt;sequence>
- *         &lt;element name="ResponseStatus" type="{ru.tapublog.lib.gsm0348}ResponsePacketStatus"/>
- *       &lt;/sequence>
- *     &lt;/extension>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ResponsePacketHeader", propOrder = {
     "responseStatus"

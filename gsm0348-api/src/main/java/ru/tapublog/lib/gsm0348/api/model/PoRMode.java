@@ -5,30 +5,11 @@
 // Generated on: 2011.09.09 at 04:14:20 PM MSD 
 //
 
-
 package ru.tapublog.lib.gsm0348.api.model;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
-
-/**
- * <p>Java class for PoRMode.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
- * <pre>
- * &lt;simpleType name="PoRMode">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="NO_REPLY"/>
- *     &lt;enumeration value="REPLY_ALWAYS"/>
- *     &lt;enumeration value="REPLY_WHEN_ERROR"/>
- *     &lt;enumeration value="RESERVED"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
- * </pre>
- * 
- */
 @XmlType(name = "PoRMode")
 @XmlEnum
 public enum PoRMode {
