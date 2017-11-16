@@ -24,7 +24,7 @@
 		<beanutils.version>1.9.3</beanutils.version>
 		<crc.version>1.0.1</crc.version>
 
-		<maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
