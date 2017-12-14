@@ -306,7 +306,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     usingCounters = commandSPI.getSynchroCounterMode() != SynchroCounterMode.NO_COUNTER;
 
     if (!usingCounters) {
-      LOGGER.debug("Counters are turned off - counters field in CommandPacked will be filled with zeroes");
+      LOGGER.debug("Counters are turned off - counters field in CommandPacket will be filled with zeroes");
     }
 
     try {
