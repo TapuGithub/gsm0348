@@ -20,7 +20,7 @@
 		<commons-cli.version>1.4</commons-cli.version>
 		<jsr305.version>2.0.3</jsr305.version>
 		<junit.version>4.12</junit.version>
-		<bouncycastle.version>1.58</bouncycastle.version>
+		<bouncycastle.version>1.59</bouncycastle.version>
 		<beanutils.version>1.9.3</beanutils.version>
 		<crc.version>1.0.1</crc.version>
 
