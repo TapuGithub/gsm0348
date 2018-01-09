@@ -86,7 +86,7 @@ public class KIDCoder
                 break;
               default:
                 throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such CRC algorithm mode(raw="
-                    + Integer.toHexString(algMode));
+                    + Integer.toHexString(algMode) + ")");
             }
             break;
           case 3:
@@ -94,7 +94,7 @@ public class KIDCoder
             break;
           default:
             throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such RC algorithm mode(raw="
-                + Integer.toHexString(algImpl));
+                + Integer.toHexString(algImpl) + ")");
         }
         break;
 			case CC:
@@ -119,7 +119,7 @@ public class KIDCoder
 								break;
 							default:
 								throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such DES algorithm mode(raw="
-										+ Integer.toHexString(algMode));
+										+ Integer.toHexString(algMode) + ")");
 						}
 						break;
 					case 2:
@@ -130,7 +130,7 @@ public class KIDCoder
 								break;
 							default:
 								throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such AES algorithm mode(raw="
-										+ Integer.toHexString(algMode));
+										+ Integer.toHexString(algMode) + ")");
 						}
 						break;
 					case 3:
@@ -138,12 +138,12 @@ public class KIDCoder
 						break;
 					default:
 						throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such algorithm implemetation(raw="
-								+ Integer.toHexString(algImpl));
+								+ Integer.toHexString(algImpl)+ ")");
 				}
 				break;
 			default:
 				throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such certificationMode(raw="
-						+ certificationMode);
+						+ certificationMode + ")");
 		}
 
 		if(keysetID  < 0 && keysetID > 0xF) {

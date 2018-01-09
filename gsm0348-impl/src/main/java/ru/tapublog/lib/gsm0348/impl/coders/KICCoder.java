@@ -89,7 +89,7 @@ public class KICCoder
 						resultAlgMode = CipheringAlgorithmMode.DES_ECB;
 						break;
 					default:
-						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such DES algorithm mode(raw=" + Integer.toHexString(algMode));
+						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such DES algorithm mode(raw=" + Integer.toHexString(algMode) + ")");
 				}
 				break;
 			case 1:
@@ -109,7 +109,7 @@ public class KICCoder
 						resultAlgMode = CipheringAlgorithmMode.DES_ECB;
 						break;
 					default:
-						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such DES algorithm mode(raw=" + Integer.toHexString(algMode));
+						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such DES algorithm mode(raw=" + Integer.toHexString(algMode) + ")");
 				}
 				break;
 			case 2:
@@ -120,7 +120,7 @@ public class KICCoder
 						resultAlgMode = CipheringAlgorithmMode.AES_CBC;
 						break;
 					default:
-						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such AES algorithm mode(raw=" + Integer.toHexString(algMode));
+						throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such AES algorithm mode(raw=" + Integer.toHexString(algMode) + ")");
 				}
 				break;
 			case 3:
@@ -129,7 +129,7 @@ public class KICCoder
 
 			default:
 				throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). No such algorithm implemetation(raw="
-						+ Integer.toHexString(algImpl));
+						+ Integer.toHexString(algImpl) + ")");
 		}
 		
 		if(keysetID  < 0 && keysetID > 0xF)
