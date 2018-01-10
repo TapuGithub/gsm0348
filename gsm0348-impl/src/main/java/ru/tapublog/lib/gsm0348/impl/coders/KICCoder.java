@@ -132,8 +132,9 @@ public class KICCoder
 						+ Integer.toHexString(algImpl) + ")");
 		}
 		
-		if(keysetID  < 0 && keysetID > 0xF)
+		if(keysetID  < 0 && keysetID > 0xF) {
 			throw new CodingException("Cannot encode KIC(raw=" + Util.toHex(kic) + "). KIC keySetID cannot be <0 and >15");
+		}
 		
 		result.setAlgorithmImplementation(resultAlgImpl);
 		result.setCipheringAlgorithmMode(resultAlgMode);
