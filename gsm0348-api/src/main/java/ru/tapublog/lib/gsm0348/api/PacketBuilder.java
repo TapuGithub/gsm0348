@@ -9,7 +9,7 @@ import ru.tapublog.lib.gsm0348.api.model.ResponsePacketStatus;
 /**
  * This interface describes GSM 03.48 packet builder. Instances of this
  * interface must create and recover GSM 03.48 {@linkplain CommandPacket} and
- * {@linkplain ResponsePacket} including their enciphering,deciphering,
+ * {@linkplain ResponsePacket} including their enciphering, deciphering,
  * signing(RC,CC,DS) and signature verification.
  * 
  * @author Victor Platov
@@ -54,8 +54,8 @@ public interface PacketBuilder
 	 * 
 	 * @param data
 	 *            - data to be sent. Can be null if no data sending needed.
-	 * @param counters
-	 *            - counters value. If not used can be null.
+	 * @param counter
+	 *            - counter value. If not used can be null.
 	 * @param cipheringKey
 	 *            - ciphering key. Used only if enciphering is needed, otherwise
 	 *            can be null.
@@ -70,7 +70,7 @@ public interface PacketBuilder
 	 *             in other cases.
 	 * 
 	 */
-	byte[] buildCommandPacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey)
+	byte[] buildCommandPacket(byte[] data, byte[] counter, byte[] cipheringKey, byte[] signatureKey)
 			throws PacketBuilderConfigurationException, Gsm0348Exception;
 
 	/**
@@ -98,12 +98,12 @@ public interface PacketBuilder
 			throws PacketBuilderConfigurationException, Gsm0348Exception;
 
 	/**
-	 * Builds {@linkplain ResponsePacket}. Not implemented.
+	 * Builds {@linkplain ResponsePacket}.
 	 * 
 	 * @param data
 	 *            - data to be sent. Can be null if no data sending needed.
-	 * @param counters
-	 *            - counters value. If not used can be null.
+	 * @param counter
+	 *            - counter value. If not used can be null.
 	 * @param cipheringKey
 	 *            - ciphering key. Used only if enciphering is needed, otherwise
 	 *            can be null.
@@ -121,8 +121,7 @@ public interface PacketBuilder
 	 *             in other cases.
 	 * 
 	 */
-	@Deprecated 
-	byte[] buildResponsePacket(byte[] data, byte[] counters, byte[] cipheringKey, byte[] signatureKey,
+	byte[] buildResponsePacket(byte[] data, byte[] counter, byte[] cipheringKey, byte[] signatureKey,
 			ResponsePacketStatus responseStatus) throws PacketBuilderConfigurationException, Gsm0348Exception;
 
 	/**
