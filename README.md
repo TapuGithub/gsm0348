@@ -1,8 +1,6 @@
-** If you have ANY questions - please mail me(tapumail@gmail.com) **
-
 # API and realization of GSM 03.48 (ETSI TS 102 225) standard for Java
 ## Scope
-The present project provides API and realization of the Secured Packets using Short Message Service Point to Point (SMS-PP). It is used to the exchange of secured packets between an entity in a GSM PLMN and an entity in the SIM. Secured Packets contain application messages to which certain mechanisms according to GSM 03.48 have been applied.
+The project provides API and realization of the Secured Packets using Short Message Service Point to Point (SMS-PP). It is used to the exchange of secured packets between an entity in a GSM PLMN and an entity in the SIM. Secured Packets contain application messages to which certain mechanisms according to GSM 03.48 have been applied.
 Application messages are commands or data exchanged between an application resident in or behind the GSM PLMN and on the SIM.
 
 ## News
@@ -12,6 +10,7 @@ Application messages are commands or data exchanged between an application resid
 0. Fixed NPE during response packet recovering (thanks to Tomas)
 0. Fixed testcases dataset schema location - now autotest should pass
 0. Added AES and RC
+0. Moved to the Open Telecoms GitHub and published in Maven Central repository
 
 ## System Overview
 
@@ -33,18 +32,18 @@ Short Message Service Cell Broadcast (SMS-CB) is not supported as for now.
 ```
 <repository>
    <id>GSM 03.48 Library</id>
-   <url>https://github.com/pmoerenhout/gsm0348</url>
+   <url>https://github.com/opentelecoms-org/gsm0348</url>
 </repository>
 <dependencies>
    <dependency>
       <groupId>ru.tapublog.lib.gsm0348</groupId>
       <artifactId>gsm0348-api</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
    </dependency>
    <dependency>
       <groupId>ru.tapublog.lib.gsm0348</groupId>
       <artifactId>gsm0348-impl</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
    </dependency>
 </dependencies>
 ```

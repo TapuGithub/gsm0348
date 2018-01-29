@@ -6,7 +6,7 @@
 	<version>1.2.6</version>
 	<packaging>pom</packaging>
 	<name>GSM 03.48</name>
-	<url>https://github.com/TapuGithub/gsm0348</url>
+	<url>https://github.com/opentelecoms-org/gsm0348</url>
 
 	<modules>
 		<module>gsm0348-api</module>
@@ -53,9 +53,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:git@github.com:pmoerenhout/gsm0348.git</connection>
-		<developerConnection>scm:git:git@github.com:pmoerenhout/gsm0348.git</developerConnection>
-		<url>https://github.com/pmoerenhout/gsm0348</url>
+		<connection>scm:git:git@github.com:opentelecoms-org/gsm0348.git</connection>
+		<developerConnection>scm:git:git@github.com:opentelecoms-org/gsm0348.git</developerConnection>
+		<url>https://github.com/opentelecoms-org/gsm0348</url>
 	</scm>
 
 	<dependencyManagement>
