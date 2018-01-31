@@ -20,7 +20,7 @@ Under normal circumstances the Receiving Entity receives the Command Packet and 
 
 If so indicated in the Command Header, the Receiving Entity shall create a (Secured) Response Packet. The Response Packet consists of a Security Header (the Response Header) and optionally, application specific data supplied by the Receiving Application. Both the Response Header and the application specific data are secured using the security mechanisms indicated in the received Command Packet. The Response Packet will be returned to the Sending Entity, subject to constraints in the transport layer, (e.g. timing).
 
-![System overview](http://gsm0348.googlecode.com/files/1.png)
+![System overview](/resources/system-overview.png?raw=true "System overview")
 
 ### The project
 This project designed to help building Receiving/Sending Entity. It provides library for construction of Secured Packets with all required security procedures - signing and ciphering, padding, redundancy checking and etc.
