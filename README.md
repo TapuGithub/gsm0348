@@ -3,6 +3,10 @@
 The project provides API and realization of the Secured Packets using Short Message Service Point to Point (SMS-PP). It is used to the exchange of secured packets between an entity in a GSM PLMN and an entity in the SIM. Secured Packets contain application messages to which certain mechanisms according to GSM 03.48 have been applied.
 Application messages are commands or data exchanged between an application resident in or behind the GSM PLMN and on the SIM.
 
+## History
+The project was originally developed by Victor Platov. Initially the code was hosted on Google Code (https://code.google.com/archive/p/gsm0348/). After Google shutdown Google Code, the code was moved to GitHub (https://github.com/TapuGithub/gsm0348).
+Finally, the code was adopted by the Open Telecoms project.
+
 ## News
 
 0. Moved to GitHub - as you all know Google Code is closing
@@ -46,4 +50,18 @@ Short Message Service Cell Broadcast (SMS-CB) is not supported as for now.
       <version>1.2.6</version>
    </dependency>
 </dependencies>
+```
+
+### Maven Central Release
+For a snapshot:
+```
+mvn clean deploy
+```
+For a proper release:
+```
+mvn versions:set -DnewVersion=1.2.3
+mvn clean deploy -P release
+mvn nexus-staging:release
+# Or when something went wrong
+mvn nexus-staging:drop
 ```
