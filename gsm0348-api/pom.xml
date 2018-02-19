@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<artifactId>gsm0348</artifactId>
-		<groupId>ru.tapublog.lib.gsm0348</groupId>
-		<version>1.2.6</version>
-	</parent>
-	<artifactId>gsm0348-api</artifactId>
-	<name>GSM 03.48 :: API</name>
-	<description>API</description>
-	<build>
-		<plugins>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opentelecoms.gsm0348</groupId>
+    <artifactId>gsm0348</artifactId>
+    <version>1.2.6</version>
+  </parent>
+  <artifactId>gsm0348-api</artifactId>
+  <name>GSM 03.48 :: API</name>
+  <description>API</description>
+  <build>
+    <plugins>
       <!-- <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
@@ -27,54 +27,54 @@
 					<schemaDirectory>src/main/resources</schemaDirectory>
 					<outputDirectory>src/main/java/</outputDirectory>
 					<clearOutputDir>false</clearOutputDir>
-					<packageName>ru.tapublog.lib.gsm0348.api.model</packageName>
+					<packageName>org.opentelecoms.gsm0348.api.model</packageName>
 				</configuration>
 			</plugin> -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>${java.source.version}</source>
-					<target>${java.target.version}</target>
-				</configuration>
-			</plugin>
-			<!--<plugin>-->
-				<!--<groupId>org.apache.maven.plugins</groupId>-->
-				<!--<artifactId>maven-jar-plugin</artifactId>-->
-				<!--<version>${maven-jar-plugin.version}</version>-->
-				<!--<configuration>-->
-					<!--<finalName>${project.parent.name}-api-${project.version}</finalName>-->
-				<!--</configuration>-->
-			<!--</plugin>-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven-javadoc-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>api-javadoc</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven-source-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>api-sources</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${java.source.version}</source>
+          <target>${java.target.version}</target>
+        </configuration>
+      </plugin>
+      <!--<plugin>-->
+      <!--<groupId>org.apache.maven.plugins</groupId>-->
+      <!--<artifactId>maven-jar-plugin</artifactId>-->
+      <!--<version>${maven-jar-plugin.version}</version>-->
+      <!--<configuration>-->
+      <!--<finalName>${project.parent.name}-api-${project.version}</finalName>-->
+      <!--</configuration>-->
+      <!--</plugin>-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${maven-javadoc-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>api-javadoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven-source-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>api-sources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

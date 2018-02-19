@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>ru.tapublog.lib.gsm0348</groupId>
+	<groupId>org.opentelecoms.gsm0348</groupId>
 	<artifactId>gsm0348</artifactId>
 	<version>1.2.6</version>
 	<packaging>pom</packaging>
@@ -61,12 +61,12 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>ru.tapublog.lib.gsm0348</groupId>
+				<groupId>org.opentelecoms.gsm0348</groupId>
 				<artifactId>gsm0348-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>ru.tapublog.lib.gsm0348</groupId>
+				<groupId>org.opentelecoms.gsm0348</groupId>
 				<artifactId>gsm0348-crypto</artifactId>
 				<version>${project.version}</version>
 			</dependency>

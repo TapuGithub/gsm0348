@@ -5,27 +5,26 @@ import org.bouncycastle.util.encoders.Hex;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.opentelecoms.gsm0348.api.PacketBuilder;
+import org.opentelecoms.gsm0348.api.model.AlgorithmImplementation;
+import org.opentelecoms.gsm0348.api.model.CardProfile;
+import org.opentelecoms.gsm0348.api.model.CertificationAlgorithmMode;
+import org.opentelecoms.gsm0348.api.model.CertificationMode;
+import org.opentelecoms.gsm0348.api.model.CipheringAlgorithmMode;
+import org.opentelecoms.gsm0348.api.model.CommandSPI;
+import org.opentelecoms.gsm0348.api.model.KIC;
+import org.opentelecoms.gsm0348.api.model.KID;
+import org.opentelecoms.gsm0348.api.model.PoRMode;
+import org.opentelecoms.gsm0348.api.model.PoRProtocol;
+import org.opentelecoms.gsm0348.api.model.ResponsePacket;
+import org.opentelecoms.gsm0348.api.model.ResponsePacketStatus;
+import org.opentelecoms.gsm0348.api.model.ResponseSPI;
+import org.opentelecoms.gsm0348.api.model.SPI;
+import org.opentelecoms.gsm0348.api.model.SecurityBytesType;
+import org.opentelecoms.gsm0348.api.model.SynchroCounterMode;
+import org.opentelecoms.gsm0348.impl.PacketBuilderFactory;
+import org.opentelecoms.gsm0348.impl.Util;
 import org.slf4j.impl.SimpleLogger;
-
-import ru.tapublog.lib.gsm0348.api.PacketBuilder;
-import ru.tapublog.lib.gsm0348.api.model.AlgorithmImplementation;
-import ru.tapublog.lib.gsm0348.api.model.CardProfile;
-import ru.tapublog.lib.gsm0348.api.model.CertificationAlgorithmMode;
-import ru.tapublog.lib.gsm0348.api.model.CertificationMode;
-import ru.tapublog.lib.gsm0348.api.model.CipheringAlgorithmMode;
-import ru.tapublog.lib.gsm0348.api.model.CommandSPI;
-import ru.tapublog.lib.gsm0348.api.model.KIC;
-import ru.tapublog.lib.gsm0348.api.model.KID;
-import ru.tapublog.lib.gsm0348.api.model.PoRMode;
-import ru.tapublog.lib.gsm0348.api.model.PoRProtocol;
-import ru.tapublog.lib.gsm0348.api.model.ResponsePacket;
-import ru.tapublog.lib.gsm0348.api.model.ResponsePacketStatus;
-import ru.tapublog.lib.gsm0348.api.model.ResponseSPI;
-import ru.tapublog.lib.gsm0348.api.model.SPI;
-import ru.tapublog.lib.gsm0348.api.model.SecurityBytesType;
-import ru.tapublog.lib.gsm0348.api.model.SynchroCounterMode;
-import ru.tapublog.lib.gsm0348.impl.PacketBuilderFactory;
-import ru.tapublog.lib.gsm0348.impl.Util;
 
 public class Gsm0348Test {
   private PacketBuilder packetBuilder;
@@ -154,7 +153,7 @@ public class Gsm0348Test {
     Assert.assertArrayEquals(new byte[]{ (byte) 0xB0, 0x01, 0x1F }, responsePacket.getHeader().getTAR());
     Assert.assertArrayEquals(new byte[]{ 0x00, 0x00, 0x00, 0x00, 0x01 }, responsePacket.getHeader().getCounter());
     Assert.assertEquals(0x00, responsePacket.getHeader().getPaddingCounter());
-    Assert.assertArrayEquals(new byte[]{ 0x0A, (byte)0x90, 0x00 }, responsePacket.getData());
+    Assert.assertArrayEquals(new byte[]{ 0x0A, (byte) 0x90, 0x00 }, responsePacket.getData());
   }
 
   @Test
@@ -163,6 +162,7 @@ public class Gsm0348Test {
     //byte[] counter = new byte[]{ (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05 };
     byte[] responsePacketBytes = packetBuilder.buildResponsePacket(data, null, cipheringKey, signatureKey, ResponsePacketStatus.CIPHERING_ERROR);
 
-    Assert.assertArrayEquals(new byte[]{ (byte) 0x00, 0x0D, 0x0A, (byte) 0xB0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, (byte) 0x90, 0x00 }, responsePacketBytes);
+    Assert.assertArrayEquals(new byte[]{ (byte) 0x00, 0x0D, 0x0A, (byte) 0xB0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, (byte) 0x90, 0x00 },
+        responsePacketBytes);
   }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xs:schema id="Dataset" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0"
-	xmlns:gsm0348="ru.tapublog.lib.gsm0348">
-	<xs:import namespace="ru.tapublog.lib.gsm0348" schemaLocation="../../../../gsm0348-api/src/main/resources/gsm0348.xsd"/>
+	xmlns:gsm0348="org.opentelecoms.gsm0348">
+	<xs:import namespace="org.opentelecoms.gsm0348" schemaLocation="../../../../gsm0348-api/src/main/resources/gsm0348.xsd"/>
 
 	<xs:element name="Dataset">
 		<xs:complexType>
@@ -16,7 +16,7 @@
 			<xs:element name="CardProfile" type="gsm0348:CardProfile">
 				<xs:annotation>
 					<xs:appinfo>
-						<jxb:class implClass="ru.tapublog.lib.gsm0348.api.model.CardProfile"/>
+						<jxb:class implClass="org.opentelecoms.gsm0348.api.model.CardProfile"/>
 					</xs:appinfo>
 				</xs:annotation>
 			</xs:element>
@@ -32,7 +32,7 @@
 						<xs:element name="ResponseResult" type="gsm0348:ResponsePacket" minOccurs="1" maxOccurs="1">
 							<xs:annotation>
 								<xs:appinfo>
-									<jxb:class implClass="ru.tapublog.lib.gsm0348.api.model.ResponsePacket"/>
+									<jxb:class implClass="org.opentelecoms.gsm0348.api.model.ResponsePacket"/>
 								</xs:appinfo>
 							</xs:annotation>
 						</xs:element>

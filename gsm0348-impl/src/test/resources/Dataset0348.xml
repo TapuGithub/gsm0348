@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<Dataset xmlns:gsm0348="ru.tapublog.lib.gsm0348">
+<Dataset xmlns:gsm0348="org.opentelecoms.gsm0348">
 
 	<testcase name="test001">
 		<CardProfile>

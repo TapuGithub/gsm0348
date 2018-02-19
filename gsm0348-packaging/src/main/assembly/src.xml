@@ -11,17 +11,17 @@
     <dependencySet>
       <outputDirectory>/libs</outputDirectory>
       <excludes>
-        <exclude>ru.tapublog.lib.gsm0348:gsm0348-api</exclude>
-        <exclude>ru.tapublog.lib.gsm0348:gsm0348-impl</exclude>
-        <exclude>ru.tapublog.lib.gsm0348:gsm0348-crypto</exclude>
+        <exclude>org.opentelecoms.gsm0348:gsm0348-api</exclude>
+        <exclude>org.opentelecoms.gsm0348:gsm0348-impl</exclude>
+        <exclude>org.opentelecoms.gsm0348:gsm0348-crypto</exclude>
       </excludes>
     </dependencySet>
     <dependencySet>
       <outputDirectory>/</outputDirectory>
       <includes>
-        <include>ru.tapublog.lib.gsm0348:gsm0348-api</include>
-        <include>ru.tapublog.lib.gsm0348:gsm0348-impl</include>
-        <include>ru.tapublog.lib.gsm0348:gsm0348-crypto</include>
+        <include>org.opentelecoms.gsm0348:gsm0348-api</include>
+        <include>org.opentelecoms.gsm0348:gsm0348-impl</include>
+        <include>org.opentelecoms.gsm0348:gsm0348-crypto</include>
       </includes>
     </dependencySet>
   </dependencySets>

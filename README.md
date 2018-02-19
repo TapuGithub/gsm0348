@@ -36,12 +36,12 @@ Short Message Service Cell Broadcast (SMS-CB) is not supported as for now.
 </repository>
 <dependencies>
    <dependency>
-      <groupId>ru.tapublog.lib.gsm0348</groupId>
+      <groupId>org.opentelecoms.gsm0348</groupId>
       <artifactId>gsm0348-api</artifactId>
       <version>1.2.6</version>
    </dependency>
    <dependency>
-      <groupId>ru.tapublog.lib.gsm0348</groupId>
+      <groupId>org.opentelecoms.gsm0348</groupId>
       <artifactId>gsm0348-impl</artifactId>
       <version>1.2.6</version>
    </dependency>
