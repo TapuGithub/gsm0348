@@ -19,119 +19,118 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class KIC {
 
-    @XmlElement(name = "KeysetID")
-    protected byte keysetID;
-    @XmlElement(name = "CipheringAlgorithmMode", required = true)
-    protected CipheringAlgorithmMode cipheringAlgorithmMode;
-    @XmlElement(name = "AlgorithmImplementation", required = true)
-    protected AlgorithmImplementation algorithmImplementation;
+  @XmlElement(name = "KeysetID")
+  protected byte keysetID;
+  @XmlElement(name = "CipheringAlgorithmMode", required = true)
+  protected CipheringAlgorithmMode cipheringAlgorithmMode;
+  @XmlElement(name = "AlgorithmImplementation", required = true)
+  protected AlgorithmImplementation algorithmImplementation;
 
-    /**
-     * Gets the value of the keysetID property.
-     * 
-     */
-    public byte getKeysetID() {
-        return keysetID;
+  /**
+   * Gets the value of the keysetID property.
+   *
+   * @return possible object is
+   * {@link byte }
+   */
+  public byte getKeysetID() {
+    return keysetID;
+  }
+
+  /**
+   * Sets the value of the keysetID property.
+   *
+   * @param value allowed object is
+   *              {@link byte }
+   */
+  public void setKeysetID(byte value) {
+    this.keysetID = value;
+  }
+
+  /**
+   * Gets the value of the cipheringAlgorithmMode property.
+   *
+   * @return possible object is
+   * {@link CipheringAlgorithmMode }
+   */
+  public CipheringAlgorithmMode getCipheringAlgorithmMode() {
+    return cipheringAlgorithmMode;
+  }
+
+  /**
+   * Sets the value of the cipheringAlgorithmMode property.
+   *
+   * @param value allowed object is
+   *              {@link CipheringAlgorithmMode }
+   */
+  public void setCipheringAlgorithmMode(CipheringAlgorithmMode value) {
+    this.cipheringAlgorithmMode = value;
+  }
+
+  /**
+   * Gets the value of the algorithmImplementation property.
+   *
+   * @return possible object is
+   * {@link AlgorithmImplementation }
+   */
+  public AlgorithmImplementation getAlgorithmImplementation() {
+    return algorithmImplementation;
+  }
+
+  /**
+   * Sets the value of the algorithmImplementation property.
+   *
+   * @param value allowed object is
+   *              {@link AlgorithmImplementation }
+   */
+  public void setAlgorithmImplementation(AlgorithmImplementation value) {
+    this.algorithmImplementation = value;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((algorithmImplementation == null) ? 0 : algorithmImplementation.hashCode());
+    result = prime * result + ((cipheringAlgorithmMode == null) ? 0 : cipheringAlgorithmMode.hashCode());
+    result = prime * result + keysetID;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    /**
-     * Sets the value of the keysetID property.
-     * 
-     */
-    public void setKeysetID(byte value) {
-        this.keysetID = value;
+    if (obj == null) {
+      return false;
     }
-
-    /**
-     * Gets the value of the cipheringAlgorithmMode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CipheringAlgorithmMode }
-     *     
-     */
-    public CipheringAlgorithmMode getCipheringAlgorithmMode() {
-        return cipheringAlgorithmMode;
+    if (!(obj instanceof KIC)) {
+      return false;
     }
-
-    /**
-     * Sets the value of the cipheringAlgorithmMode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CipheringAlgorithmMode }
-     *     
-     */
-    public void setCipheringAlgorithmMode(CipheringAlgorithmMode value) {
-        this.cipheringAlgorithmMode = value;
+    KIC other = (KIC) obj;
+    if (algorithmImplementation != other.algorithmImplementation) {
+      return false;
     }
-
-    /**
-     * Gets the value of the algorithmImplementation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AlgorithmImplementation }
-     *     
-     */
-    public AlgorithmImplementation getAlgorithmImplementation() {
-        return algorithmImplementation;
+    if (cipheringAlgorithmMode != other.cipheringAlgorithmMode) {
+      return false;
     }
-
-    /**
-     * Sets the value of the algorithmImplementation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AlgorithmImplementation }
-     *     
-     */
-    public void setAlgorithmImplementation(AlgorithmImplementation value) {
-        this.algorithmImplementation = value;
+    if (keysetID != other.keysetID) {
+      return false;
     }
+    return true;
+  }
 
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((algorithmImplementation == null) ? 0 : algorithmImplementation.hashCode());
-		result = prime * result + ((cipheringAlgorithmMode == null) ? 0 : cipheringAlgorithmMode.hashCode());
-		result = prime * result + keysetID;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof KIC))
-			return false;
-		KIC other = (KIC) obj;
-		if (algorithmImplementation != other.algorithmImplementation)
-			return false;
-		if (cipheringAlgorithmMode != other.cipheringAlgorithmMode)
-			return false;
-		if (keysetID != other.keysetID)
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString()
-	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("KIC [keysetID=");
-		builder.append(keysetID);
-		builder.append(", cipheringAlgorithmMode=");
-		builder.append(cipheringAlgorithmMode);
-		builder.append(", algorithmImplementation=");
-		builder.append(algorithmImplementation);
-		builder.append("]");
-		return builder.toString();
-	}
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("KIC [keysetID=");
+    builder.append(keysetID);
+    builder.append(", cipheringAlgorithmMode=");
+    builder.append(cipheringAlgorithmMode);
+    builder.append(", algorithmImplementation=");
+    builder.append(algorithmImplementation);
+    builder.append("]");
+    return builder.toString();
+  }
 
 }

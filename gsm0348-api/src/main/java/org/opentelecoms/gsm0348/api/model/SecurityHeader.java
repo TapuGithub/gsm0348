@@ -29,156 +29,151 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     ResponsePacketHeader.class
 })
 public class SecurityHeader
-    extends PacketHeader
-{
+    extends PacketHeader {
 
-    @XmlElement(name = "TAR", required = true, type = String.class)
-    @XmlJavaTypeAdapter(HexBinaryAdapter.class)
-    protected byte[] tar;
-    @XmlElement(name = "PaddingCounter")
-    protected byte paddingCounter;
-    @XmlElement(name = "Security", type = String.class)
-    @XmlJavaTypeAdapter(HexBinaryAdapter.class)
-    protected byte[] security;
-    @XmlElement(name = "Counter", required = true, type = String.class)
-    @XmlJavaTypeAdapter(HexBinaryAdapter.class)
-    protected byte[] counter;
+  @XmlElement(name = "TAR", required = true, type = String.class)
+  @XmlJavaTypeAdapter(HexBinaryAdapter.class)
+  protected byte[] tar;
+  @XmlElement(name = "PaddingCounter")
+  protected byte paddingCounter;
+  @XmlElement(name = "Security", type = String.class)
+  @XmlJavaTypeAdapter(HexBinaryAdapter.class)
+  protected byte[] security;
+  @XmlElement(name = "Counter", required = true, type = String.class)
+  @XmlJavaTypeAdapter(HexBinaryAdapter.class)
+  protected byte[] counter;
 
-    /**
-     * Gets the value of the tar property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public byte[] getTAR() {
-        return tar;
+  /**
+   * Gets the value of the tar property.
+   *
+   * @return possible object is
+   * {@link String }
+   */
+  public byte[] getTAR() {
+    return tar;
+  }
+
+  /**
+   * Sets the value of the tar property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setTAR(byte[] value) {
+    this.tar = ((byte[]) value);
+  }
+
+  /**
+   * Gets the value of the paddingCounter property.
+   *
+   * @return possible object is
+   * {@link byte }
+   */
+  public byte getPaddingCounter() {
+    return paddingCounter;
+  }
+
+  /**
+   * Sets the value of the paddingCounter property.
+   *
+   * @param value allowed object is
+   *              {@link byte }
+   */
+  public void setPaddingCounter(byte value) {
+    this.paddingCounter = value;
+  }
+
+  /**
+   * Gets the value of the security property.
+   *
+   * @return possible object is
+   * {@link byte[] }
+   */
+  public byte[] getSecurity() {
+    return security;
+  }
+
+  /**
+   * Sets the value of the security property.
+   *
+   * @param value allowed object is
+   *              {@link byte[] }
+   */
+  public void setSecurity(byte[] value) {
+    this.security = ((byte[]) value);
+  }
+
+  /**
+   * Gets the value of the counter property.
+   *
+   * @return possible object is
+   * {@link byte[] }
+   */
+  public byte[] getCounter() {
+    return counter;
+  }
+
+  /**
+   * Sets the value of the counter property.
+   *
+   * @param value allowed object is
+   *              {@link String }
+   */
+  public void setCounter(byte[] value) {
+    this.counter = ((byte[]) value);
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + Arrays.hashCode(counter);
+    result = prime * result + paddingCounter;
+    result = prime * result + Arrays.hashCode(security);
+    result = prime * result + Arrays.hashCode(tar);
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    /**
-     * Sets the value of the tar property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTAR(byte[] value) {
-        this.tar = ((byte[]) value);
+    if (obj == null) {
+      return false;
     }
-
-    /**
-     * Gets the value of the paddingCounter property.
-     * 
-     */
-    public byte getPaddingCounter() {
-        return paddingCounter;
+    if (!(obj instanceof SecurityHeader)) {
+      return false;
     }
-
-    /**
-     * Sets the value of the paddingCounter property.
-     * 
-     */
-    public void setPaddingCounter(byte value) {
-        this.paddingCounter = value;
+    SecurityHeader other = (SecurityHeader) obj;
+    if (!Arrays.equals(counter, other.counter)) {
+      return false;
     }
-
-    /**
-     * Gets the value of the security property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public byte[] getSecurity() {
-        return security;
+    if (paddingCounter != other.paddingCounter) {
+      return false;
     }
-
-    /**
-     * Sets the value of the security property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSecurity(byte[] value) {
-        this.security = ((byte[]) value);
+    if (!Arrays.equals(security, other.security)) {
+      return false;
     }
-
-    /**
-     * Gets the value of the counter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public byte[] getCounter() {
-        return counter;
+    if (!Arrays.equals(tar, other.tar)) {
+      return false;
     }
+    return true;
+  }
 
-    /**
-     * Sets the value of the counter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCounter(byte[] value) {
-        this.counter = ((byte[]) value);
-    }
-
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(counter);
-		result = prime * result + paddingCounter;
-		result = prime * result + Arrays.hashCode(security);
-		result = prime * result + Arrays.hashCode(tar);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof SecurityHeader))
-			return false;
-		SecurityHeader other = (SecurityHeader) obj;
-		if (!Arrays.equals(counter, other.counter))
-			return false;
-		if (paddingCounter != other.paddingCounter)
-			return false;
-		if (!Arrays.equals(security, other.security))
-			return false;
-		if (!Arrays.equals(tar, other.tar))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString()
-	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("SecurityHeader [tar=");
-		builder.append(Arrays.toString(tar));
-		builder.append(", paddingCounter=");
-		builder.append(paddingCounter);
-		builder.append(", security=");
-		builder.append(Arrays.toString(security));
-		builder.append(", counter=");
-		builder.append(Arrays.toString(counter));
-		builder.append("]");
-		return builder.toString();
-	}
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("SecurityHeader [tar=");
+    builder.append(Arrays.toString(tar));
+    builder.append(", paddingCounter=");
+    builder.append(paddingCounter);
+    builder.append(", security=");
+    builder.append(Arrays.toString(security));
+    builder.append(", counter=");
+    builder.append(Arrays.toString(counter));
+    builder.append("]");
+    return builder.toString();
+  }
 
 }

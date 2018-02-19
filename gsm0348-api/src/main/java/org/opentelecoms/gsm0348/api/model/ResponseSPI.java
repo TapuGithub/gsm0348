@@ -17,150 +17,146 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ResponseSPI {
 
-    @XmlElement(name = "PoRProtocol", required = true)
-    protected PoRProtocol poRProtocol;
-    @XmlElement(name = "PoRMode", required = true)
-    protected PoRMode poRMode;
-    @XmlElement(name = "PoRCertificateMode", required = true)
-    protected CertificationMode poRCertificateMode;
-    @XmlElement(name = "Ciphered")
-    protected boolean ciphered;
+  @XmlElement(name = "PoRProtocol", required = true)
+  protected PoRProtocol poRProtocol;
+  @XmlElement(name = "PoRMode", required = true)
+  protected PoRMode poRMode;
+  @XmlElement(name = "PoRCertificateMode", required = true)
+  protected CertificationMode poRCertificateMode;
+  @XmlElement(name = "Ciphered")
+  protected boolean ciphered;
 
-    /**
-     * Gets the value of the poRProtocol property.
-     *
-     * @return
-     *     possible object is
-     *     {@link PoRProtocol }
-     *
-     */
-    public PoRProtocol getPoRProtocol() {
-        return poRProtocol;
+  /**
+   * Gets the value of the poRProtocol property.
+   *
+   * @return possible object is
+   * {@link PoRProtocol }
+   */
+  public PoRProtocol getPoRProtocol() {
+    return poRProtocol;
+  }
+
+  /**
+   * Sets the value of the poRProtocol property.
+   *
+   * @param value allowed object is
+   *              {@link PoRProtocol }
+   */
+  public void setPoRProtocol(PoRProtocol value) {
+    this.poRProtocol = value;
+  }
+
+  /**
+   * Gets the value of the poRMode property.
+   *
+   * @return possible object is
+   * {@link PoRMode }
+   */
+  public PoRMode getPoRMode() {
+    return poRMode;
+  }
+
+  /**
+   * Sets the value of the poRMode property.
+   *
+   * @param value allowed object is
+   *              {@link PoRMode }
+   */
+  public void setPoRMode(PoRMode value) {
+    this.poRMode = value;
+  }
+
+  /**
+   * Gets the value of the poRCertificateMode property.
+   *
+   * @return possible object is
+   * {@link CertificationMode }
+   */
+  public CertificationMode getPoRCertificateMode() {
+    return poRCertificateMode;
+  }
+
+  /**
+   * Sets the value of the poRCertificateMode property.
+   *
+   * @param value allowed object is
+   *              {@link CertificationMode }
+   */
+  public void setPoRCertificateMode(CertificationMode value) {
+    this.poRCertificateMode = value;
+  }
+
+  /**
+   * Gets the value of the ciphered property.
+   *
+   * @return possible object is
+   * {@link boolean }
+   */
+  public boolean isCiphered() {
+    return ciphered;
+  }
+
+  /**
+   * Sets the value of the ciphered property.
+   *
+   * @param value allowed object is
+   *              {@link boolean }
+   */
+  public void setCiphered(boolean value) {
+    this.ciphered = value;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + (ciphered ? 1231 : 1237);
+    result = prime * result + ((poRCertificateMode == null) ? 0 : poRCertificateMode.hashCode());
+    result = prime * result + ((poRMode == null) ? 0 : poRMode.hashCode());
+    result = prime * result + ((poRProtocol == null) ? 0 : poRProtocol.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    /**
-     * Sets the value of the poRProtocol property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link PoRProtocol }
-     *
-     */
-    public void setPoRProtocol(PoRProtocol value) {
-        this.poRProtocol = value;
+    if (obj == null) {
+      return false;
     }
-
-    /**
-     * Gets the value of the poRMode property.
-     *
-     * @return
-     *     possible object is
-     *     {@link PoRMode }
-     *
-     */
-    public PoRMode getPoRMode() {
-        return poRMode;
+    if (!(obj instanceof ResponseSPI)) {
+      return false;
     }
-
-    /**
-     * Sets the value of the poRMode property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link PoRMode }
-     *
-     */
-    public void setPoRMode(PoRMode value) {
-        this.poRMode = value;
+    ResponseSPI other = (ResponseSPI) obj;
+    if (ciphered != other.ciphered) {
+      return false;
     }
-
-    /**
-     * Gets the value of the poRCertificateMode property.
-     *
-     * @return
-     *     possible object is
-     *     {@link CertificationMode }
-     *
-     */
-    public CertificationMode getPoRCertificateMode() {
-        return poRCertificateMode;
+    if (poRCertificateMode != other.poRCertificateMode) {
+      return false;
     }
-
-    /**
-     * Sets the value of the poRCertificateMode property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link CertificationMode }
-     *
-     */
-    public void setPoRCertificateMode(CertificationMode value) {
-        this.poRCertificateMode = value;
+    if (poRMode != other.poRMode) {
+      return false;
     }
-
-    /**
-     * Gets the value of the ciphered property.
-     *
-     */
-    public boolean isCiphered() {
-        return ciphered;
+    if (poRProtocol != other.poRProtocol) {
+      return false;
     }
+    return true;
+  }
 
-    /**
-     * Sets the value of the ciphered property.
-     *
-     */
-    public void setCiphered(boolean value) {
-        this.ciphered = value;
-    }
-
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (ciphered ? 1231 : 1237);
-		result = prime * result + ((poRCertificateMode == null) ? 0 : poRCertificateMode.hashCode());
-		result = prime * result + ((poRMode == null) ? 0 : poRMode.hashCode());
-		result = prime * result + ((poRProtocol == null) ? 0 : poRProtocol.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof ResponseSPI))
-			return false;
-		ResponseSPI other = (ResponseSPI) obj;
-		if (ciphered != other.ciphered)
-			return false;
-		if (poRCertificateMode != other.poRCertificateMode)
-			return false;
-		if (poRMode != other.poRMode)
-			return false;
-		if (poRProtocol != other.poRProtocol)
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString()
-	{
-		StringBuilder builder = new StringBuilder();
-		builder.append("ResponseSPI [poRProtocol=");
-		builder.append(poRProtocol);
-		builder.append(", poRMode=");
-		builder.append(poRMode);
-		builder.append(", poRCertificateMode=");
-		builder.append(poRCertificateMode);
-		builder.append(", ciphered=");
-		builder.append(ciphered);
-		builder.append("]");
-		return builder.toString();
-	}
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("ResponseSPI [poRProtocol=");
+    builder.append(poRProtocol);
+    builder.append(", poRMode=");
+    builder.append(poRMode);
+    builder.append(", poRCertificateMode=");
+    builder.append(poRCertificateMode);
+    builder.append(", ciphered=");
+    builder.append(ciphered);
+    builder.append("]");
+    return builder.toString();
+  }
 
 }
