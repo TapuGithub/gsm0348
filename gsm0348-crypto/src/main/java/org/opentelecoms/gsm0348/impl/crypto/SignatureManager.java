@@ -25,6 +25,8 @@ public class SignatureManager {
   public static final String DES_MAC8_ISO9797_M1 = "DES_MAC8_ISO9797_M1";
   public static final String CRC_16 = "CRC16";
   public static final String CRC_32 = "CRC32";
+  public static final String AES_CMAC_32 = "AES_CMAC_32";
+  public static final String AES_CMAC_64 = "AES_CMAC_64";
   private static final Logger LOGGER = LoggerFactory.getLogger(SignatureManager.class);
 
   private SignatureManager() {
@@ -33,7 +35,6 @@ public class SignatureManager {
   private static Mac getMac(String algName, byte[] key) throws InvalidKeyException, NoSuchAlgorithmException {
     LOGGER.debug("Creating MAC for name: {} with key length {}", algName, key.length);
     Mac mac = Mac.getInstance(algName);
-    LOGGER.debug("MAC length: {}", mac.getMacLength());
     SecretKeySpec keySpec = new SecretKeySpec(key, algName);
     mac.init(keySpec);
     return mac;
@@ -60,7 +61,19 @@ public class SignatureManager {
     if (CRC_32.equals(algName)) {
       return runOwnMac(new CRC32(), key, data, 4);
     }
+    if (AES_CMAC_64.equals(algName)) {
+      return truncate(doWork("AESCMAC", key, data), 8);
+    }
+    if (AES_CMAC_32.equals(algName)) {
+      return truncate(doWork("AESCMAC", key, data), 4);
+    }
     return doWork(algName, key, data);
+  }
+
+  private static byte[] truncate(final byte[] signature, final int length) {
+    final byte[] value = new byte[length];
+    System.arraycopy(signature, 0, value, 0, length);
+    return value;
   }
 
   public static boolean verify(String algName, byte[] key, byte[] data, byte[] signature)
@@ -72,13 +85,14 @@ public class SignatureManager {
   private static byte[] doWork(final String algName, byte[] key, byte[] data) throws InvalidKeyException, NoSuchAlgorithmException {
     final Mac mac = getMac(algName, key);
     final byte[] result = mac.doFinal(data);
+    LOGGER.debug("MAC {} length: {} result: {}", algName, mac.getMacLength(), Util.toHexString(result));
     return result;
   }
 
   public static int signLength(final String algName) throws NoSuchAlgorithmException {
     LOGGER.debug("Creating MAC for algorithm: {}", algName);
-    if (DES_MAC8_ISO9797_M1.equals(algName)) // TODO: remove this block after adding something better
-    {
+    // TODO: remove this block after adding something better
+    if (DES_MAC8_ISO9797_M1.equals(algName)) {
       final int macLength = 8;
       LOGGER.trace("MAC length: {}", macLength);
       return macLength;
@@ -87,6 +101,14 @@ public class SignatureManager {
       LOGGER.trace("MAC length: {}", macLength);
       return macLength;
     } else if (CRC_32.equals(algName)) {
+      final int macLength = 4;
+      LOGGER.trace("MAC length: {}", macLength);
+      return macLength;
+    } else if (AES_CMAC_64.equals(algName)) {
+      final int macLength = 8;
+      LOGGER.trace("MAC length: {}", macLength);
+      return macLength;
+    } else if (AES_CMAC_32.equals(algName)) {
       final int macLength = 4;
       LOGGER.trace("MAC length: {}", macLength);
       return macLength;

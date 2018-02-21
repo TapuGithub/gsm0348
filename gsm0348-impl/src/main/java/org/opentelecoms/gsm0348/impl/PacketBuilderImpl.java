@@ -36,10 +36,10 @@ import org.slf4j.LoggerFactory;
 
 public class PacketBuilderImpl implements PacketBuilder {
   private static final Logger LOGGER = LoggerFactory.getLogger(PacketBuilderImpl.class);
-  private static final int PACKET_LENGHT_SIZE = 2;
-  private static final int HEADER_LENGHT_POSITION = 0;
-  private static final int HEADER_LENGHT_RESPONSE_POSITION = 2;
-  private static final int HEADER_LENGHT_SIZE = 1;
+  private static final int PACKET_LENGTH_SIZE = 2;
+  private static final int HEADER_LENGTH_POSITION = 0;
+  private static final int HEADER_LENGTH_RESPONSE_POSITION = 2;
+  private static final int HEADER_LENGTH_SIZE = 1;
   private static final int SPI_POSITION = 1;
   private static final int SPI_SIZE = 2;
   private static final int KIC_POSITION = 3;
@@ -192,7 +192,16 @@ public class PacketBuilderImpl implements PacketBuilder {
       case AES:
         switch (kid.getCertificationAlgorithmMode()) {
           case AES_CMAC:
-            signatureAlgorithmName = "AESCMAC";
+            final String signatureAlgorithm = cardProfile.getSignatureAlgorithm();
+            if (signatureAlgorithm == null || signatureAlgorithm.isEmpty()) {
+              throw new PacketBuilderConfigurationException(
+                  "In selected configuration signature algorithm name cannot be null or empty");
+            }
+            if (!SignatureManager.AES_CMAC_32.equals(signatureAlgorithm) && !SignatureManager.AES_CMAC_64.equals(signatureAlgorithm)) {
+              throw new PacketBuilderConfigurationException(
+                  "For AES CMAC, the signature can only be AES_CMAC_32 or AES_CMAC_64, but was " + signatureAlgorithm);
+            }
+            signatureAlgorithmName = cardProfile.getSignatureAlgorithm();
             break;
           default:
             throw new PacketBuilderConfigurationException("Not implemented yet");
@@ -201,10 +210,10 @@ public class PacketBuilderImpl implements PacketBuilder {
       case CRC:
         switch (kid.getCertificationAlgorithmMode()) {
           case CRC_16:
-            signatureAlgorithmName = "CRC16";
+            signatureAlgorithmName = SignatureManager.CRC_16;
             break;
           case CRC_32:
-            signatureAlgorithmName = "CRC32";
+            signatureAlgorithmName = SignatureManager.CRC_32;
             break;
           default:
             throw new PacketBuilderConfigurationException("Not implemented yet");
@@ -371,17 +380,17 @@ public class PacketBuilderImpl implements PacketBuilder {
     try {
       final int signatureLength = commandPacketSigning ? signatureSize : 0;
       LOGGER.debug("Signature length: {}", signatureLength);
-      final int headerLenght = HEADER_SIZE_WITHOUT_SIGNATURE + HEADER_LENGHT_SIZE + signatureLength;
-      LOGGER.debug("Header length (including size byte): {}", headerLenght);
+      final int headerLength = HEADER_SIZE_WITHOUT_SIGNATURE + HEADER_LENGTH_SIZE + signatureLength;
+      LOGGER.debug("Header length (including size byte): {}", headerLength);
 
       byte[] signature = new byte[signatureLength];
-      byte[] headerData = new byte[headerLenght];
+      byte[] headerData = new byte[headerLength];
       byte[] dataBytes = (data == null) ? new byte[0] : data;
       byte[] countersBytes = usingCounters ? counter : new byte[COUNTERS_SIZE];
       byte paddingCounter = 0;
 
-      headerData[HEADER_LENGHT_POSITION] = (byte) (headerLenght - HEADER_LENGHT_SIZE);
-      LOGGER.debug("Header length value: {}", headerData[HEADER_LENGHT_POSITION]);
+      headerData[HEADER_LENGTH_POSITION] = (byte) (headerLength - HEADER_LENGTH_SIZE);
+      LOGGER.debug("Header length value: {}", headerData[HEADER_LENGTH_POSITION]);
       System.arraycopy(getSPI(), 0, headerData, SPI_POSITION, SPI_SIZE);
       LOGGER.debug("SPI value: " + Util.toHexArray(Arrays.copyOfRange(headerData, SPI_POSITION, SPI_POSITION + SPI_SIZE)));
       headerData[KIC_POSITION] = KICCoder.decode(cardProfile.getKIC());
@@ -404,13 +413,13 @@ public class PacketBuilderImpl implements PacketBuilder {
       LOGGER.debug("Padding counter value: {}", String.format("%X", headerData[PADDING_COUNTER_POSITION]));
 
       if (commandPacketSigning) {
-        byte[] signData = new byte[headerLenght + dataBytes.length - signatureLength + PACKET_LENGHT_SIZE + paddingCounter];
+        byte[] signData = new byte[headerLength + dataBytes.length - signatureLength + PACKET_LENGTH_SIZE + paddingCounter];
         LOGGER.debug("Signing data length: {}", signData.length);
-        final int length = dataBytes.length + paddingCounter + headerLenght;
+        final int length = dataBytes.length + paddingCounter + headerLength;
         signData[0] = (byte) ((length >> 8) & (byte) 0xff);
         signData[1] = (byte) ((length & (byte) 0xff));
-        System.arraycopy(headerData, 0, signData, 2, headerLenght - signatureLength);
-        System.arraycopy(dataBytes, 0, signData, headerLenght - signatureLength + 2, dataBytes.length);
+        System.arraycopy(headerData, 0, signData, 2, headerLength - signatureLength);
+        System.arraycopy(dataBytes, 0, signData, headerLength - signatureLength + 2, dataBytes.length);
         LOGGER.debug("Signing data: {} ({})", Util.toHexString(signData), signatureAlgorithmName);
         signature = SignatureManager.sign(signatureAlgorithmName, signatureKey, signData);
       }
@@ -419,24 +428,21 @@ public class PacketBuilderImpl implements PacketBuilder {
       }
       System.arraycopy(signature, 0, headerData, SIGNATURE_POSITION, signatureLength);
 
-      LOGGER.debug("Signature value: {} length:{}", Util.toHexString(signature), signature.length);
+      LOGGER.debug("Signature value: {} length: {}", Util.toHexString(signature), signature.length);
+      LOGGER.debug("Header: {} length: {}", Util.toHexString(headerData), headerData.length);
 
       if (commandPacketCiphering) {
-        LOGGER.debug("Ciphering command");
         byte[] cipherData = new byte[COUNTERS_SIZE + PADDING_COUNTER_SIZE + signatureLength + dataBytes.length];
-        if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug("Ciphering data length {}", cipherData.length);
-        }
+        LOGGER.debug("Ciphering data length {}", cipherData.length);
         System.arraycopy(countersBytes, 0, cipherData, 0, COUNTERS_SIZE);
         cipherData[5] = paddingCounter;
         System.arraycopy(signature, 0, cipherData, 6, signatureLength);
         System.arraycopy(dataBytes, 0, cipherData, 6 + signatureLength, dataBytes.length);
         dataBytes = new byte[dataBytes.length + paddingCounter];
 
+        LOGGER.debug("Ciphering data: {} length: {}", Util.toHexString(cipherData), cipherData.length);
         byte[] cipheredData = CipheringManager.encipher(cipheringAlgorithmName, cipheringKey, cipherData, countersBytes);
-        if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug("Ciphered data: {} length: {}", Util.toHexString(cipheredData), cipheredData.length);
-        }
+        LOGGER.debug("Ciphered data: {} length: {}", Util.toHexString(cipheredData), cipheredData.length);
         System.arraycopy(cipheredData, 0, countersBytes, 0, COUNTERS_SIZE);
         System.arraycopy(cipheredData, 6, signature, 0, signatureLength);
         System.arraycopy(cipheredData, 6 + signatureLength, dataBytes, 0, dataBytes.length);
@@ -446,19 +452,15 @@ public class PacketBuilderImpl implements PacketBuilder {
         System.arraycopy(signature, 0, headerData, SIGNATURE_POSITION, signatureLength);
         System.arraycopy(countersBytes, 0, headerData, COUNTERS_POSITION, COUNTERS_SIZE);
       }
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Header raw data: {} length: {}", Util.toHexString(headerData), headerData.length);
-      }
-      byte[] result = new byte[headerData.length + dataBytes.length + PACKET_LENGHT_SIZE];
+      LOGGER.debug("Header raw data: {} length: {}", Util.toHexString(headerData), headerData.length);
+      byte[] result = new byte[headerData.length + dataBytes.length + PACKET_LENGTH_SIZE];
 
       result[0] = (byte) (((headerData.length + dataBytes.length) >> 8) & (byte) 0xff);
       result[1] = (byte) (((headerData.length + dataBytes.length) & (byte) 0xff));
-      System.arraycopy(headerData, 0, result, PACKET_LENGHT_SIZE, headerData.length);
-      System.arraycopy(dataBytes, 0, result, headerData.length + PACKET_LENGHT_SIZE, dataBytes.length);
+      System.arraycopy(headerData, 0, result, PACKET_LENGTH_SIZE, headerData.length);
+      System.arraycopy(dataBytes, 0, result, headerData.length + PACKET_LENGTH_SIZE, dataBytes.length);
 
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Packet created: {} length: {}", Util.toHexString(result), result.length);
-      }
+      LOGGER.debug("Packet created: {} length: {}", Util.toHexString(result), result.length);
       return result;
     } catch (GeneralSecurityException e) {
       throw new Gsm0348Exception(e);
@@ -495,12 +497,12 @@ public class PacketBuilderImpl implements PacketBuilder {
     }
 
     final int packetLength = (Util.unsignedByteToInt(data[0]) >> 8) + Util.unsignedByteToInt(data[1]);
-    if (data.length - PACKET_LENGHT_SIZE != packetLength) {
+    if (data.length - PACKET_LENGTH_SIZE != packetLength) {
       throw new Gsm0348Exception("Length of raw data doesnt match packet length. Expected " + packetLength + " but found "
-          + (data.length - PACKET_LENGHT_SIZE));
+          + (data.length - PACKET_LENGTH_SIZE));
     }
 
-    final int headerLength = Util.unsignedByteToInt(data[HEADER_LENGHT_RESPONSE_POSITION]);
+    final int headerLength = Util.unsignedByteToInt(data[HEADER_LENGTH_RESPONSE_POSITION]);
     final byte[] tar = new byte[TAR_SIZE];
     System.arraycopy(data, TAR_RESPONSE_POSITION, tar, 0, TAR_SIZE);
     final byte[] counters = new byte[COUNTERS_SIZE];
@@ -545,7 +547,7 @@ public class PacketBuilderImpl implements PacketBuilder {
 //				System.arraycopy(dataEnc, COUNTERS_SIZE + 2 + signatureLength, packetData, 0, dataSize);
         // <- End of old code
         // New code->
-        final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
+        final int dataSize = packetLength - headerLength - HEADER_LENGTH_SIZE;
         final int dataSizeToCopy = dataEnc.length - COUNTERS_SIZE - PADDING_COUNTER_SIZE - RESPONSE_CODE_RESPONSE_SIZE - signatureLength;
 
         packetData = new byte[dataSize];
@@ -558,9 +560,9 @@ public class PacketBuilderImpl implements PacketBuilder {
         paddingCounter = Util.unsignedByteToInt(data[PADDING_COUNTER_RESPONSE_POSITION]);
         responseCode = data[RESPONSE_CODE_RESPONSE_POSITION];
         System.arraycopy(data, SIGNATURE_RESPONSE_POSITION, signature, 0, signatureLength);
-        final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
+        final int dataSize = packetLength - headerLength - HEADER_LENGTH_SIZE;
         packetData = new byte[dataSize];
-        System.arraycopy(data, headerLength + HEADER_LENGHT_SIZE + PACKET_LENGHT_SIZE, packetData, 0, dataSize);
+        System.arraycopy(data, headerLength + HEADER_LENGTH_SIZE + PACKET_LENGTH_SIZE, packetData, 0, dataSize);
       }
 
       if (responsePacketSigning) {
@@ -608,9 +610,7 @@ public class PacketBuilderImpl implements PacketBuilder {
       pac.setData(packetData);
       pac.setHeader(pacHeader);
 
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Packet recovered : {}", pac);
-      }
+      LOGGER.debug("Packet recovered : {}", pac);
       return pac;
     } catch (GeneralSecurityException e) {
       throw new Gsm0348Exception(e);
@@ -649,7 +649,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     try {
       final int signatureLength = responsePacketSigning ? signatureSize : 0;
       LOGGER.debug("Signature length: {}", signatureLength);
-      final int headerLenght = RESPONSE_HEADER_SIZE_WITHOUT_SIGNATURE + HEADER_LENGHT_SIZE + signatureLength;
+      final int headerLenght = RESPONSE_HEADER_SIZE_WITHOUT_SIGNATURE + HEADER_LENGTH_SIZE + signatureLength;
       LOGGER.debug("Header length (including size byte): {}", headerLenght);
 
       byte[] signature = new byte[signatureLength];
@@ -658,8 +658,8 @@ public class PacketBuilderImpl implements PacketBuilder {
       byte[] countersBytes = usingCounters ? counter : new byte[COUNTERS_SIZE];
       byte paddingCounter = 0;
 
-      headerData[HEADER_LENGHT_POSITION] = (byte) (headerLenght - HEADER_LENGHT_SIZE);
-      LOGGER.debug("Header length value: {}", headerData[HEADER_LENGHT_POSITION]);
+      headerData[HEADER_LENGTH_POSITION] = (byte) (headerLenght - HEADER_LENGTH_SIZE);
+      LOGGER.debug("Header length value: {}", headerData[HEADER_LENGTH_POSITION]);
 //      System.arraycopy(getSPI(), 0, headerData, SPI_POSITION, SPI_SIZE);
 //      LOGGER.debug("SPI value: " + Util.toHexArray(Arrays.copyOfRange(headerData, SPI_POSITION, SPI_POSITION + SPI_SIZE)));
 //      headerData[KIC_POSITION] = KICCoder.decode(cardProfile.getKIC());
@@ -686,7 +686,7 @@ public class PacketBuilderImpl implements PacketBuilder {
       LOGGER.debug("Response status code value: {}", String.format("%X", headerData[STATUS_CODE_RESPONSE_POSITION - 2]));
 
       if (responsePacketSigning) {
-        byte[] signData = new byte[headerLenght + dataBytes.length - signatureLength + PACKET_LENGHT_SIZE + paddingCounter];
+        byte[] signData = new byte[headerLenght + dataBytes.length - signatureLength + PACKET_LENGTH_SIZE + paddingCounter];
         LOGGER.debug("Signing data length: {}", signData.length);
         final int length = dataBytes.length + paddingCounter + headerLenght;
         signData[0] = (byte) ((length >> 8) & (byte) 0xff);
@@ -706,9 +706,7 @@ public class PacketBuilderImpl implements PacketBuilder {
       if (responsePacketCiphering) {
         LOGGER.debug("Ciphering command");
         byte[] cipherData = new byte[COUNTERS_SIZE + PADDING_COUNTER_SIZE + signatureLength + dataBytes.length];
-        if (LOGGER.isDebugEnabled()) {
           LOGGER.debug("Ciphering data length {}", cipherData.length);
-        }
         System.arraycopy(countersBytes, 0, cipherData, 0, COUNTERS_SIZE);
         cipherData[5] = paddingCounter;
         System.arraycopy(signature, 0, cipherData, 6, signatureLength);
@@ -716,9 +714,7 @@ public class PacketBuilderImpl implements PacketBuilder {
         dataBytes = new byte[dataBytes.length + paddingCounter];
 
         byte[] cipheredData = CipheringManager.encipher(cipheringAlgorithmName, cipheringKey, cipherData, countersBytes);
-        if (LOGGER.isDebugEnabled()) {
           LOGGER.debug("Ciphered data: {} length: {}", Util.toHexString(cipheredData), cipheredData.length);
-        }
         System.arraycopy(cipheredData, 0, countersBytes, 0, COUNTERS_SIZE);
         System.arraycopy(cipheredData, 6, signature, 0, signatureLength);
         System.arraycopy(cipheredData, 6 + signatureLength, dataBytes, 0, dataBytes.length);
@@ -731,12 +727,12 @@ public class PacketBuilderImpl implements PacketBuilder {
       if (LOGGER.isDebugEnabled()) {
         LOGGER.debug("Header raw data: {} length: {}", Util.toHexString(headerData), headerData.length);
       }
-      byte[] result = new byte[headerData.length + dataBytes.length + PACKET_LENGHT_SIZE];
+      byte[] result = new byte[headerData.length + dataBytes.length + PACKET_LENGTH_SIZE];
 
       result[0] = (byte) (((headerData.length + dataBytes.length) >> 8) & (byte) 0xff);
       result[1] = (byte) (((headerData.length + dataBytes.length) & (byte) 0xff));
-      System.arraycopy(headerData, 0, result, PACKET_LENGHT_SIZE, headerData.length);
-      System.arraycopy(dataBytes, 0, result, headerData.length + PACKET_LENGHT_SIZE, dataBytes.length);
+      System.arraycopy(headerData, 0, result, PACKET_LENGTH_SIZE, headerData.length);
+      System.arraycopy(dataBytes, 0, result, headerData.length + PACKET_LENGTH_SIZE, dataBytes.length);
 
       if (LOGGER.isDebugEnabled()) {
         LOGGER.debug("Packet created: {} length: {}", Util.toHexString(result), result.length);
@@ -787,14 +783,14 @@ public class PacketBuilderImpl implements PacketBuilder {
               + ((signatureKey.length == 0) ? "empty" : Util.toHexArray(signatureKey)));
     }
     final int packetLength = (Util.unsignedByteToInt(data[0]) >> 8) + Util.unsignedByteToInt(data[1]);
-    if (data.length - PACKET_LENGHT_SIZE != packetLength) {
+    if (data.length - PACKET_LENGTH_SIZE != packetLength) {
       throw new Gsm0348Exception(
-          "Length of raw data doesnt match packet length. Expected " + packetLength + " but found " + (data.length - PACKET_LENGHT_SIZE));
+          "Length of raw data doesnt match packet length. Expected " + packetLength + " but found " + (data.length - PACKET_LENGTH_SIZE));
     }
 
-    final int headerLength = Util.unsignedByteToInt(data[PACKET_LENGHT_SIZE + HEADER_LENGHT_POSITION]);
+    final int headerLength = Util.unsignedByteToInt(data[PACKET_LENGTH_SIZE + HEADER_LENGTH_POSITION]);
     final byte[] header = new byte[headerLength];
-    System.arraycopy(data, PACKET_LENGHT_SIZE, header, 0, headerLength);
+    System.arraycopy(data, PACKET_LENGTH_SIZE, header, 0, headerLength);
     LOGGER.debug("Header[{}]: {}", header.length, Util.toHexArray(header));
 
     final byte[] spiBytes = new byte[SPI_SIZE];
@@ -837,7 +833,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     try {
       if (commandPacketCiphering) {
         byte[] dataDec = CipheringManager.decipher(cipheringAlgorithmName, cipheringKey,
-            Arrays.copyOfRange(data, PACKET_LENGHT_SIZE + HEADER_LENGHT_SIZE + TAR_SIZE + SPI_SIZE + KIC_SIZE + KID_SIZE, data.length));
+            Arrays.copyOfRange(data, PACKET_LENGTH_SIZE + HEADER_LENGTH_SIZE + TAR_SIZE + SPI_SIZE + KIC_SIZE + KID_SIZE, data.length));
         LOGGER.info("Decrypted: {}", Util.toHexArray(dataDec));
 
         System.arraycopy(dataDec, 0, counters, 0, COUNTERS_SIZE);
@@ -848,26 +844,26 @@ public class PacketBuilderImpl implements PacketBuilder {
         System.arraycopy(dataDec, COUNTERS_SIZE + 1, signature, 0, signatureLength);
         LOGGER.debug("Signature[{}]: {}", signature.length, Util.toHexArray(signature));
 
-        final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
+        final int dataSize = packetLength - headerLength - HEADER_LENGTH_SIZE;
         final int dataSizeToCopy = dataDec.length - COUNTERS_SIZE - PADDING_COUNTER_SIZE - signatureLength;
 
         packetData = new byte[dataSize];
         System.arraycopy(dataDec, COUNTERS_SIZE + PADDING_COUNTER_SIZE + signatureLength, packetData, 0, dataSizeToCopy);
       } else {
-        System.arraycopy(data, PACKET_LENGHT_SIZE + COUNTERS_POSITION, counters, 0, COUNTERS_SIZE);
+        System.arraycopy(data, PACKET_LENGTH_SIZE + COUNTERS_POSITION, counters, 0, COUNTERS_SIZE);
         LOGGER.debug("Counters[{}]: {}", counters.length, Util.toHexArray(counters));
-        paddingCounter = Util.unsignedByteToInt(data[PACKET_LENGHT_SIZE + PADDING_COUNTER_POSITION]);
+        paddingCounter = Util.unsignedByteToInt(data[PACKET_LENGTH_SIZE + PADDING_COUNTER_POSITION]);
         LOGGER.debug("Padding counter: {}", paddingCounter);
         if (paddingCounter != 0) {
           throw new Gsm0348Exception(
               "Command packet ciphering is off but padding counter is not 0. So it can be corrupted packet or configuration doesn't match provided data");
         }
 
-        System.arraycopy(data, PACKET_LENGHT_SIZE + SIGNATURE_POSITION, signature, 0, signatureLength);
+        System.arraycopy(data, PACKET_LENGTH_SIZE + SIGNATURE_POSITION, signature, 0, signatureLength);
         LOGGER.debug("Signature[{}]: {}", signature.length, Util.toHexArray(signature));
-        final int dataSize = packetLength - headerLength - HEADER_LENGHT_SIZE;
+        final int dataSize = packetLength - headerLength - HEADER_LENGTH_SIZE;
         packetData = new byte[dataSize];
-        System.arraycopy(data, headerLength + HEADER_LENGHT_SIZE + PACKET_LENGHT_SIZE, packetData, 0, dataSize);
+        System.arraycopy(data, headerLength + HEADER_LENGTH_SIZE + PACKET_LENGTH_SIZE, packetData, 0, dataSize);
       }
       LOGGER.debug("PacketData[{}]: {}", packetData.length, Util.toHexArray(packetData));
 
@@ -879,7 +875,7 @@ public class PacketBuilderImpl implements PacketBuilder {
 //        } else if (cardProfile.getSecurityBytesType() == SecurityBytesType.WITH_LENGHTS) {
 //          addonAmount = 3;
 //        }
-        int addonAmount = PACKET_LENGHT_SIZE + HEADER_LENGHT_SIZE;
+        int addonAmount = PACKET_LENGTH_SIZE + HEADER_LENGTH_SIZE;
         byte[] signData = new byte[addonAmount + HEADER_SIZE_WITHOUT_SIGNATURE + packetData.length];
 
 //        switch (cardProfile.getSecurityBytesType()) {

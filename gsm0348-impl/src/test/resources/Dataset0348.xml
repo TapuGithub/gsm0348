@@ -1159,7 +1159,7 @@
 		</Result>
 	</testcase>
 
-	<testcase type="request" name="test_aes_256">
+	<testcase type="request" name="test_aes_256_aes_cmac_32">
 		<CardProfile>
 			<gsm0348:Name>TestProfile</gsm0348:Name>
 			<gsm0348:KIC>
@@ -1187,7 +1187,7 @@
 			</gsm0348:SPI>
 			<gsm0348:TAR>B00010</gsm0348:TAR>
 			<gsm0348:SecurityBytesType>WITH_LENGHTS_AND_UDHL</gsm0348:SecurityBytesType>
-			<gsm0348:SignatureAlgorithm></gsm0348:SignatureAlgorithm>
+			<gsm0348:SignatureAlgorithm>AES_CMAC_32</gsm0348:SignatureAlgorithm>
 			<gsm0348:CipheringAlgorithm></gsm0348:CipheringAlgorithm>
 		</CardProfile>
 		<CipheringKey>D382E547B32F46A981FB1789DE20C4EDD382E547B32F46A981FB1789DE20C4ED</CipheringKey>
@@ -1195,11 +1195,11 @@
 		<Counter>0000000001</Counter>
 		<Data>000E0AB0001000000018180000049000</Data>
 		<Result>
-			<RequestResult>00381D16011212B00010BD6E3D3AEA1DE5AA2767BBD9ECC9A3A86CC0DD6DFDB99013094CB09118049D9A2FCD8311A9EE0FF2C9CF29B2DA236D1C</RequestResult>
+			<RequestResult>00281116011212B00010B2E0C40CCAFEF52E45EDF0C612D4ECA0C477A70CF860A76D0F4798A1793635A5</RequestResult>
 		</Result>
 	</testcase>
 
-	<testcase type="request" name="test_aes_192">
+	<testcase type="request" name="test_aes_256_aes_cmac_64">
 		<CardProfile>
 			<gsm0348:Name>TestProfile</gsm0348:Name>
 			<gsm0348:KIC>
@@ -1227,7 +1227,47 @@
 			</gsm0348:SPI>
 			<gsm0348:TAR>B00010</gsm0348:TAR>
 			<gsm0348:SecurityBytesType>WITH_LENGHTS_AND_UDHL</gsm0348:SecurityBytesType>
-			<gsm0348:SignatureAlgorithm></gsm0348:SignatureAlgorithm>
+			<gsm0348:SignatureAlgorithm>AES_CMAC_64</gsm0348:SignatureAlgorithm>
+			<gsm0348:CipheringAlgorithm></gsm0348:CipheringAlgorithm>
+		</CardProfile>
+		<CipheringKey>D382E547B32F46A981FB1789DE20C4EDD382E547B32F46A981FB1789DE20C4ED</CipheringKey>
+		<SignatureKey>67062EAE4534B19DFCE61464597DF320D382E547B32F46A981FB1789DE20C4ED</SignatureKey>
+		<Counter>0000000001</Counter>
+		<Data>000E0AB0001000000018180000049000</Data>
+		<Result>
+			<RequestResult>00281516011212B00010C9F23D986CC63FA53638751A249266D1086952E9A0F7E5EF1910295919E68056</RequestResult>
+		</Result>
+	</testcase>
+
+	<testcase type="request" name="test_aes_192_aes_cmac_64">
+		<CardProfile>
+			<gsm0348:Name>TestProfile</gsm0348:Name>
+			<gsm0348:KIC>
+				<gsm0348:KeysetID>1</gsm0348:KeysetID>
+				<gsm0348:CipheringAlgorithmMode>AES_CBC</gsm0348:CipheringAlgorithmMode>
+				<gsm0348:AlgorithmImplementation>AES</gsm0348:AlgorithmImplementation>
+			</gsm0348:KIC>
+			<gsm0348:KID>
+				<gsm0348:KeysetID>1</gsm0348:KeysetID>
+				<gsm0348:CertificationAlgorithmMode>AES_CMAC</gsm0348:CertificationAlgorithmMode>
+				<gsm0348:AlgorithmImplementation>AES</gsm0348:AlgorithmImplementation>
+			</gsm0348:KID>
+			<gsm0348:SPI>
+				<gsm0348:CommandSPI>
+					<gsm0348:CertificationMode>CC</gsm0348:CertificationMode>
+					<gsm0348:SynchroCounterMode>COUNTER_REPLAY_OR_CHECK</gsm0348:SynchroCounterMode>
+					<gsm0348:Ciphered>true</gsm0348:Ciphered>
+				</gsm0348:CommandSPI>
+				<gsm0348:ResponseSPI>
+					<gsm0348:PoRProtocol>SMS_DELIVER_REPORT</gsm0348:PoRProtocol>
+					<gsm0348:PoRMode>REPLY_ALWAYS</gsm0348:PoRMode>
+					<gsm0348:PoRCertificateMode>NO_SECURITY</gsm0348:PoRCertificateMode>
+					<gsm0348:Ciphered>false</gsm0348:Ciphered>
+				</gsm0348:ResponseSPI>
+			</gsm0348:SPI>
+			<gsm0348:TAR>B00010</gsm0348:TAR>
+			<gsm0348:SecurityBytesType>WITH_LENGHTS_AND_UDHL</gsm0348:SecurityBytesType>
+			<gsm0348:SignatureAlgorithm>AES_CMAC_64</gsm0348:SignatureAlgorithm>
 			<gsm0348:CipheringAlgorithm></gsm0348:CipheringAlgorithm>
 		</CardProfile>
 		<CipheringKey>D382E547B32F46A981FB1789DE20C4EDD382E547B32F46A9</CipheringKey>
@@ -1235,11 +1275,11 @@
 		<Counter>0000000001</Counter>
 		<Data>000E0AB0001000000018180000049000</Data>
 		<Result>
-			<RequestResult>00381D16011212B00010A9AFFC8ECC60E12DC98542AC4D0AE81C17A3D3883EA76E6EA7898347DED5D259626CF2D06C83112F33DDD42280384E32</RequestResult>
+			<RequestResult>00281516011212B0001085B09A5F9A25A1EC3E7FF5A02FA73ABF59F38EB9E4052FDB4352C38E6550DB52</RequestResult>
 		</Result>
 	</testcase>
 
-	<testcase type="request" name="test_aes_128">
+	<testcase type="request" name="test_aes_128_aes_cmac_64">
 		<CardProfile>
 			<gsm0348:Name>TestProfile</gsm0348:Name>
 			<gsm0348:KIC>
@@ -1267,7 +1307,7 @@
 			</gsm0348:SPI>
 			<gsm0348:TAR>B00010</gsm0348:TAR>
 			<gsm0348:SecurityBytesType>WITH_LENGHTS_AND_UDHL</gsm0348:SecurityBytesType>
-			<gsm0348:SignatureAlgorithm></gsm0348:SignatureAlgorithm>
+			<gsm0348:SignatureAlgorithm>AES_CMAC_64</gsm0348:SignatureAlgorithm>
 			<gsm0348:CipheringAlgorithm></gsm0348:CipheringAlgorithm>
 		</CardProfile>
 		<CipheringKey>D382E547B32F46A981FB1789DE20C4ED</CipheringKey>
@@ -1275,7 +1315,7 @@
 		<Counter>0000000001</Counter>
 		<Data>000E0AB0001000000018180000049000</Data>
 		<Result>
-			<RequestResult>00381D16011212B00010A1A032F9D760F7FAAABED9A29E6D23E39C34A7AC4B07C3F458AEF442B93D0DB2437EAA1C7A2697837CFB5F6A8FD2A9B4</RequestResult>
+			<RequestResult>00281516011212B0001069787DD434C3D1C892ED66A873E85842746A9A9BA085FA42312B9DE449720A15</RequestResult>
 		</Result>
 	</testcase>
 
