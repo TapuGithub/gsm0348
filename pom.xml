@@ -6,6 +6,7 @@
   <version>1.2.6</version>
   <packaging>pom</packaging>
   <name>GSM 03.48</name>
+  <description>Java API and realization of GSM 03.48 (ETSI TS 102 225) standard</description>
   <url>https://github.com/opentelecoms-org/gsm0348</url>
 
   <modules>
@@ -16,13 +17,13 @@
   </modules>
 
   <properties>
-    <slf4j.version>1.7.25</slf4j.version>
+    <beanutils.version>1.9.3</beanutils.version>
+    <bouncycastle.version>1.59</bouncycastle.version>
     <commons-cli.version>1.4</commons-cli.version>
+    <crc.version>1.0.1</crc.version>
     <jsr305.version>2.0.3</jsr305.version>
     <junit.version>4.12</junit.version>
-    <bouncycastle.version>1.59</bouncycastle.version>
-    <beanutils.version>1.9.3</beanutils.version>
-    <crc.version>1.0.1</crc.version>
+    <slf4j.version>1.7.25</slf4j.version>
 
     <jaxb2-maven-plugin.version>1.6</jaxb2-maven-plugin.version>
     <maven-bundle-plugin.version>3.5.0</maven-bundle-plugin.version>
@@ -56,6 +57,7 @@
       <id>pmoerenhout</id>
       <email>pim.moerenhout@gmail.com</email>
       <name>Pim Moerenhout</name>
+      <timezone>+1</timezone>
     </developer>
   </developers>
 
