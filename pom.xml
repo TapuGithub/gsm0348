@@ -154,136 +154,70 @@
           <target>${java.target.version}</target>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-      </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>${nexus-staging-maven-plugin.version}</version>
-          <extensions>true</extensions>
-          <configuration>
-            <serverId>ossrh</serverId>
-            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-            <autoReleaseAfterClose>false</autoReleaseAfterClose>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-        </plugin>
-        <!--<plugin>-->
-        <!--<groupId>org.apache.felix</groupId>-->
-        <!--<artifactId>maven-bundle-plugin</artifactId>-->
-        <!--<version>${maven-bundle-plugin.version}</version>-->
-        <!--</plugin>-->
-        <plugin>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>${maven-source-plugin.version}</version>
-          <executions>
-            <execution>
-              <id>attach-sources</id>
-              <goals>
-                <goal>jar-no-fork</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${maven-javadoc-plugin.version}</version>
-          <executions>
-            <execution>
-              <id>attach-javadocs</id>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <artifactId>maven-gpg-plugin</artifactId>
-          <version>${maven-gpg-plugin.version}</version>
-          <executions>
-            <execution>
-              <id>sign-artifacts</id>
-              <phase>verify</phase>
-              <goals>
-                <goal>sign</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <!--<plugin>-->
-        <!--<groupId>pl.project13.maven</groupId>-->
-        <!--<artifactId>git-commit-id-plugin</artifactId>-->
-        <!--<version>2.2.4</version>-->
-        <!--<executions>-->
-        <!--<execution>-->
-        <!--<phase>initialize</phase>-->
-        <!--<goals>-->
-        <!--<goal>revision</goal>-->
-        <!--</goals>-->
-        <!--</execution>-->
-        <!--</executions>-->
-
-        <!--<configuration>-->
-        <!--&lt;!&ndash; that's the default value, you don't have to set it &ndash;&gt;-->
-        <!--<prefix>git</prefix>-->
-
-        <!--&lt;!&ndash; that's the default value &ndash;&gt;-->
-        <!--<dateFormat>dd.MM.yyyy '@' HH:mm:ss z</dateFormat>-->
-
-        <!--&lt;!&ndash; false is default here, it prints some more information during the build &ndash;&gt;-->
-        <!--<verbose>true</verbose>-->
-        <!--&lt;!&ndash; this is false by default, forces the plugin to generate the git.properties file &ndash;&gt;-->
-        <!--<generateGitPropertiesFile>true</generateGitPropertiesFile>-->
-
-        <!--&lt;!&ndash; The path for the to be generated properties file, it's relative to ${project.basedir} &ndash;&gt;-->
-        <!--<generateGitPropertiesFilename>${git.properties}</generateGitPropertiesFilename>-->
-        <!--</configuration>-->
-
-        <!--</plugin>-->
-        <!--<plugin>-->
-        <!--<groupId>org.codehaus.mojo</groupId>-->
-        <!--<artifactId>properties-maven-plugin</artifactId>-->
-        <!--<version>1.0.0</version>-->
-        <!--<executions>-->
-        <!--<execution>-->
-        <!--<phase>initialize</phase>-->
-        <!--<goals>-->
-        <!--<goal>read-project-properties</goal>-->
-        <!--</goals>-->
-        <!--<configuration>-->
-        <!--<files>-->
-        <!--<file>${git.properties}</file>-->
-        <!--</files>-->
-        <!--</configuration>-->
-        <!--</execution>-->
-        <!--</executions>-->
-        <!--</plugin>-->
-        <!--<plugin>-->
-        <!--<artifactId>maven-jar-plugin</artifactId>-->
-        <!--<version>${maven-jar-plugin.version}</version>-->
-        <!--<configuration>-->
-        <!--<archive>-->
-        <!--<manifest>-->
-        <!--<addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
-        <!--<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>-->
-        <!--</manifest>-->
-        <!--<manifestEntries>-->
-        <!--<Implementation-Version>${project.version}-${git.branch}.${git.commit.id.abbrev}</Implementation-Version>-->
-        <!--&lt;!&ndash;<Dependencies>org.apache.log4j</Dependencies>&ndash;&gt;-->
-        <!--</manifestEntries>-->
-        <!--</archive>-->
-        <!--</configuration>-->
-        <!--</plugin>-->
-      </plugins>
-    </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>${nexus-staging-maven-plugin.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>${maven-release-plugin.version}</version>
+          </plugin>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${maven-source-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${maven-javadoc-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${maven-gpg-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
