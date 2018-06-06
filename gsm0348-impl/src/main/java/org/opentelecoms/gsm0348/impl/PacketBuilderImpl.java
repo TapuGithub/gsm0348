@@ -98,36 +98,9 @@ public class PacketBuilderImpl implements PacketBuilder {
       throw new PacketBuilderConfigurationException("CardProfile cannot be null");
     }
 
-    if (cardProfile.getKIC() == null) {
-      throw new PacketBuilderConfigurationException("KIC cannot be null");
-    }
-    if (cardProfile.getKIC().getAlgorithmImplementation() == null) {
-      throw new PacketBuilderConfigurationException("KIC AlgorithmImplementation cannot be null");
-    }
-    if (cardProfile.getKIC().getCipheringAlgorithmMode() == null) {
-      throw new PacketBuilderConfigurationException("KIC CipheringAlgorithmMode cannot be null");
-    }
-    if (cardProfile.getKIC().getKeysetID() < 0x0 || cardProfile.getKIC().getKeysetID() > (byte) 0xf) {
-      throw new PacketBuilderConfigurationException("KIC keySetID cannot be <0 and >15");
-    }
-
-    if (cardProfile.getKID() == null) {
-      throw new PacketBuilderConfigurationException("KID cannot be null");
-    }
-    if (cardProfile.getKID().getAlgorithmImplementation() == null) {
-      throw new PacketBuilderConfigurationException("KID AlgorithmImplementation cannot be null");
-    }
-    if (cardProfile.getKID().getCertificationAlgorithmMode() == null) {
-      throw new PacketBuilderConfigurationException("KID CertificationAlgorithmMode cannot be null");
-    }
-    if (cardProfile.getKID().getKeysetID() < 0x0 || cardProfile.getKID().getKeysetID() > (byte) 0xf) {
-      throw new PacketBuilderConfigurationException("KID keySetID cannot be <0 and >15");
-    }
-
     if (cardProfile.getSPI() == null) {
       throw new PacketBuilderConfigurationException("SPI cannot be null");
     }
-
     if (cardProfile.getSPI().getCommandSPI() == null) {
       throw new PacketBuilderConfigurationException("CommandSPI cannot be null");
     }
@@ -137,7 +110,6 @@ public class PacketBuilderImpl implements PacketBuilder {
     if (cardProfile.getSPI().getCommandSPI().getSynchroCounterMode() == null) {
       throw new PacketBuilderConfigurationException("CommandSPI SynchroCounterMode cannot be null");
     }
-
     if (cardProfile.getSPI().getResponseSPI() == null) {
       throw new PacketBuilderConfigurationException("ResponseSPI cannot be null");
     }
@@ -149,6 +121,34 @@ public class PacketBuilderImpl implements PacketBuilder {
     }
     if (cardProfile.getSPI().getResponseSPI().getPoRProtocol() == null) {
       throw new PacketBuilderConfigurationException("ResponseSPI PoRProtocol cannot be null");
+    }
+
+    final boolean commandCiphered = cardProfile.getSPI().getCommandSPI().isCiphered();
+    if (cardProfile.getKIC() == null) {
+      throw new PacketBuilderConfigurationException("KIC cannot be null");
+    }
+    if (cardProfile.getKIC().getAlgorithmImplementation() == null) {
+      throw new PacketBuilderConfigurationException("KIC AlgorithmImplementation cannot be null");
+    }
+    if (commandCiphered && cardProfile.getKIC().getCipheringAlgorithmMode() == null) {
+      throw new PacketBuilderConfigurationException("KIC CipheringAlgorithmMode cannot be null for ciphered command");
+    }
+    if (cardProfile.getKIC().getKeysetID() < 0x0 || cardProfile.getKIC().getKeysetID() > (byte) 0xf) {
+      throw new PacketBuilderConfigurationException("KIC keySetID cannot be <0 and >15");
+    }
+
+    final boolean responseCiphered = cardProfile.getSPI().getResponseSPI().isCiphered();
+    if (cardProfile.getKID() == null) {
+      throw new PacketBuilderConfigurationException("KID cannot be null");
+    }
+    if (responseCiphered && cardProfile.getKID().getAlgorithmImplementation() == null) {
+      throw new PacketBuilderConfigurationException("KID AlgorithmImplementation cannot be null for ciphered response");
+    }
+    if (responseCiphered && cardProfile.getKID().getCertificationAlgorithmMode() == null) {
+      throw new PacketBuilderConfigurationException("KID CertificationAlgorithmMode cannot be null for ciphered response");
+    }
+    if (cardProfile.getKID().getKeysetID() < 0x0 || cardProfile.getKID().getKeysetID() > (byte) 0xf) {
+      throw new PacketBuilderConfigurationException("KID keySetID cannot be <0 and >15");
     }
 
     if (cardProfile.getSecurityBytesType() == null) {
@@ -785,7 +785,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     final int packetLength = (Util.unsignedByteToInt(data[0]) >> 8) + Util.unsignedByteToInt(data[1]);
     if (data.length - PACKET_LENGTH_SIZE != packetLength) {
       throw new Gsm0348Exception(
-          "Length of raw data doesnt match packet length. Expected " + packetLength + " but found " + (data.length - PACKET_LENGTH_SIZE));
+          "Length of raw data doesn't match packet length. Expected " + packetLength + " but found " + (data.length - PACKET_LENGTH_SIZE));
     }
 
     final int headerLength = Util.unsignedByteToInt(data[PACKET_LENGTH_SIZE + HEADER_LENGTH_POSITION]);

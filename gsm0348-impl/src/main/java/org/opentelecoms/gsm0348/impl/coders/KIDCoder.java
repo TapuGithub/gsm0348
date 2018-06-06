@@ -18,38 +18,44 @@ public class KIDCoder {
       throw new CodingException("Cannot decode KID. KID keySetID cannot be <0 and >15");
     }
 
-    switch (kid.getAlgorithmImplementation()) {
-      case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
-        algImpl = 0;
-        break;
-      case DES:
-      case CRC:
-        algImpl = 1;
-        break;
-      case AES:
-        algImpl = 2;
-        break;
-      case PROPRIETARY_IMPLEMENTATIONS:
-        algImpl = 3;
-        break;
+    if (kid.getAlgorithmImplementation() != null) {
+      switch (kid.getAlgorithmImplementation()) {
+        case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
+          algImpl = 0;
+          break;
+        case DES:
+        case CRC:
+          algImpl = 1;
+          break;
+        case AES:
+          algImpl = 2;
+          break;
+        case PROPRIETARY_IMPLEMENTATIONS:
+          algImpl = 3;
+          break;
+      }
+    } else {
+      algImpl = 0;
     }
 
-    switch (kid.getCertificationAlgorithmMode()) {
-      case DES_CBC:
-      case AES_CMAC:
-      case CRC_16:
-        algMode = 0;
-        break;
-      case TRIPLE_DES_CBC_2_KEYS:
-      case CRC_32:
-        algMode = 1;
-        break;
-      case TRIPLE_DES_CBC_3_KEYS:
-        algMode = 2;
-        break;
-      case RESERVED:
-        algMode = 3;
-        break;
+    if (kid.getCertificationAlgorithmMode() != null) {
+      switch (kid.getCertificationAlgorithmMode()) {
+        case DES_CBC:
+        case AES_CMAC:
+        case CRC_16:
+          algMode = 0;
+          break;
+        case TRIPLE_DES_CBC_2_KEYS:
+        case CRC_32:
+          algMode = 1;
+          break;
+        case TRIPLE_DES_CBC_3_KEYS:
+          algMode = 2;
+          break;
+        case RESERVED:
+          algMode = 3;
+          break;
+      }
     }
 
     byte result = (byte) (algImpl + (algMode << 2) + (keysetID << 4));
@@ -60,13 +66,17 @@ public class KIDCoder {
   public static KID encode(CertificationMode certificationMode, byte kid) throws CodingException {
     KID result = new KID();
 
-    final int algImpl = kid & 0x3;
-    final int algMode = (kid & 0xC) >> 2;
-    final byte keysetID = (byte) ((kid & 0xF0) >>> 4);
+    final int algImpl = kid & 0x03;
+    final int algMode = (kid & 0x0c) >> 2;
+    final byte keysetID = (byte) ((kid & 0xf0) >>> 4);
 
     AlgorithmImplementation resultAlgImpl = null;
     CertificationAlgorithmMode resultAlgMode = null;
     switch (certificationMode) {
+      case NO_SECURITY:
+        resultAlgImpl = null;
+        resultAlgMode = null;
+        break;
       case RC:
         switch (algImpl) {
           case 0:
@@ -134,7 +144,7 @@ public class KIDCoder {
             resultAlgImpl = AlgorithmImplementation.PROPRIETARY_IMPLEMENTATIONS;
             break;
           default:
-            throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such algorithm implemetation(raw="
+            throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). No such algorithm implementation(raw="
                 + Integer.toHexString(algImpl) + ")");
         }
         break;
@@ -143,7 +153,7 @@ public class KIDCoder {
             + certificationMode + ")");
     }
 
-    if (keysetID < 0 && keysetID > 0xF) {
+    if (keysetID < 0 && keysetID > 0xf) {
       throw new CodingException("Cannot encode KID(raw=" + Util.toHex(kid) + "). KID keySetID cannot be <0 and >15");
     }
 

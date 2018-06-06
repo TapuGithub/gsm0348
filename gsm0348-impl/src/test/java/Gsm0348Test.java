@@ -137,6 +137,32 @@ public class Gsm0348Test {
   }
 
   @Test
+  public void should_build_command_packet_no_security() throws Exception {
+    byte[] data = new byte[]{ (byte) 0xaa, (byte) 0xbb };
+    byte[] tar = new byte[]{ 0x01, 0x02, 0x03 };
+    CardProfile cardProfile = new CardProfile();
+    SPI spi = new SPI();
+    // No RC, CC or DS, No Ciphering
+    spi.setCommandSPI(CommandSPICoder.encode((byte) 0x00));
+    spi.setResponseSPI(ResponseSPICoder.encode((byte) 0x22));
+    cardProfile.setSPI(spi);
+    cardProfile.setKIC(KICCoder.encode((byte) 0x00));
+    cardProfile.setKID(KIDCoder.encode(CertificationMode.NO_SECURITY, (byte) 0x00));
+    cardProfile.setSecurityBytesType(SecurityBytesType.WITH_LENGHTS_AND_UDHL);
+    cardProfile.setTAR(tar);
+    cardProfile.setSignatureAlgorithm(SignatureManager.AES_CMAC_64);
+    PacketBuilder packetBuilder = PacketBuilderFactory.getInstance(cardProfile);
+    byte[] commandBytes = packetBuilder.buildCommandPacket(data, null, null, null);
+
+    System.out.println(Util.toHexString(commandBytes));
+
+    Assert.assertArrayEquals(
+        new byte[]{ (byte) 0x00, (byte) 0x10, (byte) 0x0d, (byte) 0x00, (byte) 0x22, (byte) 0x00, (byte) 0x00, (byte) 0x01,
+            (byte) 0x02, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xaa, (byte) 0xbb },
+        commandBytes);
+  }
+
+  @Test
   public void should_build_command_packet_aes() throws Exception {
     byte[] data = new byte[]{ (byte) 0xAA, (byte) 0xBB };
     byte[] counter = new byte[]{ 0x00, 0x00, 0x00, 0x00, 0x00 };

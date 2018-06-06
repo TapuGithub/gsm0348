@@ -4,7 +4,6 @@ import com.github.snksoft.crc.CRC;
 
 public class CRC16X25 extends AbstractCrcMac {
 
-  //
   // CRC algorithm is specified in ISO 13239.
   // The generator polynomial used for CRC 16 shall be X^16 + X^12 + X^5 + 1.
   // The least significant bit of the first byte to be included in the checksum shall represent the most significant term of the input polynomial.

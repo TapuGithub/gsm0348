@@ -20,7 +20,7 @@
     <beanutils.version>1.9.3</beanutils.version>
     <bouncycastle.version>1.59</bouncycastle.version>
     <commons-cli.version>1.4</commons-cli.version>
-    <crc.version>1.0.1</crc.version>
+    <crc.version>1.0.2</crc.version>
     <jsr305.version>2.0.3</jsr305.version>
     <junit.version>4.12</junit.version>
     <slf4j.version>1.7.25</slf4j.version>
@@ -29,11 +29,11 @@
     <maven-bundle-plugin.version>3.5.0</maven-bundle-plugin.version>
     <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-    <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+    <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
     <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-    <maven-surefire-plugin>2.20.1</maven-surefire-plugin>
+    <maven-surefire-plugin>2.21.0</maven-surefire-plugin>
     <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
 
     <java.version>1.6</java.version>

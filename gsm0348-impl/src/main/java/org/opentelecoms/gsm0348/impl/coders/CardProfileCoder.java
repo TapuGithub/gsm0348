@@ -66,9 +66,9 @@ public class CardProfileCoder {
    * Build {@linkplain CardProfile} from row byte array
    *
    * @param datarow - the message heater {@linkplain byte[]} row.
+   * @return CardProfile
    * @throws NullPointerException if <strong>datarow</strong> parameter is null.
    * @throws CodingException      if configuration is in inconsistent state.
-   * @return CardProfile
    */
   public static CardProfile encode(byte[] datarow) throws CodingException {
 
@@ -88,9 +88,7 @@ public class CardProfileCoder {
     spi.setCommandSPI(CommandSPICoder.encode(datarow[SPI_POSITION - 1]));
     spi.setResponseSPI(ResponseSPICoder.encode(datarow[SPI_POSITION]));
 
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("SPI value: {}", spi.toString());
-    }
+    LOGGER.debug("SPI value: {}", spi.toString());
 
     KIC kic = KICCoder.encode(datarow[KIC_POSITION - 1]);
     LOGGER.debug("KIC value: {}", kic);
@@ -99,9 +97,7 @@ public class CardProfileCoder {
 
     newCardProfile.setTAR(Arrays.copyOfRange(datarow, TAR_POSITION - 1, TAR_POSITION - 1 + TAR_SIZE));
 
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("TAR value: {}", Util.toHexArray(newCardProfile.getTAR()));
-    }
+    LOGGER.debug("TAR value: {}", Util.toHexArray(newCardProfile.getTAR()));
 
     newCardProfile.setSPI(spi);
     newCardProfile.setKIC(kic);
@@ -186,14 +182,14 @@ public class CardProfileCoder {
    * Build {@linkplain byte[]} from {@linkplain CardProfile}
    *
    * @param profile - a card profile {@linkplain CardProfile}.
+   * @return byte[]
    * @throws NullPointerException if <strong>profile</strong> parameter is null.
    * @throws CodingException      if configuration is in inconsistent state.
-   * @return byte[]
    */
   public static byte[] decode(CardProfile profile) throws CodingException {
 
     if (profile == null) {
-      throw new NullPointerException();
+      throw new IllegalArgumentException("The profile argument cannot be null");
     }
 
     byte[] headerData = new byte[7];
