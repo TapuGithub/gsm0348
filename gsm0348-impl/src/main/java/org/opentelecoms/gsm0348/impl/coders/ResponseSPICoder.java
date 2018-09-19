@@ -70,10 +70,10 @@ public class ResponseSPICoder
 	{
 		ResponseSPI result = new ResponseSPI();
 
-		final int certMode = (responseSPI & 0xC) >> 2;
+		final int porMode = responseSPI & 0x03;
+		final int certMode = (responseSPI & 0x0c) >> 2;
+		final boolean isCiphered = (responseSPI & 0x10) != 0;
 		final int porProtocol = (responseSPI & 0x20) >> 5;
-		final int porMode = responseSPI & 0x3;
-		boolean isCiphered = (responseSPI & 0x10) != 0;
 
 		CertificationMode resultCertMode = null;
 		switch (certMode)
