@@ -35,6 +35,9 @@ This project designed to help building Receiving/Sending Entity. It provides lib
 ### Capability
 Short Message Service Cell Broadcast (SMS-CB) is not supported as for now.
 
+### Links
+![3GPP TS 31.115](https://www.etsi.org/deliver/etsi_ts/131100_131199/131115/06.05.00_60/ts_131115v060500p.pdf)
+
 ### Maven Config
 ```
 <repository>

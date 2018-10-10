@@ -58,7 +58,7 @@ public class ResponsePacketStatusCoder {
       case 10:
         return ResponsePacketStatus.INSUFFICIENT_SECURITY_LEVEL;
       default:
-        throw new CodingException("Cannot decode response packet status with id=" + respStatus);
+        throw new CodingException("Cannot decode response packet status with id=" + String.format("%02X",respStatus));
     }
   }
 }
