@@ -3,6 +3,7 @@ package org.opentelecoms.gsm0348.impl.coders;
 import java.util.Arrays;
 
 import org.opentelecoms.gsm0348.api.model.CardProfile;
+import org.opentelecoms.gsm0348.api.model.CertificationMode;
 import org.opentelecoms.gsm0348.api.model.KIC;
 import org.opentelecoms.gsm0348.api.model.KID;
 import org.opentelecoms.gsm0348.api.model.SPI;
@@ -104,78 +105,84 @@ public class CardProfileCoder {
     newCardProfile.setKID(kid);
 
     // The initial chaining value for CBC modes shall be zero.
-    switch (kic.getAlgorithmImplementation()) {
-      case PROPRIETARY_IMPLEMENTATIONS:
-      case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
-        break;
-      case DES:
-        switch (kic.getCipheringAlgorithmMode()) {
-          case DES_CBC:
-            newCardProfile.setCipheringAlgorithm("DES/CBC/ZeroBytePadding");
-            break;
-
-          case DES_ECB:
-            newCardProfile.setCipheringAlgorithm("DES/ECB/ZeroBytePadding");
-            break;
-
-          case TRIPLE_DES_CBC_2_KEYS:
-          case TRIPLE_DES_CBC_3_KEYS:
-            newCardProfile.setCipheringAlgorithm("DESede/CBC/ZeroBytePadding");
-            break;
-
-          default:
-        }
-        break;
-
-      case AES:
-        // AES shall be used together with counter settings (b5 and b4 of the first octet of SPI) 10 or 11.
-        switch (kic.getCipheringAlgorithmMode()) {
-          case AES_CBC:
-            newCardProfile.setCipheringAlgorithm("AES/CBC/ZeroBytePadding");
-            break;
-          default:
-        }
-        break;
-
-      default:
+    
+    if (spi.getCommandSPI().isCiphered()==true) 
+    {
+	    switch (kic.getAlgorithmImplementation()) {
+	      case PROPRIETARY_IMPLEMENTATIONS:
+	      case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
+	        break;
+	      case DES:
+	        switch (kic.getCipheringAlgorithmMode()) {
+	          case DES_CBC:
+	            newCardProfile.setCipheringAlgorithm("DES/CBC/ZeroBytePadding");
+	            break;
+	
+	          case DES_ECB:
+	            newCardProfile.setCipheringAlgorithm("DES/ECB/ZeroBytePadding");
+	            break;
+	
+	          case TRIPLE_DES_CBC_2_KEYS:
+	          case TRIPLE_DES_CBC_3_KEYS:
+	            newCardProfile.setCipheringAlgorithm("DESede/CBC/ZeroBytePadding");
+	            break;
+	
+	          default:
+	        }
+	        break;
+	
+	      case AES:
+	        // AES shall be used together with counter settings (b5 and b4 of the first octet of SPI) 10 or 11.
+	        switch (kic.getCipheringAlgorithmMode()) {
+	          case AES_CBC:
+	            newCardProfile.setCipheringAlgorithm("AES/CBC/ZeroBytePadding");
+	            break;
+	          default:
+	        }
+	        break;
+	
+	      default:
+	    }
     }
-
-    switch (kid.getAlgorithmImplementation()) {
-      case CRC:
-        switch (kid.getCertificationAlgorithmMode()) {
-          case CRC_16:
-            newCardProfile.setSignatureAlgorithm("CRC16");
-            break;
-          case CRC_32:
-            newCardProfile.setSignatureAlgorithm("CRC32");
-            break;
-        }
-      case PROPRIETARY_IMPLEMENTATIONS:
-      case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
-        break;
-      case DES:
-        switch (kid.getCertificationAlgorithmMode()) {
-          case DES_CBC:
-            newCardProfile.setSignatureAlgorithm(SignatureManager.DES_MAC8_ISO9797_M1);
-            break;
-
-          case RESERVED:
-            break;
-
-          case TRIPLE_DES_CBC_2_KEYS:
-          case TRIPLE_DES_CBC_3_KEYS:
-            newCardProfile.setSignatureAlgorithm("DESEDEMAC64");
-            break;
-
-          default:
-        }
-        break;
-      case AES:
-        newCardProfile.setSignatureAlgorithm("AESCMAC");
-        break;
-    }
-
-    return newCardProfile;
+    
+    if (!spi.getCommandSPI().getCertificationMode().equals(CertificationMode.NO_SECURITY))
+    {
+	    switch (kid.getAlgorithmImplementation()) {
+	      case CRC:
+	        switch (kid.getCertificationAlgorithmMode()) {
+	          case CRC_16:
+	            newCardProfile.setSignatureAlgorithm("CRC16");
+	            break;
+	          case CRC_32:
+	            newCardProfile.setSignatureAlgorithm("CRC32");
+	            break;
+	        }
+	      case PROPRIETARY_IMPLEMENTATIONS:
+	      case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
+	        break;
+	      case DES:
+	        switch (kid.getCertificationAlgorithmMode()) {
+	          case DES_CBC:
+	            newCardProfile.setSignatureAlgorithm(SignatureManager.DES_MAC8_ISO9797_M1);
+	            break;
+	
+	          case RESERVED:
+	            break;
+	
+	          case TRIPLE_DES_CBC_2_KEYS:
+	          case TRIPLE_DES_CBC_3_KEYS:
+	            newCardProfile.setSignatureAlgorithm("DESEDEMAC64");
+	            break;
+	
+	          default:
+	        }
+	        break;
+	      case AES:
+	        newCardProfile.setSignatureAlgorithm("AESCMAC");
+	        break;
+	    }
+	  }
+      return newCardProfile;
   }
 
   /**
