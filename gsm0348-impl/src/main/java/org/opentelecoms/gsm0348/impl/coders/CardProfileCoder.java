@@ -106,9 +106,7 @@ public class CardProfileCoder {
 
     // The initial chaining value for CBC modes shall be zero.
     
-    if (spi.getCommandSPI().isCiphered()==true) 
-    {
-	    switch (kic.getAlgorithmImplementation()) {
+  	    switch (kic.getAlgorithmImplementation()) {
 	      case PROPRIETARY_IMPLEMENTATIONS:
 	      case ALGORITHM_KNOWN_BY_BOTH_ENTITIES:
 	        break;
@@ -143,7 +141,7 @@ public class CardProfileCoder {
 	
 	      default:
 	    }
-    }
+ 
     
     if (!spi.getCommandSPI().getCertificationMode().equals(CertificationMode.NO_SECURITY))
     {
