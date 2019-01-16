@@ -3,6 +3,7 @@ package org.opentelecoms.gsm0348.impl.crypto;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Security;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -11,6 +12,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,10 @@ import org.slf4j.LoggerFactory;
  */
 public class CipheringManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(CipheringManager.class);
+
+  static {
+    Security.addProvider(new BouncyCastleProvider());
+  }
 
   private CipheringManager() {
   }
