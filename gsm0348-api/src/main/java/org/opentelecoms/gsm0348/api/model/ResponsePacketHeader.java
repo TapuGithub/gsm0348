@@ -14,6 +14,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.opentelecoms.gsm0348.api.Util;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ResponsePacketHeader", propOrder = {
     "responseStatus"
@@ -87,13 +89,13 @@ public class ResponsePacketHeader
 		builder.append("ResponsePacketHeader [responseStatus=");
 		builder.append(responseStatus);
 		builder.append(", tar=");
-		builder.append(Arrays.toString(tar));
+		builder.append(Util.toHexString(tar));
 		builder.append(", paddingCounter=");
 		builder.append(paddingCounter);
 		builder.append(", security=");
-		builder.append(Arrays.toString(security));
+		builder.append(Util.toHexString(security));
 		builder.append(", counter=");
-		builder.append(Arrays.toString(counter));
+		builder.append(Util.toHexString(counter));
 		builder.append("]");
 		return builder.toString();
 	}

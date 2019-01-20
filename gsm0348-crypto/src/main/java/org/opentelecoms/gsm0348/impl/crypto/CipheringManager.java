@@ -14,6 +14,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.opentelecoms.gsm0348.api.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,7 @@ public class CipheringManager {
 
   /**
    * Returns block size for transformation name specified. Name can be specified ether by only name, e.g.,DES or with mode and padding, e.g.,
-   * DES/EDE/ZerroBytePadding.
+   * DES/EDE/ZeroBytePadding.
    *
    * @param transformation - the name of the transformation, e.g., DES/CBC/PKCS5Padding.
    * @return cipher`s block size
@@ -82,19 +83,18 @@ public class CipheringManager {
    * @throws BadPaddingException                if particular padding mechanism is expected for the input data but the data is not padded properly.
    * @throws InvalidAlgorithmParameterException if invalid or inappropriate algorithm parameters specified.
    */
-  public static byte[] decipher(String transformation, byte[] key, byte[] data) throws IllegalBlockSizeException,
-      BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException,
-      InvalidKeyException {
+  public static byte[] decipher(final String transformation, final byte[] key, final byte[] data) throws IllegalBlockSizeException,
+      BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
     LOGGER.debug("Deciphering data");
     return doWork(transformation, key, data, new byte[]{ 0, 0, 0, 0, 0 }, Cipher.DECRYPT_MODE);
   }
 
-  private static void initCipher(Cipher cipher, int mode, byte[] key,
-                                 byte[] iv) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
+  private static void initCipher(final Cipher cipher, final int mode, final byte[] key, byte[] iv)
+      throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
     LOGGER.debug("Initializing cipher: {} key length: {} bits", cipher.getAlgorithm(), key.length * 8);
     final int blockSize = getBlockSize(cipher.getAlgorithm());
     LOGGER.debug("Block size for {}: {}", cipher.getAlgorithm(), blockSize);
-    SecretKeySpec keySpec = new SecretKeySpec(key, cipher.getAlgorithm());
+    final SecretKeySpec keySpec = new SecretKeySpec(key, cipher.getAlgorithm());
     if (key.length > Cipher.getMaxAllowedKeyLength(cipher.getAlgorithm())) {
       LOGGER.error("The maximum allowed key length is {} for {}", Cipher.getMaxAllowedKeyLength(cipher.getAlgorithm()), cipher.getAlgorithm());
       throw new IllegalArgumentException("The key length is above the maximum, please install JCE unlimited strength jurisdiction policy files");
@@ -126,14 +126,13 @@ public class CipheringManager {
    * @throws BadPaddingException                if particular padding mechanism is expected for the input data but the data is not padded properly.
    * @throws InvalidAlgorithmParameterException if invalid or inappropriate algorithm parameters specified.
    */
-  public static byte[] encipher(String transformation, byte[] key, byte[] data, byte[] iv) throws IllegalBlockSizeException,
-      BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException,
-      InvalidKeyException {
+  public static byte[] encipher(final String transformation, final byte[] key, final byte[] data, final byte[] iv)
+      throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
     LOGGER.debug("Enciphering data");
     return doWork(transformation, key, data, iv, Cipher.ENCRYPT_MODE);
   }
 
-  private static byte[] doWork(String transformation, byte[] key, byte[] data, byte[] iv, int mode)
+  private static byte[] doWork(final String transformation, final byte[] key, final byte[] data, final byte[] iv, final int mode)
       throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
       NoSuchPaddingException, InvalidKeyException {
     if (transformation == null || transformation.length() == 0 || key == null || data == null) {

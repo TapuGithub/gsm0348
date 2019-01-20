@@ -3,6 +3,7 @@ package org.opentelecoms.gsm0348.impl;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
+import org.opentelecoms.gsm0348.api.Util;
 import org.opentelecoms.gsm0348.impl.crypto.CipheringManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -7,12 +7,12 @@
 
 package org.opentelecoms.gsm0348.api.model;
 
-import java.util.Arrays;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.opentelecoms.gsm0348.api.Util;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CommandPacket", propOrder = {
@@ -85,7 +85,7 @@ public class CommandPacket
 		builder.append("CommandPacket [header=");
 		builder.append(header);
 		builder.append(", data=");
-		builder.append(Arrays.toString(data));
+		builder.append(Util.toHexString(data));
 		builder.append("]");
 		return builder.toString();
 	}

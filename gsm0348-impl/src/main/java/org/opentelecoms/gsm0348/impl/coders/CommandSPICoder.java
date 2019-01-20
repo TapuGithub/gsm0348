@@ -1,10 +1,10 @@
 package org.opentelecoms.gsm0348.impl.coders;
 
+import org.opentelecoms.gsm0348.api.Util;
 import org.opentelecoms.gsm0348.api.model.CertificationMode;
 import org.opentelecoms.gsm0348.api.model.CommandSPI;
 import org.opentelecoms.gsm0348.api.model.SynchroCounterMode;
 import org.opentelecoms.gsm0348.impl.CodingException;
-import org.opentelecoms.gsm0348.impl.Util;
 
 public class CommandSPICoder {
   public static byte decode(CommandSPI commandSPI) throws CodingException {
@@ -57,7 +57,7 @@ public class CommandSPICoder {
     final int counterMode = (commandSPI & 0x18) >> 3;
     boolean isCiphered = (commandSPI & 0x4) != 0;
 
-    CertificationMode resultCertMode = null;
+    CertificationMode resultCertMode;
     switch (certMode) {
       case 0:
         resultCertMode = CertificationMode.NO_SECURITY;
@@ -77,7 +77,7 @@ public class CommandSPICoder {
             + Integer.toHexString(certMode));
     }
 
-    SynchroCounterMode resultCounterMode = null;
+    SynchroCounterMode resultCounterMode;
     switch (counterMode) {
       case 0:
         resultCounterMode = SynchroCounterMode.NO_COUNTER;

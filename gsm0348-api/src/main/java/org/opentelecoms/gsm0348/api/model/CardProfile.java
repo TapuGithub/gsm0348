@@ -7,8 +7,6 @@
 
 package org.opentelecoms.gsm0348.api.model;
 
-import java.util.Arrays;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,6 +14,8 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.opentelecoms.gsm0348.api.Util;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CardProfile", propOrder = {
@@ -339,7 +339,7 @@ public class CardProfile {
 		builder.append(", spi=");
 		builder.append(spi);
 		builder.append(", tar=");
-		builder.append(Arrays.toString(tar));
+		builder.append(Util.toHexString(tar));
 		builder.append(", securityBytesType=");
 		builder.append(securityBytesType);
 		builder.append(", signatureAlgorithm=");
@@ -347,9 +347,9 @@ public class CardProfile {
 		builder.append(", cipheringAlgorithm=");
 		builder.append(cipheringAlgorithm);
 		builder.append(", cipheringMasterKey=");
-		builder.append(Arrays.toString(cipheringMasterKey));
+		builder.append(Util.toHexString(cipheringMasterKey));
 		builder.append(", signatureMasterKey=");
-		builder.append(Arrays.toString(signatureMasterKey));
+		builder.append(Util.toHexString(signatureMasterKey));
 		builder.append("]");
 		return builder.toString();
 	}

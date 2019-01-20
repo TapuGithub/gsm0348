@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.opentelecoms.gsm0348.api.Util;
+
 /**
  *
  * This interface describes GSM 03.48 packet.
@@ -93,7 +95,7 @@ public class Packet {
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("Packet [data=");
-		builder.append(Arrays.toString(data));
+		builder.append(Util.toHexString(data));
 		builder.append("]");
 		return builder.toString();
 	}

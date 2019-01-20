@@ -1,11 +1,11 @@
 package org.opentelecoms.gsm0348.impl.coders;
 
+import org.opentelecoms.gsm0348.api.Util;
 import org.opentelecoms.gsm0348.api.model.AlgorithmImplementation;
 import org.opentelecoms.gsm0348.api.model.CertificationAlgorithmMode;
 import org.opentelecoms.gsm0348.api.model.CertificationMode;
 import org.opentelecoms.gsm0348.api.model.KID;
 import org.opentelecoms.gsm0348.impl.CodingException;
-import org.opentelecoms.gsm0348.impl.Util;
 
 public class KIDCoder {
 

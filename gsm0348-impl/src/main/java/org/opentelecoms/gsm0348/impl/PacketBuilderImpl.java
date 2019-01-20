@@ -10,6 +10,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.opentelecoms.gsm0348.api.Gsm0348Exception;
 import org.opentelecoms.gsm0348.api.PacketBuilder;
 import org.opentelecoms.gsm0348.api.PacketBuilderConfigurationException;
+import org.opentelecoms.gsm0348.api.Util;
 import org.opentelecoms.gsm0348.api.model.CardProfile;
 import org.opentelecoms.gsm0348.api.model.CertificationMode;
 import org.opentelecoms.gsm0348.api.model.CommandPacket;
@@ -488,13 +489,13 @@ public class PacketBuilderImpl implements PacketBuilder {
               + ((signatureKey.length == 0) ? "empty" : Util.toHexArray(signatureKey)));
     }
 
-    final int packetLength = (Util.unsignedByteToInt(data[0]) >> 8) + Util.unsignedByteToInt(data[1]);
+    final int packetLength = (Util.byteToInt(data[0]) >> 8) + Util.byteToInt(data[1]);
     if (data.length - PACKET_LENGTH_SIZE != packetLength) {
       throw new Gsm0348Exception("Length of raw data doesnt match packet length. Expected " + packetLength + " but found "
           + (data.length - PACKET_LENGTH_SIZE));
     }
 
-    final int headerLength = Util.unsignedByteToInt(data[HEADER_LENGTH_RESPONSE_POSITION]);
+    final int headerLength = Util.byteToInt(data[HEADER_LENGTH_RESPONSE_POSITION]);
     final byte[] tar = new byte[TAR_SIZE];
     System.arraycopy(data, 2 + TAR_RESPONSE_POSITION, tar, 0, TAR_SIZE);
     final byte[] counters = new byte[COUNTERS_SIZE];
@@ -511,7 +512,7 @@ public class PacketBuilderImpl implements PacketBuilder {
     }
 
     final byte[] signature = new byte[signatureLength];
-    int paddingCounter = Util.unsignedByteToInt(data[PADDING_COUNTER_RESPONSE_POSITION - 2]);
+    int paddingCounter = Util.byteToInt(data[PADDING_COUNTER_RESPONSE_POSITION - 2]);
     if (!responsePacketCiphering && paddingCounter != 0) {
       throw new Gsm0348Exception(
           "Response packet ciphering is off but padding counter is not 0. So it can be corrupted packet or configuration doesn't match provided data");
@@ -523,7 +524,7 @@ public class PacketBuilderImpl implements PacketBuilder {
         byte[] dataEnc = CipheringManager.decipher(cipheringAlgorithmName, cipheringKey,
             Arrays.copyOfRange(data, 6, data.length));
         System.arraycopy(dataEnc, 0, counters, 0, COUNTERS_SIZE);
-        paddingCounter = Util.unsignedByteToInt(dataEnc[COUNTERS_SIZE]);
+        paddingCounter = Util.byteToInt(dataEnc[COUNTERS_SIZE]);
         responseCode = dataEnc[COUNTERS_SIZE + 1];
         if (dataEnc.length < COUNTERS_SIZE + 2 + signatureLength) {
           throw new Gsm0348Exception(
@@ -549,7 +550,7 @@ public class PacketBuilderImpl implements PacketBuilder {
 //				End of modification by Tomas Andersen / Morecom AS 2014.04.08 - TEST CASE: Tomas Andersen Bug #1->
       } else {
         System.arraycopy(data, 2 + COUNTERS_RESPONSE_POSITION, counters, 0, COUNTERS_SIZE);
-        paddingCounter = Util.unsignedByteToInt(data[2 + PADDING_COUNTER_RESPONSE_POSITION]);
+        paddingCounter = Util.byteToInt(data[2 + PADDING_COUNTER_RESPONSE_POSITION]);
         responseCode = data[RESPONSE_CODE_RESPONSE_POSITION];
         System.arraycopy(data, SIGNATURE_RESPONSE_POSITION, signature, 0, signatureLength);
         final int dataSize = packetLength - headerLength - HEADER_LENGTH_SIZE;
@@ -760,13 +761,13 @@ public class PacketBuilderImpl implements PacketBuilder {
           "Response signing is enabled - signature key must be specified. Provided: "
               + ((signatureKey.length == 0) ? "empty" : Util.toHexArray(signatureKey)));
     }
-    final int packetLength = (Util.unsignedByteToInt(data[0]) >> 8) + Util.unsignedByteToInt(data[1]);
+    final int packetLength = (Util.byteToInt(data[0]) >> 8) + Util.byteToInt(data[1]);
     if (data.length - PACKET_LENGTH_SIZE != packetLength) {
       throw new Gsm0348Exception(
           "Length of raw data doesn't match packet length. Expected " + packetLength + " but found " + (data.length - PACKET_LENGTH_SIZE));
     }
 
-    final int headerLength = Util.unsignedByteToInt(data[PACKET_LENGTH_SIZE + HEADER_LENGTH_POSITION]);
+    final int headerLength = Util.byteToInt(data[PACKET_LENGTH_SIZE + HEADER_LENGTH_POSITION]);
     final byte[] header = new byte[headerLength];
     System.arraycopy(data, PACKET_LENGTH_SIZE, header, 0, headerLength);
     LOGGER.debug("Header[{}]: {}", header.length, Util.toHexArray(header));
@@ -816,7 +817,7 @@ public class PacketBuilderImpl implements PacketBuilder {
 
         System.arraycopy(dataDec, 0, counters, 0, COUNTERS_SIZE);
         LOGGER.debug("Counters[{}]: {}", counters.length, Util.toHexArray(counters));
-        paddingCounter = Util.unsignedByteToInt(dataDec[COUNTERS_SIZE]);
+        paddingCounter = Util.byteToInt(dataDec[COUNTERS_SIZE]);
         LOGGER.debug("Padding counter: {}", paddingCounter);
 
         System.arraycopy(dataDec, COUNTERS_SIZE + 1, signature, 0, signatureLength);
@@ -830,7 +831,7 @@ public class PacketBuilderImpl implements PacketBuilder {
       } else {
         System.arraycopy(data, PACKET_LENGTH_SIZE + COUNTERS_POSITION, counters, 0, COUNTERS_SIZE);
         LOGGER.debug("Counters[{}]: {}", counters.length, Util.toHexArray(counters));
-        paddingCounter = Util.unsignedByteToInt(data[PACKET_LENGTH_SIZE + PADDING_COUNTER_POSITION]);
+        paddingCounter = Util.byteToInt(data[PACKET_LENGTH_SIZE + PADDING_COUNTER_POSITION]);
         LOGGER.debug("Padding counter: {}", paddingCounter);
         if (paddingCounter != 0) {
           throw new Gsm0348Exception(

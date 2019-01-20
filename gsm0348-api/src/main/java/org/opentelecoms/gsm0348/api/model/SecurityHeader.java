@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.opentelecoms.gsm0348.api.Util;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SecurityHeader", propOrder = {
     "tar",
@@ -46,8 +48,7 @@ public class SecurityHeader
   /**
    * Gets the value of the tar property.
    *
-   * @return possible object is
-   * {@link String }
+   * @return possible object is {@link String }
    */
   public byte[] getTAR() {
     return tar;
@@ -56,8 +57,7 @@ public class SecurityHeader
   /**
    * Sets the value of the tar property.
    *
-   * @param value allowed object is
-   *              {@link String }
+   * @param value allowed object is {@link String }
    */
   public void setTAR(byte[] value) {
     this.tar = ((byte[]) value);
@@ -66,8 +66,7 @@ public class SecurityHeader
   /**
    * Gets the value of the paddingCounter property.
    *
-   * @return possible object is
-   * {@link byte }
+   * @return possible object is {@link byte }
    */
   public byte getPaddingCounter() {
     return paddingCounter;
@@ -76,8 +75,7 @@ public class SecurityHeader
   /**
    * Sets the value of the paddingCounter property.
    *
-   * @param value allowed object is
-   *              {@link byte }
+   * @param value allowed object is {@link byte }
    */
   public void setPaddingCounter(byte value) {
     this.paddingCounter = value;
@@ -86,8 +84,7 @@ public class SecurityHeader
   /**
    * Gets the value of the security property.
    *
-   * @return possible object is
-   * {@link byte[] }
+   * @return possible object is {@link byte[] }
    */
   public byte[] getSecurity() {
     return security;
@@ -96,8 +93,7 @@ public class SecurityHeader
   /**
    * Sets the value of the security property.
    *
-   * @param value allowed object is
-   *              {@link byte[] }
+   * @param value allowed object is {@link byte[] }
    */
   public void setSecurity(byte[] value) {
     this.security = ((byte[]) value);
@@ -106,8 +102,7 @@ public class SecurityHeader
   /**
    * Gets the value of the counter property.
    *
-   * @return possible object is
-   * {@link byte[] }
+   * @return possible object is {@link byte[] }
    */
   public byte[] getCounter() {
     return counter;
@@ -116,8 +111,7 @@ public class SecurityHeader
   /**
    * Sets the value of the counter property.
    *
-   * @param value allowed object is
-   *              {@link String }
+   * @param value allowed object is {@link String }
    */
   public void setCounter(byte[] value) {
     this.counter = ((byte[]) value);
@@ -165,13 +159,13 @@ public class SecurityHeader
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append("SecurityHeader [tar=");
-    builder.append(Arrays.toString(tar));
+    builder.append(Util.toHexString(tar));
     builder.append(", paddingCounter=");
     builder.append(paddingCounter);
     builder.append(", security=");
-    builder.append(Arrays.toString(security));
+    builder.append(Util.toHexString(security));
     builder.append(", counter=");
-    builder.append(Arrays.toString(counter));
+    builder.append(Util.toHexString(counter));
     builder.append("]");
     return builder.toString();
   }

@@ -1,10 +1,10 @@
 package org.opentelecoms.gsm0348.impl.coders;
 
+import org.opentelecoms.gsm0348.api.Util;
 import org.opentelecoms.gsm0348.api.model.AlgorithmImplementation;
 import org.opentelecoms.gsm0348.api.model.CipheringAlgorithmMode;
 import org.opentelecoms.gsm0348.api.model.KIC;
 import org.opentelecoms.gsm0348.impl.CodingException;
-import org.opentelecoms.gsm0348.impl.Util;
 
 public class KICCoder {
   public static byte decode(KIC kic) throws CodingException {

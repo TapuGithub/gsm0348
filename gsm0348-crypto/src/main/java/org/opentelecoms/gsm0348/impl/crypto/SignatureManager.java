@@ -7,6 +7,7 @@ import java.util.Arrays;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.opentelecoms.gsm0348.api.Util;
 import org.opentelecoms.gsm0348.impl.crypto.mac.CRC16X25;
 import org.opentelecoms.gsm0348.impl.crypto.mac.CRC32;
 import org.opentelecoms.gsm0348.impl.crypto.mac.DESMACISO9797M1;
