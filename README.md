@@ -13,7 +13,7 @@ Finally, the code was adopted by the Open Telecoms project.
 ## News
 
 0. Moved to GitHub - as you all know Google Code is closing
-0. Version 1.2.5 is out
+0. Version 1.2.7 is out
 0. Fixed NPE during response packet recovering (thanks to Tomas)
 0. Fixed testcases dataset schema location - now autotest should pass
 0. Added AES and RC
@@ -48,12 +48,12 @@ Short Message Service Cell Broadcast (SMS-CB) is not supported as for now.
    <dependency>
       <groupId>org.opentelecoms.gsm0348</groupId>
       <artifactId>gsm0348-api</artifactId>
-      <version>1.2.6</version>
+      <version>1.2.7</version>
    </dependency>
    <dependency>
       <groupId>org.opentelecoms.gsm0348</groupId>
       <artifactId>gsm0348-impl</artifactId>
-      <version>1.2.6</version>
+      <version>1.2.7</version>
    </dependency>
 </dependencies>
 ```
@@ -65,7 +65,7 @@ mvn clean deploy
 ```
 For a proper release:
 ```
-mvn versions:set -DnewVersion=1.2.3
+mvn versions:set -DnewVersion=1.2.8
 mvn clean deploy -P release
 mvn nexus-staging:release
 # Or when something went wrong
