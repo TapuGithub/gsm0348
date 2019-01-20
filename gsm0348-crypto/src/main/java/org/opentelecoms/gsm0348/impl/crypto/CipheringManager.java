@@ -3,6 +3,7 @@ package org.opentelecoms.gsm0348.impl.crypto;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 import java.security.Security;
 
 import javax.crypto.BadPaddingException;
@@ -18,8 +19,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * This utility class is used for ciphering operations during GSM 03.48 packet
- * creation and recovering.
+ * This utility class is used for ciphering operations during GSM 03.48 packet creation and recovering.
  *
  * @author Victor Platov
  */
@@ -27,7 +27,16 @@ public class CipheringManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(CipheringManager.class);
 
   static {
-    Security.addProvider(new BouncyCastleProvider());
+    if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+      final Provider provider = new BouncyCastleProvider();
+      LOGGER.trace("Adding security provider {} ({})", provider.getName(), provider.getInfo());
+      final int position = Security.addProvider(provider);
+      if (position == -1) {
+        LOGGER.info("Security provider {} ({}) was already installed", provider.getName(), provider.getInfo());
+      } else {
+        LOGGER.debug("Security provider {} ({}) added at position {}", provider.getName(), provider.getInfo(), position);
+      }
+    }
   }
 
   private CipheringManager() {
@@ -39,8 +48,7 @@ public class CipheringManager {
   }
 
   /**
-   * Returns block size for transformation name specified. Name can be
-   * specified ether by only name, e.g.,DES or with mode and padding, e.g.,
+   * Returns block size for transformation name specified. Name can be specified ether by only name, e.g.,DES or with mode and padding, e.g.,
    * DES/EDE/ZerroBytePadding.
    *
    * @param transformation - the name of the transformation, e.g., DES/CBC/PKCS5Padding.
@@ -81,7 +89,8 @@ public class CipheringManager {
     return doWork(transformation, key, data, new byte[]{ 0, 0, 0, 0, 0 }, Cipher.DECRYPT_MODE);
   }
 
-  private static void initCipher(Cipher cipher, int mode, byte[] key, byte[] iv) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
+  private static void initCipher(Cipher cipher, int mode, byte[] key,
+                                 byte[] iv) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
     LOGGER.debug("Initializing cipher: {} key length: {} bits", cipher.getAlgorithm(), key.length * 8);
     final int blockSize = getBlockSize(cipher.getAlgorithm());
     LOGGER.debug("Block size for {}: {}", cipher.getAlgorithm(), blockSize);
@@ -101,8 +110,7 @@ public class CipheringManager {
   }
 
   /**
-   * Enciphers data with specified transformation, key and initialization
-   * vector.
+   * Enciphers data with specified transformation, key and initialization vector.
    *
    * @param transformation - the name of the transformation, e.g., DES/CBC/PKCS5Padding.
    * @param key            - key for cipher.
