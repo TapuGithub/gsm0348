@@ -16,11 +16,10 @@ public class PacketBuilderFactory {
   private static final Logger LOGGER = LoggerFactory.getLogger(PacketBuilderFactory.class);
 
   private PacketBuilderFactory() {
-
   }
 
   public static PacketBuilder getInstance(CardProfile cardProfile) throws PacketBuilderConfigurationException {
-    LOGGER.debug("Creating new PacketBuilder for " + cardProfile);
+    LOGGER.debug("Creating new PacketBuilder for {}", cardProfile);
     return new PacketBuilderImpl(cardProfile);
   }
 }
