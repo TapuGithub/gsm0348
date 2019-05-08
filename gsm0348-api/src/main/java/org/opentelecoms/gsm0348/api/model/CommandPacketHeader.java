@@ -143,8 +143,8 @@ public class CommandPacketHeader
     builder.append(Util.toHexString(tar));
     builder.append(", paddingCounter=");
     builder.append(paddingCounter);
-    builder.append(", security=");
-    builder.append(Util.toHexString(security));
+    builder.append(", checksumSignature=");
+    builder.append(Util.toHexString(checksumSignature));
     builder.append(", counter=");
     builder.append(Util.toHexString(counter));
     builder.append("]");

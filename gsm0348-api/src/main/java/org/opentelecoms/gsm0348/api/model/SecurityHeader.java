@@ -23,7 +23,7 @@ import org.opentelecoms.gsm0348.api.Util;
 @XmlType(name = "SecurityHeader", propOrder = {
     "tar",
     "paddingCounter",
-    "security",
+    "checksumSignature",
     "counter"
 })
 @XmlSeeAlso({
@@ -38,9 +38,9 @@ public class SecurityHeader
   protected byte[] tar;
   @XmlElement(name = "PaddingCounter")
   protected byte paddingCounter;
-  @XmlElement(name = "Security", type = String.class)
+  @XmlElement(name = "ChecksumSignature", type = String.class)
   @XmlJavaTypeAdapter(HexBinaryAdapter.class)
-  protected byte[] security;
+  protected byte[] checksumSignature;
   @XmlElement(name = "Counter", required = true, type = String.class)
   @XmlJavaTypeAdapter(HexBinaryAdapter.class)
   protected byte[] counter;
@@ -86,8 +86,8 @@ public class SecurityHeader
    *
    * @return possible object is {@link byte[] }
    */
-  public byte[] getSecurity() {
-    return security;
+  public byte[] getChecksumSignature() {
+    return checksumSignature;
   }
 
   /**
@@ -95,8 +95,8 @@ public class SecurityHeader
    *
    * @param value allowed object is {@link byte[] }
    */
-  public void setSecurity(byte[] value) {
-    this.security = ((byte[]) value);
+  public void setChecksumSignature(byte[] value) {
+    this.checksumSignature = ((byte[]) value);
   }
 
   /**
@@ -123,7 +123,7 @@ public class SecurityHeader
     int result = 1;
     result = prime * result + Arrays.hashCode(counter);
     result = prime * result + paddingCounter;
-    result = prime * result + Arrays.hashCode(security);
+    result = prime * result + Arrays.hashCode(checksumSignature);
     result = prime * result + Arrays.hashCode(tar);
     return result;
   }
@@ -146,7 +146,7 @@ public class SecurityHeader
     if (paddingCounter != other.paddingCounter) {
       return false;
     }
-    if (!Arrays.equals(security, other.security)) {
+    if (!Arrays.equals(checksumSignature, other.checksumSignature)) {
       return false;
     }
     if (!Arrays.equals(tar, other.tar)) {
@@ -162,8 +162,8 @@ public class SecurityHeader
     builder.append(Util.toHexString(tar));
     builder.append(", paddingCounter=");
     builder.append(paddingCounter);
-    builder.append(", security=");
-    builder.append(Util.toHexString(security));
+    builder.append(", checksumSignature=");
+    builder.append(Util.toHexString(checksumSignature));
     builder.append(", counter=");
     builder.append(Util.toHexString(counter));
     builder.append("]");

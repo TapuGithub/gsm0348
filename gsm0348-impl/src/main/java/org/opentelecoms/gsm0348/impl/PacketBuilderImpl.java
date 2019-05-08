@@ -596,7 +596,7 @@ public class PacketBuilderImpl implements PacketBuilder {
       pacHeader.setCounter(counters);
       pacHeader.setPaddingCounter((byte) paddingCounter);
       pacHeader.setResponseStatus(ResponsePacketStatusCoder.encode(responseCode));
-      pacHeader.setSecurity(signature);
+      pacHeader.setChecksumSignature(signature);
       pacHeader.setTAR(tar);
 
       ResponsePacket pac = new ResponsePacket();
@@ -891,7 +891,7 @@ public class PacketBuilderImpl implements PacketBuilder {
       pacHeader.setKIC(kic);
       pacHeader.setKID(kid);
       pacHeader.setSPI(spi);
-      pacHeader.setSecurity(signature);
+      pacHeader.setChecksumSignature(signature);
       pacHeader.setTAR(tar);
 
       final CommandPacket pac = new CommandPacket();
