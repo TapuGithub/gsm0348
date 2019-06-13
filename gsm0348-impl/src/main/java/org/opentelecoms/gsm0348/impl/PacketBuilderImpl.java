@@ -734,8 +734,7 @@ public class PacketBuilderImpl implements PacketBuilder {
   }
 
   @Override
-  public CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
-      throws PacketBuilderConfigurationException, Gsm0348Exception {
+  public CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey) throws Gsm0348Exception {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Recovering command packet.\n\tData: {}\n\tCipheringKey: {}\n\tSigningKey: {}",
           Util.toHexArray(data),
@@ -743,24 +742,10 @@ public class PacketBuilderImpl implements PacketBuilder {
           Util.toHexArray(signatureKey));
     }
 
-    if (!isConfigured()) {
-      throw new PacketBuilderConfigurationException("Not configured");
-    }
-
     if (data == null) {
       throw new IllegalArgumentException("Packet data cannot be null");
     }
 
-    if (responsePacketCiphering && (cipheringKey == null || cipheringKey.length == 0)) {
-      throw new PacketBuilderConfigurationException(
-          "Response ciphering is enabled - ciphering key must be specified. Provided: "
-              + ((cipheringKey.length == 0) ? "empty" : Util.toHexArray(cipheringKey)));
-    }
-    if (responsePacketSigning && (signatureKey == null || signatureKey.length == 0)) {
-      throw new PacketBuilderConfigurationException(
-          "Response signing is enabled - signature key must be specified. Provided: "
-              + ((signatureKey.length == 0) ? "empty" : Util.toHexArray(signatureKey)));
-    }
     final int packetLength = (Util.byteToInt(data[0]) >> 8) + Util.byteToInt(data[1]);
     if (data.length - PACKET_LENGTH_SIZE != packetLength) {
       throw new Gsm0348Exception(
@@ -791,8 +776,33 @@ public class PacketBuilderImpl implements PacketBuilder {
     System.arraycopy(header, TAR_POSITION, tar, 0, TAR_SIZE);
     LOGGER.debug("TAR: {}", Util.toHexArray(tar));
 
+    commandPacketSigning = spi.getCommandSPI().getCertificationMode() != CertificationMode.NO_SECURITY;
+    commandPacketCiphering = spi.getCommandSPI().isCiphered();
+
+    cardProfile.setSPI(spi);
+    cardProfile.setKIC(kic);
+    cardProfile.setKID(kid);
+
+    if (commandPacketCiphering) {
+      setCipheringAlgorithmName(cardProfile);
+    }
+    if (commandPacketSigning) {
+      setSigningAlgorithmName(cardProfile);
+    }
+
     final byte[] counters = new byte[COUNTERS_SIZE];
     final int signatureLength = commandPacketSigning ? signatureSize : 0;
+
+    if (commandPacketCiphering && (cipheringKey == null || cipheringKey.length == 0)) {
+      throw new PacketBuilderConfigurationException(
+              "Ciphering is enabled - ciphering key must be specified. Provided: "
+                      + ((cipheringKey.length == 0) ? "empty" : Util.toHexArray(cipheringKey)));
+    }
+    if (commandPacketSigning && (signatureKey == null || signatureKey.length == 0)) {
+      throw new PacketBuilderConfigurationException(
+              "Signing is enabled - signature key must be specified. Provided: "
+                      + ((signatureKey.length == 0) ? "empty" : Util.toHexArray(signatureKey)));
+    }
 
     if (data.length < MINIMUM_COMMAND_PACKET_SIZE + signatureLength) {
       String message = "rawdata too small to be command packet. Expected to be >= "
