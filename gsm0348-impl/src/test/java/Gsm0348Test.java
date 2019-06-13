@@ -355,8 +355,7 @@ public class Gsm0348Test {
     Assert.assertArrayEquals(new byte[]{ (byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x04, (byte) 0x05 }, responsePacket.getHeader().getCounter());
     Assert.assertEquals(0x0f, responsePacket.getHeader().getPaddingCounter());
     Assert.assertEquals(POR_OK, responsePacket.getHeader().getResponseStatus());
-    Assert.assertArrayEquals(new byte[]{ (byte) 0x90, (byte) 0x00,
-            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00 },
+    Assert.assertArrayEquals(new byte[]{ (byte) 0x90, (byte) 0x00},
         responsePacket.getData());
   }
 }

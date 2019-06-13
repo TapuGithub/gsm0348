@@ -1050,7 +1050,7 @@
 		<Data>001C12C00203F5909CB8B8F141FEC926024DCF0EB376D4CCFB92BB35177A</Data>
 		<Result>
 			<ResponseResult>
-				<gsm0348:Data>110000000000000000</gsm0348:Data>
+				<gsm0348:Data>1100</gsm0348:Data>
 				<gsm0348:Header>
 					<gsm0348:TAR>C00203</gsm0348:TAR>
 					<gsm0348:PaddingCounter>7</gsm0348:PaddingCounter>

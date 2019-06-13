@@ -543,9 +543,15 @@ public class PacketBuilderImpl implements PacketBuilder {
         final int dataSize = packetLength - headerLength - HEADER_LENGTH_SIZE;
         final int dataSizeToCopy = dataEnc.length - COUNTERS_SIZE - PADDING_COUNTER_SIZE - RESPONSE_CODE_RESPONSE_SIZE - signatureLength;
 
+        if (dataSize < dataSizeToCopy) {
+          throw new Gsm0348Exception(
+                  "Packet recovery failure. Possibly because of unexpected security bytes length. Expected: "
+                          + signatureSize);
+        }
+
         packetData = new byte[dataSize];
 
-        System.arraycopy(dataEnc, COUNTERS_SIZE + 2 + signatureLength, packetData, 0, dataSizeToCopy);
+        System.arraycopy(dataEnc, COUNTERS_SIZE + PADDING_COUNTER_SIZE + RESPONSE_CODE_RESPONSE_SIZE + signatureLength, packetData, 0, dataSizeToCopy);
 //				<- End of new code
 //				End of modification by Tomas Andersen / Morecom AS 2014.04.08 - TEST CASE: Tomas Andersen Bug #1->
       } else {
@@ -600,6 +606,13 @@ public class PacketBuilderImpl implements PacketBuilder {
       pacHeader.setTAR(tar);
 
       ResponsePacket pac = new ResponsePacket();
+      // remove padding from end of packetData
+      if (paddingCounter > 0) {
+        byte[] packetDataWithoutPadding = new byte[packetData.length-paddingCounter];
+        System.arraycopy(packetData, 0, packetDataWithoutPadding, 0, packetData.length
+        -paddingCounter);
+        packetData = packetDataWithoutPadding;
+      }
       pac.setData(packetData);
       pac.setHeader(pacHeader);
 
