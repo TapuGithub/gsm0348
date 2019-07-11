@@ -108,10 +108,7 @@ public interface PacketBuilder {
    *                     be null.
    * @return {@linkplain CommandPacket}
    * @throws NullPointerException                if data is null or empty.
-   * @throws PacketBuilderConfigurationException if builder if not configured or if ciphering and/or signing
-   *                                             is on but key is not provided.
    * @throws Gsm0348Exception                    in other cases.
    */
-  CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
-      throws PacketBuilderConfigurationException, Gsm0348Exception;
+  CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey) throws Gsm0348Exception;
 }

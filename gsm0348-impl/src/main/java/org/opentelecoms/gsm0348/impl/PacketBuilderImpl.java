@@ -543,9 +543,15 @@ public class PacketBuilderImpl implements PacketBuilder {
         final int dataSize = packetLength - headerLength - HEADER_LENGTH_SIZE;
         final int dataSizeToCopy = dataEnc.length - COUNTERS_SIZE - PADDING_COUNTER_SIZE - RESPONSE_CODE_RESPONSE_SIZE - signatureLength;
 
+        if (dataSize < dataSizeToCopy) {
+          throw new Gsm0348Exception(
+                  "Packet recovery failure. Possibly because of unexpected security bytes length. Expected: "
+                          + signatureSize);
+        }
+
         packetData = new byte[dataSize];
 
-        System.arraycopy(dataEnc, COUNTERS_SIZE + 2 + signatureLength, packetData, 0, dataSizeToCopy);
+        System.arraycopy(dataEnc, COUNTERS_SIZE + PADDING_COUNTER_SIZE + RESPONSE_CODE_RESPONSE_SIZE + signatureLength, packetData, 0, dataSizeToCopy);
 //				<- End of new code
 //				End of modification by Tomas Andersen / Morecom AS 2014.04.08 - TEST CASE: Tomas Andersen Bug #1->
       } else {
@@ -600,6 +606,13 @@ public class PacketBuilderImpl implements PacketBuilder {
       pacHeader.setTAR(tar);
 
       ResponsePacket pac = new ResponsePacket();
+      // remove padding from end of packetData
+      if (paddingCounter > 0) {
+        byte[] packetDataWithoutPadding = new byte[packetData.length-paddingCounter];
+        System.arraycopy(packetData, 0, packetDataWithoutPadding, 0, packetData.length
+        -paddingCounter);
+        packetData = packetDataWithoutPadding;
+      }
       pac.setData(packetData);
       pac.setHeader(pacHeader);
 
@@ -734,8 +747,7 @@ public class PacketBuilderImpl implements PacketBuilder {
   }
 
   @Override
-  public CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey)
-      throws PacketBuilderConfigurationException, Gsm0348Exception {
+  public CommandPacket recoverCommandPacket(byte[] data, byte[] cipheringKey, byte[] signatureKey) throws Gsm0348Exception {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Recovering command packet.\n\tData: {}\n\tCipheringKey: {}\n\tSigningKey: {}",
           Util.toHexArray(data),
@@ -743,24 +755,10 @@ public class PacketBuilderImpl implements PacketBuilder {
           Util.toHexArray(signatureKey));
     }
 
-    if (!isConfigured()) {
-      throw new PacketBuilderConfigurationException("Not configured");
-    }
-
     if (data == null) {
       throw new IllegalArgumentException("Packet data cannot be null");
     }
 
-    if (responsePacketCiphering && (cipheringKey == null || cipheringKey.length == 0)) {
-      throw new PacketBuilderConfigurationException(
-          "Response ciphering is enabled - ciphering key must be specified. Provided: "
-              + ((cipheringKey.length == 0) ? "empty" : Util.toHexArray(cipheringKey)));
-    }
-    if (responsePacketSigning && (signatureKey == null || signatureKey.length == 0)) {
-      throw new PacketBuilderConfigurationException(
-          "Response signing is enabled - signature key must be specified. Provided: "
-              + ((signatureKey.length == 0) ? "empty" : Util.toHexArray(signatureKey)));
-    }
     final int packetLength = (Util.byteToInt(data[0]) >> 8) + Util.byteToInt(data[1]);
     if (data.length - PACKET_LENGTH_SIZE != packetLength) {
       throw new Gsm0348Exception(
@@ -791,8 +789,33 @@ public class PacketBuilderImpl implements PacketBuilder {
     System.arraycopy(header, TAR_POSITION, tar, 0, TAR_SIZE);
     LOGGER.debug("TAR: {}", Util.toHexArray(tar));
 
+    commandPacketSigning = spi.getCommandSPI().getCertificationMode() != CertificationMode.NO_SECURITY;
+    commandPacketCiphering = spi.getCommandSPI().isCiphered();
+
+    cardProfile.setSPI(spi);
+    cardProfile.setKIC(kic);
+    cardProfile.setKID(kid);
+
+    if (commandPacketCiphering) {
+      setCipheringAlgorithmName(cardProfile);
+    }
+    if (commandPacketSigning) {
+      setSigningAlgorithmName(cardProfile);
+    }
+
     final byte[] counters = new byte[COUNTERS_SIZE];
     final int signatureLength = commandPacketSigning ? signatureSize : 0;
+
+    if (commandPacketCiphering && (cipheringKey == null || cipheringKey.length == 0)) {
+      throw new PacketBuilderConfigurationException(
+              "Ciphering is enabled - ciphering key must be specified. Provided: "
+                      + ((cipheringKey.length == 0) ? "empty" : Util.toHexArray(cipheringKey)));
+    }
+    if (commandPacketSigning && (signatureKey == null || signatureKey.length == 0)) {
+      throw new PacketBuilderConfigurationException(
+              "Signing is enabled - signature key must be specified. Provided: "
+                      + ((signatureKey.length == 0) ? "empty" : Util.toHexArray(signatureKey)));
+    }
 
     if (data.length < MINIMUM_COMMAND_PACKET_SIZE + signatureLength) {
       String message = "rawdata too small to be command packet. Expected to be >= "
