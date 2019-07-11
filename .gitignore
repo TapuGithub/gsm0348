@@ -3,6 +3,7 @@ target/
 mvnw
 mvnw.cmd
 dependency-reduced-pom.xml
+*.versionsBackup
 
 # Eclipse project files
 .classpath
