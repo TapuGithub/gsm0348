@@ -48,12 +48,12 @@ Short Message Service Cell Broadcast (SMS-CB) is not supported as for now.
    <dependency>
       <groupId>org.opentelecoms.gsm0348</groupId>
       <artifactId>gsm0348-api</artifactId>
-      <version>1.2.7</version>
+      <version>1.2.9</version>
    </dependency>
    <dependency>
       <groupId>org.opentelecoms.gsm0348</groupId>
       <artifactId>gsm0348-impl</artifactId>
-      <version>1.2.7</version>
+      <version>1.2.9</version>
    </dependency>
 </dependencies>
 ```
