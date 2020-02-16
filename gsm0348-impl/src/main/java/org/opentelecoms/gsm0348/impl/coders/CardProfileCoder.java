@@ -1,6 +1,6 @@
 package org.opentelecoms.gsm0348.impl.coders;
 
-import java.util.Arrays;
+import java.nio.ByteBuffer;
 
 import org.opentelecoms.gsm0348.api.Util;
 import org.opentelecoms.gsm0348.api.model.CardProfile;
@@ -22,46 +22,7 @@ public class CardProfileCoder {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CardProfileCoder.class);
 
-  private static final int PACKET_LENGHT_SIZE = 2;
-
-  private static final int HEADER_LENGHT_POSITION = 0;
-  private static final int HEADER_LENGHT_RESPONSE_POSITION = 2;
-  private static final int HEADER_LENGHT_SIZE = 1;
-
-  private static final int SPI_POSITION = 1;
-  private static final int SPI_SIZE = 2;
-
-  private static final int KIC_POSITION = 3;
-  private static final int KIC_SIZE = 1;
-
-  private static final int KID_POSITION = 4;
-  private static final int KID_SIZE = 1;
-
-  private static final int TAR_POSITION = 5;
-  private static final int TAR_RESPONSE_POSITION = 3;
   private static final int TAR_SIZE = 3;
-
-  private static final int COUNTERS_POSITION = 8;
-  private static final int COUNTERS_RESPONSE_POSITION = 6;
-  private static final int COUNTERS_SIZE = 5;
-
-  private static final int PADDING_COUNTER_POSITION = 13;
-  private static final int PADDING_COUNTER_RESPONSE_POSITION = 11;
-  private static final int PADDING_COUNTER_SIZE = 1;
-
-  private static final int RESPONSE_CODE_RESPONSE_POSITION = 12;
-  private static final int RESPONSE_CODE_RESPONSE_SIZE = 1;
-
-  private static final int SIGNATURE_POSITION = 14;
-  private static final int SIGNATURE_RESPONSE_POSITION = 13;
-
-  private static final int MINIMUM_COMMAND_PACKET_SIZE = 16;
-  private static final int MINIMUM_RESPONSE_PACKET_SIZE = 13;
-
-  private static final int HEADER_SIZE_WITOUT_SIGNATURE = SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE + COUNTERS_SIZE
-      + PADDING_COUNTER_SIZE;
-
-  private static final int HEADER_SIZE_UNCRIPTED = HEADER_LENGHT_SIZE + SPI_SIZE + KIC_SIZE + KID_SIZE + TAR_SIZE;
 
   /**
    * Build {@linkplain CardProfile} from row byte array
@@ -83,22 +44,25 @@ public class CardProfileCoder {
 
     CardProfile newCardProfile = new CardProfile();
 
+    ByteBuffer data = ByteBuffer.wrap(datarow);
+
     // cardProfile.setSecurityBytesType(SecurityBytesType.WITH_LENGHTS);
 
     SPI spi = new SPI();
-    spi.setCommandSPI(CommandSPICoder.encode(datarow[SPI_POSITION - 1]));
-    spi.setResponseSPI(ResponseSPICoder.encode(datarow[SPI_POSITION]));
+    spi.setCommandSPI(CommandSPICoder.encode(data.get()));
+    spi.setResponseSPI(ResponseSPICoder.encode(data.get()));
+    LOGGER.debug("SPI: {}", spi.toString());
 
-    LOGGER.debug("SPI value: {}", spi.toString());
+    KIC kic = KICCoder.encode(data.get());
+    LOGGER.debug("KIC: {}", kic);
+    KID kid = KIDCoder.encode(spi.getCommandSPI().getCertificationMode(), data.get());
+    LOGGER.debug("KID: {}", kid);
 
-    KIC kic = KICCoder.encode(datarow[KIC_POSITION - 1]);
-    LOGGER.debug("KIC value: {}", kic);
-    KID kid = KIDCoder.encode(spi.getCommandSPI().getCertificationMode(), datarow[KID_POSITION - 1]);
-    LOGGER.debug("KID value: {}", kid);
+    byte[] tar = new byte[TAR_SIZE];
+    data.get(tar);
+    newCardProfile.setTAR(tar);
 
-    newCardProfile.setTAR(Arrays.copyOfRange(datarow, TAR_POSITION - 1, TAR_POSITION - 1 + TAR_SIZE));
-
-    LOGGER.debug("TAR value: {}", Util.toHexArray(newCardProfile.getTAR()));
+    LOGGER.debug("TAR: {}", Util.toHexArray(tar));
 
     newCardProfile.setSPI(spi);
     newCardProfile.setKIC(kic);
@@ -141,7 +105,6 @@ public class CardProfileCoder {
 
       default:
     }
-
 
     if (!spi.getCommandSPI().getCertificationMode().equals(CertificationMode.NO_SECURITY)) {
       switch (kid.getAlgorithmImplementation()) {
@@ -196,19 +159,26 @@ public class CardProfileCoder {
       throw new IllegalArgumentException("The profile argument cannot be null");
     }
 
-    byte[] headerData = new byte[7];
+    ByteBuffer header = ByteBuffer.allocate(7);
 
-    headerData[0] = CommandSPICoder.decode(profile.getSPI().getCommandSPI());
-    headerData[1] = ResponseSPICoder.decode(profile.getSPI().getResponseSPI());
-    LOGGER.debug("SPI value: {}", String.format("%1$#x %2$#x", headerData[0], headerData[1]));
+    byte commandSpi = CommandSPICoder.decode(profile.getSPI().getCommandSPI());
+    header.put(commandSpi);
+    byte responseSpi = ResponseSPICoder.decode(profile.getSPI().getResponseSPI());
+    header.put(ResponseSPICoder.decode(profile.getSPI().getResponseSPI()));
+    LOGGER.debug("SPI: {}", String.format("%1$#x %2$#x", commandSpi, responseSpi));
 
-    headerData[KIC_POSITION - 1] = KICCoder.decode(profile.getKIC());
-    LOGGER.debug("KIC value: {}", Util.toHex(headerData[KIC_POSITION - 1]));
-    headerData[KID_POSITION - 1] = KIDCoder.decode(profile.getKID());
-    LOGGER.debug("KID value: {}", Util.toHex(headerData[KID_POSITION - 1]));
-    System.arraycopy(profile.getTAR(), 0, headerData, TAR_POSITION - 1, TAR_SIZE);
-    LOGGER.debug("TAR value: {}", Util.toHexArray(Arrays.copyOfRange(headerData, TAR_POSITION - 1, TAR_POSITION - 1 + TAR_SIZE)));
+    byte kic = KICCoder.decode(profile.getKIC());
+    header.put(kic);
+    LOGGER.debug("KIC: {}", Util.toHex(kic));
 
-    return headerData;
+    byte kid = KIDCoder.decode(profile.getKID());
+    header.put(kid);
+    LOGGER.debug("KID: {}", Util.toHex(kid));
+
+    byte[] tar = profile.getTAR();
+    header.put(tar);
+    LOGGER.debug("TAR: {}", Util.toHexArray(tar));
+
+    return header.array();
   }
 }

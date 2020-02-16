@@ -2,6 +2,9 @@ package org.opentelecoms.gsm0348.api;
 
 import static org.junit.Assert.assertEquals;
 
+import java.nio.ByteBuffer;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 public class UtilTest {
@@ -23,11 +26,62 @@ public class UtilTest {
   }
 
   @Test
-  public void test_byte_to_int() {
-    assertEquals(0, Util.byteToInt((byte) 0x00));
-    assertEquals(1, Util.byteToInt((byte) 0x01));
-    assertEquals(254, Util.byteToInt((byte) 0xfe));
-    assertEquals(255, Util.byteToInt((byte) 0xff));
+  public void test_encoded_length_decode() {
+    // ETSI TS 101 220
+    assertEncodedLength(0, new byte[]{ (byte) 0x00 });
+    assertEncodedLength(1, new byte[]{ (byte) 0x01 });
+    assertEncodedLength(127, new byte[]{ (byte) 0x7f });
+    assertEncodedLength(128, new byte[]{ (byte) 0x81, (byte) 0x80 });
+    assertEncodedLength(255, new byte[]{ (byte) 0x81, (byte) 0xff });
+    assertEncodedLength(256, new byte[]{ (byte) 0x82, (byte) 0x01, (byte) 0x00 });
+    assertEncodedLength(65535, new byte[]{ (byte) 0x82, (byte) 0xff, (byte) 0xff });
+    assertEncodedLength(65536, new byte[]{ (byte) 0x83, (byte) 0x01, (byte) 0x00, (byte) 0x00 });
+    assertEncodedLength(16777215, new byte[]{ (byte) 0x83, (byte) 0xff, (byte) 0xff, (byte) 0xff });
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void test_encoded_length_decode_exception() {
+    // ETSI TS 101 220
+    Util.getEncodedLength(ByteBuffer.wrap(new byte[]{ (byte) 0x84, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00 }));
+  }
+
+  @Test
+  public void test_encoded_length_bytes_decode() {
+    // ETSI TS 101 220
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x00 }, new byte[]{ (byte) 0x00, (byte) 0xff });
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x01 }, new byte[]{ (byte) 0x01, (byte) 0xff });
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x7f }, new byte[]{ (byte) 0x7f, (byte) 0xff });
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x81, (byte) 0x80 }, new byte[]{ (byte) 0x81, (byte) 0x80, (byte) 0xff });
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x81, (byte) 0xff }, new byte[]{ (byte) 0x81, (byte) 0xff, (byte) 0xff });
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x82, (byte) 0x01, (byte) 0x00 }, new byte[]{ (byte) 0x82, (byte) 0x01, (byte) 0x00, (byte) 0xff });
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x82, (byte) 0xff, (byte) 0xff }, new byte[]{ (byte) 0x82, (byte) 0xff, (byte) 0xff, (byte) 0xff });
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x83, (byte) 0x01, (byte) 0x00, (byte) 0x00 },
+        new byte[]{ (byte) 0x83, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0xff });
+    assertEncodedLengthBytes(new byte[]{ (byte) 0x83, (byte) 0xff, (byte) 0xff, (byte) 0xff },
+        new byte[]{ (byte) 0x83, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff });
+  }
+
+  private void assertEncodedLength(final int expected, final byte[] bytes) {
+    Assert.assertEquals(expected, Util.getEncodedLength(ByteBuffer.wrap(bytes)));
+  }
+
+  private void assertEncodedLengthBytes(final byte[] expected, final byte[] bytes) {
+    byte[] lengthBytes = Util.getEncodedLengthBytes(ByteBuffer.wrap(bytes));
+    Assert.assertArrayEquals(expected, lengthBytes);
+  }
+
+  @Test
+  public void test_ber_length_decode() {
+    // ETSI TS 101 220
+    assertEncodedLength(0, new byte[]{ (byte) 0x00 });
+    assertEncodedLength(1, new byte[]{ (byte) 0x01 });
+    assertEncodedLength(127, new byte[]{ (byte) 0x7f });
+    assertEncodedLength(128, new byte[]{ (byte) 0x81, (byte) 0x80, });
+    assertEncodedLength(255, new byte[]{ (byte) 0x81, (byte) 0xff, });
+    assertEncodedLength(256, new byte[]{ (byte) 0x82, (byte) 0x01, (byte) 0x00 });
+    assertEncodedLength(65535, new byte[]{ (byte) 0x82, (byte) 0xff, (byte) 0xff });
+    assertEncodedLength(65536, new byte[]{ (byte) 0x83, (byte) 0x01, (byte) 0x00, (byte) 0x00 });
+    assertEncodedLength(16777215, new byte[]{ (byte) 0x83, (byte) 0xff, (byte) 0xff, (byte) 0xff });
   }
 
 }

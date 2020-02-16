@@ -14,24 +14,26 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum ResponsePacketStatus {
 
-    POR_OK,
-    RC_CC_DS_FAILED,
-    CNTR_LOW,
-    CNTR_HIGH,
-    CNTR_BLOCKED,
-    CIPHERING_ERROR,
-    UNIDENTIFIED_SECURITY_ERROR,
-    INSUFFICIENT_MEMORY,
-    MORE_TIME,
-    TAR_UNKNOWN,
-    INSUFFICIENT_SECURITY_LEVEL;
+  POR_OK,
+  RC_CC_DS_FAILED,
+  CNTR_LOW,
+  CNTR_HIGH,
+  CNTR_BLOCKED,
+  CIPHERING_ERROR,
+  UNIDENTIFIED_SECURITY_ERROR,
+  INSUFFICIENT_MEMORY,
+  MORE_TIME,
+  TAR_UNKNOWN,
+  INSUFFICIENT_SECURITY_LEVEL,
+  TO_BE_SENT_VIA_SMS_SUBMIT,
+  TO_BE_SENT_VIA_PROCESSUNSTRUCTUREDSS_REQUEST;
 
-    public String value() {
-        return name();
-    }
+  public static ResponsePacketStatus fromValue(String v) {
+    return valueOf(v);
+  }
 
-    public static ResponsePacketStatus fromValue(String v) {
-        return valueOf(v);
-    }
+  public String value() {
+    return name();
+  }
 
 }

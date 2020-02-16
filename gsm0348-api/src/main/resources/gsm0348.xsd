@@ -152,6 +152,8 @@
       <xsd:enumeration value='MORE_TIME'/>
       <xsd:enumeration value='TAR_UNKNOWN'/>
       <xsd:enumeration value='INSUFFICIENT_SECURITY_LEVEL'/>
+      <xsd:enumeration value='TO_BE_SENT_VIA_SMS_SUBMIT'/>
+      <xsd:enumeration value='TO_BE_SENT_VIA_PROCESSUNSTRUCTUREDSS_REQUEST'/>
     </xsd:restriction>
   </xsd:simpleType>
 

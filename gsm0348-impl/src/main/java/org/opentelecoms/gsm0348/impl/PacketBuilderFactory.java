@@ -2,7 +2,20 @@ package org.opentelecoms.gsm0348.impl;
 
 import org.opentelecoms.gsm0348.api.PacketBuilder;
 import org.opentelecoms.gsm0348.api.PacketBuilderConfigurationException;
-import org.opentelecoms.gsm0348.api.model.*;
+import org.opentelecoms.gsm0348.api.model.AlgorithmImplementation;
+import org.opentelecoms.gsm0348.api.model.CardProfile;
+import org.opentelecoms.gsm0348.api.model.CertificationAlgorithmMode;
+import org.opentelecoms.gsm0348.api.model.CertificationMode;
+import org.opentelecoms.gsm0348.api.model.CipheringAlgorithmMode;
+import org.opentelecoms.gsm0348.api.model.CommandSPI;
+import org.opentelecoms.gsm0348.api.model.KIC;
+import org.opentelecoms.gsm0348.api.model.KID;
+import org.opentelecoms.gsm0348.api.model.PoRMode;
+import org.opentelecoms.gsm0348.api.model.PoRProtocol;
+import org.opentelecoms.gsm0348.api.model.ResponseSPI;
+import org.opentelecoms.gsm0348.api.model.SPI;
+import org.opentelecoms.gsm0348.api.model.SecurityBytesType;
+import org.opentelecoms.gsm0348.api.model.SynchroCounterMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,21 +32,22 @@ public class PacketBuilderFactory {
   }
 
   public static PacketBuilder getInstance(CardProfile cardProfile) throws PacketBuilderConfigurationException {
-    LOGGER.debug("Creating new PacketBuilder for {}", cardProfile);
+    LOGGER.trace("Creating new packet builder for profile {}", cardProfile);
     return new PacketBuilderImpl(cardProfile);
   }
 
   /**
    * Creates a default instance with no security applied.
-   * <p>
-   *     Useful for recovering packets with {@link PacketBuilder#recoverCommandPacket(byte[], byte[], byte[])}.
-   * </p>
+   *
+   * Useful for recovering packets with {@link PacketBuilder#recoverCommandPacket(byte[], byte[], byte[])}.
+   *
    * @return the created packet builder.
    */
   public static PacketBuilder getInstance() {
     CardProfile cardProfile = new CardProfile();
     cardProfile.setSecurityBytesType(SecurityBytesType.WITH_LENGHTS_AND_UDHL);
-    cardProfile.setTAR(new byte[]{0,0,0});
+    cardProfile.setTAR(new byte[]{ 0, 0, 0 });
+
     KIC kic = new KIC();
     kic.setAlgorithmImplementation(AlgorithmImplementation.ALGORITHM_KNOWN_BY_BOTH_ENTITIES);
     kic.setCipheringAlgorithmMode(CipheringAlgorithmMode.DES_CBC);
@@ -63,7 +77,7 @@ public class PacketBuilderFactory {
     try {
       return getInstance(cardProfile);
     } catch (PacketBuilderConfigurationException e) {
-      throw new RuntimeException("Could no", e);
+      throw new RuntimeException("Could not instance a packet builder", e);
     }
   }
 

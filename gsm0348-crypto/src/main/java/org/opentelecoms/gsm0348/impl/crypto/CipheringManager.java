@@ -49,11 +49,11 @@ public class CipheringManager {
   }
 
   /**
-   * Returns block size for transformation name specified. Name can be specified ether by only name, e.g.,DES or with mode and padding, e.g.,
+   * Returns block size for transformation name specified. Name can be specified ether by only name, e.g., DES or with mode and padding, e.g.,
    * DES/EDE/ZeroBytePadding.
    *
    * @param transformation - the name of the transformation, e.g., DES/CBC/PKCS5Padding.
-   * @return cipher`s block size
+   * @return cipher's block size
    * @throws NullPointerException     if the transformation is null or empty string.
    * @throws NoSuchAlgorithmException if transformation with specified name not found
    * @throws NoSuchPaddingException   if transformation contains a padding scheme that is not available.
@@ -85,7 +85,6 @@ public class CipheringManager {
    */
   public static byte[] decipher(final String transformation, final byte[] key, final byte[] data) throws IllegalBlockSizeException,
       BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
-    LOGGER.debug("Deciphering data");
     return doWork(transformation, key, data, new byte[]{ 0, 0, 0, 0, 0 }, Cipher.DECRYPT_MODE);
   }
 
@@ -93,7 +92,7 @@ public class CipheringManager {
       throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
     LOGGER.debug("Initializing cipher: {} key length: {} bits", cipher.getAlgorithm(), key.length * 8);
     final int blockSize = getBlockSize(cipher.getAlgorithm());
-    LOGGER.debug("Block size for {}: {}", cipher.getAlgorithm(), blockSize);
+    LOGGER.trace("Block size for {}: {}", cipher.getAlgorithm(), blockSize);
     final SecretKeySpec keySpec = new SecretKeySpec(key, cipher.getAlgorithm());
     if (key.length > Cipher.getMaxAllowedKeyLength(cipher.getAlgorithm())) {
       LOGGER.error("The maximum allowed key length is {} for {}", Cipher.getMaxAllowedKeyLength(cipher.getAlgorithm()), cipher.getAlgorithm());
@@ -128,7 +127,6 @@ public class CipheringManager {
    */
   public static byte[] encipher(final String transformation, final byte[] key, final byte[] data, final byte[] iv)
       throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
-    LOGGER.debug("Enciphering data");
     return doWork(transformation, key, data, iv, Cipher.ENCRYPT_MODE);
   }
 

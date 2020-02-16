@@ -23,7 +23,7 @@ public class CRC32Test {
     final byte[] crc = new byte[4];
     final int bytesCopied = crc32.doFinal(crc, 0);
     assertEquals(4, bytesCopied);
-    assertArrayEquals(new byte[]{ (byte) 0x47, (byte) 0x0B, (byte) 0x99, (byte) 0xF4 }, crc);
+    assertArrayEquals(new byte[]{ (byte) 0x47, (byte) 0x0b, (byte) 0x99, (byte) 0xf4 }, crc);
   }
 
   @Test
@@ -45,8 +45,6 @@ public class CRC32Test {
 
   @Test
   public void create_table() throws Exception {
-    //final MyCRC.Parameters crcParams = MyCRC.Parameters.CRC32;
-    //final MyCRC.Parameters crcParams = MyCRC.Parameters.CRC16;
     final MyCRC.Parameters crcParams = new MyCRC.Parameters(16, 4129L, 65535L, true, true, 0xFFFFFFFFL);
 
     long initValue = (crcParams.isReflectIn()) ? MyCRC.reflect(crcParams.getInit(), crcParams.getWidth()) : crcParams.getInit();
@@ -66,7 +64,7 @@ public class CRC32Test {
     }
     System.out.println("private final static int[] TABLE = {");
     for (int i = 0; i < 256; i++) {
-      System.out.print(String.format("0x%04X", crctable[i]));
+      System.out.print(String.format("0x%04x", crctable[i]));
       if (i < 255) {
         System.out.print(", ");
       } else {
@@ -75,7 +73,6 @@ public class CRC32Test {
       if (i % 8 == 7) {
         System.out.println("");
       }
-
     }
   }
 
@@ -101,7 +98,7 @@ public class CRC32Test {
     }
     System.out.println("private final static int[] TABLE = {");
     for (int i = 0; i < 256; i++) {
-      System.out.print(String.format("0x%04X", crctable[i]));
+      System.out.print(String.format("0x%04x", crctable[i]));
       if (i < 255) {
         System.out.print(", ");
       } else {

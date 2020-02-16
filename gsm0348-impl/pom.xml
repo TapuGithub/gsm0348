@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.opentelecoms.gsm0348</groupId>
     <artifactId>gsm0348</artifactId>
-    <version>1.2.9</version>
+    <version>1.2.10-SNAPSHOT</version>
   </parent>
   <groupId>org.opentelecoms.gsm0348</groupId>
   <artifactId>gsm0348-impl</artifactId>
@@ -17,8 +17,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
       <plugin>
