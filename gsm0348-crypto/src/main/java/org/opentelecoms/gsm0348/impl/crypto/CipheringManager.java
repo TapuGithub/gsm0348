@@ -43,7 +43,7 @@ public class CipheringManager {
   private CipheringManager() {
   }
 
-  private static final Cipher getCipher(final String alg) throws NoSuchAlgorithmException, NoSuchPaddingException {
+  private static Cipher getCipher(final String alg) throws NoSuchAlgorithmException, NoSuchPaddingException {
     LOGGER.debug("Creating cipher for name: {}", alg);
     return Cipher.getInstance(alg);
   }
@@ -77,18 +77,18 @@ public class CipheringManager {
    * @throws NullPointerException               if transformation is null or empty, or key or data are null.
    * @throws NoSuchAlgorithmException           if transformation with specified name not found.
    * @throws NoSuchPaddingException             if transformation contains a padding scheme that is not available.
-   * @throws InvalidKeyException                if the given key is inappropriate for this cipher, or if the given key has a keysize that exceeds the maximum
-   *                                            allowable keysize.
+   * @throws InvalidKeyException                if the given key is inappropriate for this cipher, or if the given key has a key size that exceeds the maximum
+   *                                            allowable key size.
    * @throws IllegalBlockSizeException          if the length of data provided is incorrect, i.e., does not match the block size of the cipher.
    * @throws BadPaddingException                if particular padding mechanism is expected for the input data but the data is not padded properly.
    * @throws InvalidAlgorithmParameterException if invalid or inappropriate algorithm parameters specified.
    */
   public static byte[] decipher(final String transformation, final byte[] key, final byte[] data) throws IllegalBlockSizeException,
       BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
-    return doWork(transformation, key, data, new byte[]{ 0, 0, 0, 0, 0 }, Cipher.DECRYPT_MODE);
+    return doWork(transformation, key, data, Cipher.DECRYPT_MODE);
   }
 
-  private static void initCipher(final Cipher cipher, final int mode, final byte[] key, byte[] iv)
+  private static void initCipher(final Cipher cipher, final int mode, final byte[] key)
       throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
     LOGGER.debug("Initializing cipher: {} key length: {} bits", cipher.getAlgorithm(), key.length * 8);
     final int blockSize = getBlockSize(cipher.getAlgorithm());
@@ -98,14 +98,11 @@ public class CipheringManager {
       LOGGER.error("The maximum allowed key length is {} for {}", Cipher.getMaxAllowedKeyLength(cipher.getAlgorithm()), cipher.getAlgorithm());
       throw new IllegalArgumentException("The key length is above the maximum, please install JCE unlimited strength jurisdiction policy files");
     }
-    if (cipher.getAlgorithm().contains("CBC")) {
-      iv = new byte[blockSize];
-      IvParameterSpec spec = new IvParameterSpec(iv);
-      LOGGER.debug("Using IV: {}", Util.toHexString(iv));
-      cipher.init(mode, keySpec, spec);
-    } else {
-      cipher.init(mode, keySpec);
-    }
+    IvParameterSpec ivParameterSpec = null;
+    if (cipher.getAlgorithm().contains("CBC"))
+      ivParameterSpec = new IvParameterSpec(new byte[blockSize]);
+
+      cipher.init(mode, keySpec, ivParameterSpec);
   }
 
   /**
@@ -113,24 +110,23 @@ public class CipheringManager {
    *
    * @param transformation - the name of the transformation, e.g., DES/CBC/PKCS5Padding.
    * @param key            - key for cipher.
-   * @param iv             - initialization vector for cipher if used.
    * @param data           - data to be enciphered.
    * @return enciphered data
    * @throws NullPointerException               if transformation is null or empty, or key, data or iv are null.
    * @throws NoSuchAlgorithmException           if transformation with specified name not found.
    * @throws NoSuchPaddingException             if transformation contains a padding scheme that is not available.
    * @throws InvalidKeyException                if the given key is inappropriate for this cipher, or if the given key has a keysize that exceeds the maximum
-   *                                            allowable keysize.
+   *                                            allowable key size.
    * @throws IllegalBlockSizeException          if the length of data provided is incorrect, i.e., does not match the block size of the cipher.
    * @throws BadPaddingException                if particular padding mechanism is expected for the input data but the data is not padded properly.
    * @throws InvalidAlgorithmParameterException if invalid or inappropriate algorithm parameters specified.
    */
-  public static byte[] encipher(final String transformation, final byte[] key, final byte[] data, final byte[] iv)
+  public static byte[] encipher(final String transformation, final byte[] key, final byte[] data)
       throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
-    return doWork(transformation, key, data, iv, Cipher.ENCRYPT_MODE);
+    return doWork(transformation, key, data, Cipher.ENCRYPT_MODE);
   }
 
-  private static byte[] doWork(final String transformation, final byte[] key, final byte[] data, final byte[] iv, final int mode)
+  private static byte[] doWork(final String transformation, final byte[] key, final byte[] data, final int mode)
       throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
       NoSuchPaddingException, InvalidKeyException {
     if (transformation == null || transformation.length() == 0 || key == null || data == null) {
@@ -139,7 +135,7 @@ public class CipheringManager {
     Cipher cipher = null;
     try {
       cipher = getCipher(transformation);
-      initCipher(cipher, mode, key, iv);
+      initCipher(cipher, mode, key);
       byte[] result = cipher.doFinal(data);
       return result;
     } catch (IllegalBlockSizeException e) {

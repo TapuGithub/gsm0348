@@ -480,7 +480,7 @@ public class PacketBuilderImpl implements PacketBuilder {
         cipherBuffer.put(dataBytes);
 
         LOGGER.debug("Ciphering command data: {} length: {}", Util.toHexString(cipherData), cipherData.length);
-        byte[] cipheredData = CipheringManager.encipher(cipheringAlgorithmName, cipheringKey, cipherData, counterBytes);
+        byte[] cipheredData = CipheringManager.encipher(cipheringAlgorithmName, cipheringKey, cipherData);
         LOGGER.debug("Ciphered command data: {} length: {}", Util.toHexString(cipheredData), cipheredData.length);
 
 
@@ -635,7 +635,7 @@ public class PacketBuilderImpl implements PacketBuilder {
         cipherBuffer.put(dataBytes);
 
         LOGGER.debug("Ciphering data[{}]: {}", cipherData.length, Util.toHexString(cipherData));
-        byte[] cipheredData = CipheringManager.encipher(cipheringAlgorithmName, cipheringKey, cipherData, counterBytes);
+        byte[] cipheredData = CipheringManager.encipher(cipheringAlgorithmName, cipheringKey, cipherData);
         LOGGER.debug("Ciphered response data[{}]: {}", cipheredData.length, Util.toHexString(cipheredData));
 
         final byte[] clearHeader = new byte[headerLengthAndIdSize + TAR_SIZE];

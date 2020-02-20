@@ -89,7 +89,7 @@ public class ICCIDKeyGenerator {
       LOGGER.debug("Generating key. Master key: {}, ICCID= {}", Util.toHexArray(masterKey), Util.toHexArray(iccid));
     }
 
-    byte[] result = CipheringManager.encipher(TRANSFORMATION, masterKey, iccid, new byte[8]);
+    byte[] result = CipheringManager.encipher(TRANSFORMATION, masterKey, iccid);
 
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Generated key: {}", Util.toHexArray(result));
