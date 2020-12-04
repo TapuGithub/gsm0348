@@ -17,7 +17,7 @@
   </modules>
 
   <properties>
-    <beanutils.version>1.9.3</beanutils.version>
+    <beanutils.version>1.9.4</beanutils.version>
     <bouncycastle.version>1.64</bouncycastle.version>
     <commons-cli.version>1.4</commons-cli.version>
     <crc.version>1.0.2</crc.version>
